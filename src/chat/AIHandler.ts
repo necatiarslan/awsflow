@@ -7,7 +7,7 @@ import * as MessageHub from '../common/MessageHub';
 import { encodingForModel } from 'js-tiktoken';
 
 const PARTICIPANT_ID = 'awsflow.chat';
-const DEFAULT_PROMPT = "How can I assist you with AWS today?";
+const DEFAULT_PROMPT = "What can you do to help me with AWS tasks?";
 const MAX_HISTORY_TOKENS = 2000;
 const MAX_RESPONSE_LENGTH = 500;
 
@@ -66,24 +66,14 @@ export class AIHandler {
     return text.substring(0, MAX_RESPONSE_LENGTH) + '... [truncated]';
   }
 
-  private _summarizeResources(): vscode.LanguageModelChatMessage[] {
-    const resources = Object.values(this.latestResources);
-    if (resources.length === 0) {
-      return [];
+  private getLatestResources(): vscode.LanguageModelChatMessage[] {
+    const messages: vscode.LanguageModelChatMessage[] = [];
+    for (const resource of Object.values(this.latestResources)) {
+      const resourceInfo: string = `Recent AWS resources: Type=${resource.type} Name=${resource.name}` + (resource.arn ? `, ARN=${resource.arn}` : '');
+      messages.push(vscode.LanguageModelChatMessage.User(resourceInfo));
     }
 
-    // Group resources by type
-    const grouped: { [type: string]: number } = {};
-    for (const resource of resources) {
-      grouped[resource.type] = (grouped[resource.type] || 0) + 1;
-    }
-
-    // Build summary message
-    const summary = Object.entries(grouped)
-      .map(([type, count]) => `${count} ${type}${count > 1 ? 's' : ''}`)
-      .join(', ');
-
-    return [vscode.LanguageModelChatMessage.User(`Recent AWS resources: ${summary}`)];
+    return messages;
   }
 
   public registerChatParticipant(): void {
@@ -165,55 +155,54 @@ export class AIHandler {
     
     messages.push(vscode.LanguageModelChatMessage.User(`AWS Expert: Use tools for tasks. Respond in Markdown; no JSON unless requested.`));
 
-    if (Session.Current) {
-      const contextInfo = `Context:\nAWS Profile: ${Session.Current.AwsProfile || 'N/A'}\nAWS Region: ${Session.Current.AwsRegion || 'N/A'}\nAWS Endpoint: ${Session.Current.AwsEndPoint || 'default'}`;
-      messages.push(vscode.LanguageModelChatMessage.User(contextInfo));
-    }
+    // if (Session.Current) {
+    //   const contextInfo = `Context:\nAWS Profile: ${Session.Current.AwsProfile || 'N/A'}\nAWS Region: ${Session.Current.AwsRegion || 'N/A'}\nAWS Endpoint: ${Session.Current.AwsEndPoint || 'default'}`;
+    //   messages.push(vscode.LanguageModelChatMessage.User(contextInfo));
+    // }
 
     // Calculate token budget and add history dynamically
-    let tokenCount = this._estimateTokens(
-      messages.map(m => typeof m.content === 'string' ? m.content : '').join('\n')
-    );
-    const historyTokenBudget = MAX_HISTORY_TOKENS - 500; // Reserve 500 for current request + resources
+    // let tokenCount = this._estimateTokens(
+    //   messages.map(m => typeof m.content === 'string' ? m.content : '').join('\n')
+    // );
+    // const historyTokenBudget = MAX_HISTORY_TOKENS - 500; // Reserve 500 for current request + resources
     
-    const allHistory = chatContext.history.slice().reverse(); // Newest first
+    // const allHistory = chatContext.history.slice().reverse(); // Newest first
     
-    for (const turn of allHistory) {
-      if (tokenCount >= historyTokenBudget) {
-        break;
-      }
+    // for (const turn of allHistory) {
+    //   if (tokenCount >= historyTokenBudget) {
+    //     break;
+    //   }
 
-      if (turn instanceof vscode.ChatRequestTurn) {
-        const reqTokens = this._estimateTokens(turn.prompt);
-        if (tokenCount + reqTokens > historyTokenBudget) {
-          break;
-        }
-        messages.push(vscode.LanguageModelChatMessage.User(turn.prompt));
-        tokenCount += reqTokens;
-        continue;
-      }
+    //   if (turn instanceof vscode.ChatRequestTurn) {
+    //     const reqTokens = this._estimateTokens(turn.prompt);
+    //     if (tokenCount + reqTokens > historyTokenBudget) {
+    //       break;
+    //     }
+    //     messages.push(vscode.LanguageModelChatMessage.User(turn.prompt));
+    //     tokenCount += reqTokens;
+    //     continue;
+    //   }
 
-      if (turn instanceof vscode.ChatResponseTurn) {
-        const responseContent = turn.response
-          .filter((part): part is vscode.ChatResponseMarkdownPart => part instanceof vscode.ChatResponseMarkdownPart)
-          .map((part: vscode.ChatResponseMarkdownPart) => part.value.value)
-          .join('\n');
+    //   if (turn instanceof vscode.ChatResponseTurn) {
+    //     const responseContent = turn.response
+    //       .filter((part): part is vscode.ChatResponseMarkdownPart => part instanceof vscode.ChatResponseMarkdownPart)
+    //       .map((part: vscode.ChatResponseMarkdownPart) => part.value.value)
+    //       .join('\n');
 
-        if (responseContent) {
-          const truncated = this._truncateResponse(responseContent);
-          const respTokens = this._estimateTokens(truncated);
-          if (tokenCount + respTokens > historyTokenBudget) {
-            break;
-          }
-          messages.push(vscode.LanguageModelChatMessage.Assistant(truncated));
-          tokenCount += respTokens;
-        }
-      }
-    }
+    //     if (responseContent) {
+    //       const truncated = this._truncateResponse(responseContent);
+    //       const respTokens = this._estimateTokens(truncated);
+    //       if (tokenCount + respTokens > historyTokenBudget) {
+    //         break;
+    //       }
+    //       messages.push(vscode.LanguageModelChatMessage.Assistant(truncated));
+    //       tokenCount += respTokens;
+    //     }
+    //   }
+    // }
 
     // Add summarized resources
-    const resourceMessages = this._summarizeResources();
-    messages.push(...resourceMessages);
+    messages.push(...this.getLatestResources());
 
     messages.push(vscode.LanguageModelChatMessage.User(request.prompt));
     return messages;
