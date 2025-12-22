@@ -23,20 +23,36 @@ import { CloudFormationTool } from '../cloudformation/CloudFormationTool';
 import { EMRTool } from '../emr/EMRTool';
 import { STSTool } from '../sts/STSTool';
 import { TestAwsConnectionTool } from '../sts/TestAwsConnectionTool';
-import { needsConfirmation, confirmProceed } from '../common/ActionGuard';
+//import { needsConfirmation, confirmProceed } from '../common/ActionGuard';
 
 interface ToolRecord {
     name: string;
     instance: BaseTool<any>;
 }
 
+interface ResourceRecord {
+    uri: string;
+    name: string;
+    description?: string;
+    mimeType?: string;
+}
+
 export class McpDispatcher {
     private readonly tools: Map<string, ToolRecord>;
     private readonly toolMetadata: Map<string, any>;
+    private readonly resources: ResourceRecord[];
 
     constructor(enabledTools: Set<string>) {
         this.tools = new Map<string, ToolRecord>();
         this.toolMetadata = new Map<string, any>();
+        this.resources = [
+            {
+                uri: `file://${path.join(__dirname, '../../README_AWS_SERVICES.md')}`,
+                name: 'README_AWS_SERVICES',
+                description: 'Reference for AWS services supported by Awsflow MCP tools',
+                mimeType: 'text/markdown'
+            }
+        ];
         
         try {
             this.loadToolsFromPackageJson();
@@ -89,6 +105,15 @@ export class McpDispatcher {
             .filter(tool => tool !== null);
     }
 
+    private listResources(): any[] {
+        return this.resources.map(r => ({
+            uri: r.uri,
+            name: r.name,
+            description: r.description || '',
+            mimeType: r.mimeType || 'text/plain'
+        }));
+    }
+
     private loadToolsFromPackageJson(): void {
         const packageJsonPath = path.join(__dirname, '../../package.json');
         
@@ -134,7 +159,7 @@ export class McpDispatcher {
                         },
                         serverInfo: {
                             name: 'awsflow',
-                            version: '1.0.3'
+                            version: '1.0.0'
                         }
                     }
                 };
@@ -158,6 +183,48 @@ export class McpDispatcher {
                 };
             }
 
+            if (request.method === 'list_resources' || request.method === 'resources/list') {
+                return {
+                    id: request.id!,
+                    jsonrpc: '2.0',
+                    result: {
+                        resources: this.listResources()
+                    }
+                };
+            }
+
+            if (request.method === 'read_resource' || request.method === 'resources/read') {
+                const uri = request.params?.uri as string;
+                if (!uri) {
+                    return { id: request.id!, jsonrpc: '2.0', error: { message: 'uri is required', code: -32602 } };
+                }
+
+                const resource = this.resources.find(r => r.uri === uri);
+                if (!resource) {
+                    return { id: request.id!, jsonrpc: '2.0', error: { message: `Resource not found: ${uri}`, code: -32004 } };
+                }
+
+                try {
+                    const filePath = uri.replace(/^file:\/\//, '');
+                    const content = fs.readFileSync(filePath, 'utf8');
+                    return {
+                        id: request.id!,
+                        jsonrpc: '2.0',
+                        result: {
+                            contents: [
+                                {
+                                    uri: resource.uri,
+                                    mimeType: resource.mimeType || 'text/plain',
+                                    text: content
+                                }
+                            ]
+                        }
+                    };
+                } catch (error: any) {
+                    return { id: request.id!, jsonrpc: '2.0', error: { message: error?.message || 'Failed to read resource', code: -32005 } };
+                }
+            }
+
             if (request.method === 'call_tool' || request.method === 'tools/call') {
                 const toolName = (request.params?.tool || request.params?.name) as string;
                 const args = (request.params?.params || request.params?.arguments) as Record<string, any> || {};
@@ -177,12 +244,12 @@ export class McpDispatcher {
                     return { id: request.id!, jsonrpc: '2.0', error: { message: 'Session not initialized in VS Code', code: -32000 } };
                 }
 
-                if (needsConfirmation(command)) {
-                    const ok = await confirmProceed(command, params);
-                    if (!ok) {
-                        return { id: request.id!, jsonrpc: '2.0', error: { message: 'User cancelled action command', code: -32000 } };
-                    }
-                }
+                // if (needsConfirmation(command)) {
+                //     const ok = await confirmProceed(command, params);
+                //     if (!ok) {
+                //         return { id: request.id!, jsonrpc: '2.0', error: { message: 'User cancelled action command', code: -32000 } };
+                //     }
+                // }
 
                 const s = Session.Current;
                 const originalDisabledTools = s.DisabledTools;

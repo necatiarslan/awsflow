@@ -27,7 +27,12 @@ export async function confirmProceed(command: string, params?: Record<string, an
   let message = `Confirm to execute action command: ${command}`;
   if (params && Object.keys(params).length > 0) {
     message += '\n\nParameters:\n';
-    for (const [key, value] of Object.entries(params)) {
+    for (let [key, value] of Object.entries(params)) {
+      if (key == 'Body'){
+        value = '[...]';
+      } else if (value.length > 100) {
+        value = `${value.substring(0, 10)}...`;
+      }
       message += `${key}: ${value}\n`;
     }
   }

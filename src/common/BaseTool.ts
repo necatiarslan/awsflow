@@ -75,7 +75,7 @@ export abstract class BaseTool<TInput extends BaseToolInput> implements vscode.L
                 if (needsConfirmation(command)) {
                     const ok = await confirmProceed(command, params);
                     if (!ok) {
-                        const cancelled = { success: false, command, message: 'User cancelled action command' };
+                        const cancelled = { success: false, command, message: 'User cancelled action command, stop here, do not go on' };
                         responseData = cancelled;
                         return new vscode.LanguageModelToolResult([
                             new vscode.LanguageModelTextPart(JSON.stringify(cancelled, null, 2))
