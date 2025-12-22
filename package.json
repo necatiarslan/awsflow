@@ -1,0 +1,2252 @@
+{
+  "name": "awsflow",
+  "displayName": "Awsflow: AWS AI Assistant",
+  "description": "Master AWS, stay in your flow. Access AWS services through AI chat and interactive tools directly within VS Code.",
+  "version": "1.0.0",
+  "publisher": "NecatiARSLAN",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/necatiarslan/awsflow"
+  },
+  "icon": "media/extension/extension-icon.png",
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "categories": [
+    "Other",
+    "AI",
+    "Chat"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "bin": {
+    "awsflow-mcp": "./out/mcp/cli.js"
+  },
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "awsflow.chat",
+        "name": "aws",
+        "fullName": "Awsflow: Aws Assistant",
+        "description": "Access AWS services through chat",
+        "isSticky": true
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "TestAwsConnectionTool",
+        "toolReferenceName": "TestAwsConnectionTool",
+        "displayName": "Test AWS Connection",
+        "modelDescription": "Tests AWS connectivity using STS GetCallerIdentity. Returns true if the connection is successful.",
+        "userDescription": "Test your AWS connectivity with current session credentials",
+        "tags": [
+          "aws",
+          "connectivity",
+          "test"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(cloud)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "type": "string",
+              "description": "The AWS region to test. If not specified, uses the current session region.",
+              "default": "us-east-1"
+            }
+          }
+        }
+      },
+      {
+        "name": "SessionTool",
+        "toolReferenceName": "SessionTool",
+        "displayName": "Session Tool",
+        "modelDescription": "Get or set AWS session values (AwsProfile, AwsEndPoint, AwsRegion), list available profiles, or refresh cached credentials. Use GetSession to read current values. Use SetSession with params to update any of AwsProfile, AwsEndPoint, AwsRegion. Use ListProfiles to return profile names detected from AWS config/credentials files. Use RefreshCredentials to clear and reload cached credentials.",
+        "userDescription": "Manage session (profile/region/endpoint), list profiles, refresh credentials",
+        "tags": [
+          "aws",
+          "session",
+          "profile",
+          "region",
+          "endpoint"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(gear)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "GetSession",
+                "SetSession",
+                "ListProfiles",
+                "RefreshCredentials"
+              ],
+              "description": "Use GetSession to read current values. Use SetSession to update session values. Use ListProfiles to retrieve available profile names. Use RefreshCredentials to clear and reload cached credentials."
+            },
+            "params": {
+              "type": "object",
+              "description": "Parameters for SetSession. Omit to leave unchanged.",
+              "properties": {
+                "AwsProfile": {
+                  "type": "string",
+                  "description": "AWS profile name to set (optional)"
+                },
+                "AwsEndPoint": {
+                  "type": "string",
+                  "description": "Custom AWS/S3-compatible endpoint to set (optional)"
+                },
+                "AwsRegion": {
+                  "type": "string",
+                  "description": "AWS region to set (optional, default us-east-1 if set to empty)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "STSTool",
+        "toolReferenceName": "STSTool",
+        "displayName": "STS Tool",
+        "modelDescription": "Execute AWS STS (Security Token Service) commands. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. GetAccessKeyInfo {command:'GetAccessKeyInfo', params:{AccessKeyId:'AKIA...'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. GetFederationToken {command:'GetFederationToken', params:{Name:'session-name'}}. GetWebIdentityToken {command:'GetWebIdentityToken', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
+        "userDescription": "Get temporary security credentials and caller identity information from AWS STS",
+        "tags": [
+          "aws",
+          "sts",
+          "credentials",
+          "security",
+          "tokens",
+          "identity"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(key)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "GetCallerIdentity",
+                "GetAccessKeyInfo",
+                "GetDelegatedAccessToken",
+                "GetFederationToken",
+                "GetSessionToken",
+                "GetWebIdentityToken"
+              ],
+              "description": "The STS command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty.",
+              "properties": {
+                "AccessKeyId": {
+                  "type": "string",
+                  "description": "AWS access key ID (REQUIRED for GetAccessKeyInfo)"
+                },
+                "RoleArn": {
+                  "type": "string",
+                  "description": "IAM role ARN (REQUIRED for GetDelegatedAccessToken, GetWebIdentityToken)"
+                },
+                "DurationSeconds": {
+                  "type": "number",
+                  "description": "Token lifetime in seconds (optional, default varies by command)"
+                },
+                "DelegationTokenLifetimeSeconds": {
+                  "type": "number",
+                  "description": "Delegated token lifetime in seconds (optional for GetDelegatedAccessToken)"
+                },
+                "Name": {
+                  "type": "string",
+                  "description": "Session or federation token name (REQUIRED for GetFederationToken)"
+                },
+                "Policy": {
+                  "type": "string",
+                  "description": "IAM policy JSON string for the temporary credentials (optional for GetFederationToken)"
+                },
+                "Tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Key": {
+                        "type": "string"
+                      },
+                      "Value": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "Session tags (optional for GetFederationToken)"
+                },
+                "SerialNumber": {
+                  "type": "string",
+                  "description": "MFA device serial number (optional for GetSessionToken)"
+                },
+                "TokenCode": {
+                  "type": "string",
+                  "description": "MFA token code (optional for GetSessionToken)"
+                },
+                "RoleSessionName": {
+                  "type": "string",
+                  "description": "Role session name (REQUIRED for GetWebIdentityToken)"
+                },
+                "WebIdentityToken": {
+                  "type": "string",
+                  "description": "Web identity token (REQUIRED for GetWebIdentityToken)"
+                },
+                "ProviderId": {
+                  "type": "string",
+                  "description": "Identity provider ID (optional for GetWebIdentityToken)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "SQSTool",
+        "toolReferenceName": "SQSTool",
+        "displayName": "SQS Tool",
+        "modelDescription": "Execute AWS SQS (Simple Queue Service) commands. ALWAYS provide params object. Examples: ListQueues {command:'ListQueues', params:{}}. GetQueueUrl {command:'GetQueueUrl', params:{QueueName:'my-queue'}}. SendMessage {command:'SendMessage', params:{QueueUrl:'https://...', MessageBody:'text'}}. ReceiveMessage {command:'ReceiveMessage', params:{QueueUrl:'https://...', MaxNumberOfMessages:10}}. DeleteMessage {command:'DeleteMessage', params:{QueueUrl:'https://...', ReceiptHandle:'handle'}}.",
+        "userDescription": "Manage SQS queues and send/receive messages",
+        "tags": [
+          "aws",
+          "sqs",
+          "queue",
+          "messaging",
+          "messages"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(inbox)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "ListQueues",
+                "ListDeadLetterSourceQueues",
+                "ListQueueTags",
+                "GetQueueAttributes",
+                "GetQueueUrl",
+                "SendMessage",
+                "ReceiveMessage",
+                "DeleteMessage"
+              ],
+              "description": "The SQS command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty.",
+              "properties": {
+                "QueueUrl": {
+                  "type": "string",
+                  "description": "Queue URL (REQUIRED for most queue operations except GetQueueUrl and ListQueues)"
+                },
+                "QueueName": {
+                  "type": "string",
+                  "description": "Queue name (REQUIRED for GetQueueUrl)"
+                },
+                "QueueNamePrefix": {
+                  "type": "string",
+                  "description": "Queue name prefix filter (optional for ListQueues)"
+                },
+                "QueueOwnerAWSAccountId": {
+                  "type": "string",
+                  "description": "Queue owner AWS account ID (optional for GetQueueUrl)"
+                },
+                "AttributeNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of attribute names to retrieve (optional for GetQueueAttributes, ReceiveMessage). Use ['All'] for all attributes."
+                },
+                "MessageBody": {
+                  "type": "string",
+                  "description": "Message body text (REQUIRED for SendMessage)"
+                },
+                "DelaySeconds": {
+                  "type": "number",
+                  "description": "Delay in seconds before message becomes available (optional for SendMessage, 0-900)"
+                },
+                "MessageAttributes": {
+                  "type": "object",
+                  "description": "Custom message attributes (optional for SendMessage)"
+                },
+                "MessageDeduplicationId": {
+                  "type": "string",
+                  "description": "Deduplication ID for FIFO queues (optional for SendMessage)"
+                },
+                "MessageGroupId": {
+                  "type": "string",
+                  "description": "Message group ID for FIFO queues (optional for SendMessage)"
+                },
+                "MaxNumberOfMessages": {
+                  "type": "number",
+                  "description": "Maximum number of messages to receive (optional for ReceiveMessage, 1-10, default 1)"
+                },
+                "VisibilityTimeout": {
+                  "type": "number",
+                  "description": "Visibility timeout in seconds (optional for ReceiveMessage, 0-43200)"
+                },
+                "WaitTimeSeconds": {
+                  "type": "number",
+                  "description": "Long polling wait time in seconds (optional for ReceiveMessage, 0-20)"
+                },
+                "MessageAttributeNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Message attribute names to retrieve (optional for ReceiveMessage)"
+                },
+                "ReceiptHandle": {
+                  "type": "string",
+                  "description": "Message receipt handle (REQUIRED for DeleteMessage)"
+                },
+                "MaxResults": {
+                  "type": "number",
+                  "description": "Maximum number of results (optional for ListQueues, ListDeadLetterSourceQueues)"
+                },
+                "NextToken": {
+                  "type": "string",
+                  "description": "Pagination token (optional for ListQueues, ListDeadLetterSourceQueues)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "EC2Tool",
+        "toolReferenceName": "EC2Tool",
+        "displayName": "EC2 Tool",
+        "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeImages {command:'DescribeImages', params:{Owners:['self']}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
+        "userDescription": "Query EC2 instances, images, networking, and console data",
+        "tags": [
+          "aws",
+          "ec2",
+          "compute",
+          "network",
+          "instances"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(vm)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "DescribeAccountAttributes",
+                "DescribeAddresses",
+                "DescribeAvailabilityZones",
+                "DescribeImages",
+                "DescribeInstances",
+                "DescribeInstanceStatus",
+                "DescribeKeyPairs",
+                "DescribeRegions",
+                "DescribeSecurityGroups",
+                "DescribeSnapshots",
+                "DescribeSubnets",
+                "DescribeTags",
+                "DescribeVolumes",
+                "DescribeVpcs",
+                "GetConsoleOutput",
+                "GetHostReservationPurchasePreview",
+                "GetLaunchTemplateData",
+                "GetPasswordData"
+              ],
+              "description": "The EC2 command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Use native EC2 API field names (e.g., InstanceIds, Filters, Owners).",
+              "properties": {
+                "InstanceId": {
+                  "type": "string",
+                  "description": "Single instance ID (for GetConsoleOutput, GetPasswordData)"
+                },
+                "InstanceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of instance IDs (for DescribeInstances, DescribeInstanceStatus)"
+                },
+                "Filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "EC2 filter array with Name and Values[]"
+                },
+                "Owners": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Image owners (for DescribeImages)"
+                },
+                "DryRun": {
+                  "type": "boolean",
+                  "description": "Validate permissions without running the request"
+                },
+                "MaxResults": {
+                  "type": "number",
+                  "description": "Pagination: maximum results"
+                },
+                "NextToken": {
+                  "type": "string",
+                  "description": "Pagination token for next page"
+                },
+                "RegionNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Specific region names (for DescribeRegions)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "APIGatewayTool",
+        "toolReferenceName": "APIGatewayTool",
+        "displayName": "API Gateway Tool",
+        "modelDescription": "Execute AWS API Gateway REST API commands. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}.",
+        "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, and more",
+        "tags": [
+          "aws",
+          "api-gateway",
+          "api",
+          "rest",
+          "gateway"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(globe)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "GetAccount",
+                "GetApiKey",
+                "GetApiKeys",
+                "GetAuthorizer",
+                "GetAuthorizers",
+                "GetBasePathMapping",
+                "GetBasePathMappings",
+                "GetClientCertificate",
+                "GetClientCertificates",
+                "GetDeployment",
+                "GetDeployments",
+                "GetDocumentationPart",
+                "GetDocumentationParts",
+                "GetDocumentationVersion",
+                "GetDocumentationVersions",
+                "GetDomainName",
+                "GetDomainNames",
+                "GetExport",
+                "GetGatewayResponse",
+                "GetGatewayResponses",
+                "GetIntegration",
+                "GetIntegrationResponse",
+                "GetMethod",
+                "GetModel",
+                "GetModels",
+                "GetRequestValidator",
+                "GetRequestValidators",
+                "GetResource",
+                "GetResources",
+                "GetRestApi",
+                "GetRestApis",
+                "GetSdk",
+                "GetSdkType",
+                "GetSdkTypes",
+                "GetStage",
+                "GetStages",
+                "GetTags",
+                "GetUsage",
+                "GetUsagePlan",
+                "GetUsagePlanKey",
+                "GetUsagePlanKeys",
+                "GetUsagePlans",
+                "GetVpcLink",
+                "GetVpcLinks"
+              ],
+              "description": "The API Gateway command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Use native API Gateway field names (e.g., restApiId, resourceId, httpMethod, limit, position).",
+              "properties": {
+                "restApiId": {
+                  "type": "string",
+                  "description": "REST API identifier (for many resource operations)"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "Resource ID"
+                },
+                "httpMethod": {
+                  "type": "string",
+                  "description": "HTTP method (e.g., GET, POST)"
+                },
+                "usagePlanId": {
+                  "type": "string",
+                  "description": "Usage plan ID"
+                },
+                "keyId": {
+                  "type": "string",
+                  "description": "Usage plan key ID"
+                },
+                "domainName": {
+                  "type": "string",
+                  "description": "Custom domain name"
+                },
+                "stageName": {
+                  "type": "string",
+                  "description": "Stage name"
+                },
+                "position": {
+                  "type": "string",
+                  "description": "Pagination position token"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum results for list operations"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Common name filter for certain commands"
+                },
+                "includeCredentials": {
+                  "type": "boolean",
+                  "description": "Whether to include credentials where supported"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "RDSTool",
+        "toolReferenceName": "RDSTool",
+        "displayName": "RDS Tool",
+        "modelDescription": "Execute AWS RDS describe and log commands. ALWAYS provide params object. Examples: DescribeDBInstances {command:'DescribeDBInstances', params:{DBInstanceIdentifier:'my-db'}}. DescribeDBClusters {command:'DescribeDBClusters', params:{}}.",
+        "userDescription": "Inspect Amazon RDS: instances, clusters, snapshots, parameters, logs",
+        "tags": [
+          "aws",
+          "rds",
+          "database",
+          "aurora"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(database)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "DescribeAccountAttributes",
+                "DescribeBlueGreenDeployments",
+                "DescribeCertificates",
+                "DescribeDBClusterAutomatedBackups",
+                "DescribeDBClusterParameterGroups",
+                "DescribeDBClusters",
+                "DescribeDBClusterSnapshots",
+                "DescribeDBEngineVersions",
+                "DescribeDBInstanceAutomatedBackups",
+                "DescribeDBInstances",
+                "DescribeDBLogFiles",
+                "DescribeDBParameterGroups",
+                "DescribeDBProxies",
+                "DescribeDBProxyEndpoints",
+                "DescribeDBRecommendations",
+                "DescribeDBSecurityGroups",
+                "DescribeDBSnapshotAttributes",
+                "DescribeDBSnapshots",
+                "DescribeDBSubnetGroups",
+                "DescribeEngineDefaultParameters",
+                "DescribeEvents",
+                "DescribeEventSubscriptions",
+                "DescribeExportTasks",
+                "DescribeGlobalClusters",
+                "DescribeIntegrations",
+                "DescribeOptionGroups",
+                "DescribeOrderableDBInstanceOptions",
+                "DescribePendingMaintenanceActions",
+                "DescribeReservedDBInstances",
+                "DescribeReservedDBInstancesOfferings",
+                "DescribeSourceRegions",
+                "DescribeTenantDatabases",
+                "DescribeValidDBInstanceModifications",
+                "DownloadDBLogFilePortion",
+                "ListTagsForResource"
+              ],
+              "description": "The RDS command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Use RDS field names (e.g., DBInstanceIdentifier, DBClusterIdentifier, Marker, MaxRecords).",
+              "properties": {
+                "DBInstanceIdentifier": {
+                  "type": "string"
+                },
+                "DBClusterIdentifier": {
+                  "type": "string"
+                },
+                "DBParameterGroupName": {
+                  "type": "string"
+                },
+                "Engine": {
+                  "type": "string"
+                },
+                "EngineVersion": {
+                  "type": "string"
+                },
+                "Marker": {
+                  "type": "string"
+                },
+                "MaxRecords": {
+                  "type": "number"
+                },
+                "Filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Name": {
+                        "type": "string"
+                      },
+                      "Values": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "StartTime": {
+                  "type": "string"
+                },
+                "EndTime": {
+                  "type": "string"
+                },
+                "Duration": {
+                  "type": "number"
+                },
+                "ResourceName": {
+                  "type": "string"
+                },
+                "LogFileName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "RDSDataTool",
+        "toolReferenceName": "RDSDataTool",
+        "displayName": "RDS Data Tool",
+        "modelDescription": "Execute Amazon RDS Data API commands for Aurora Serverless and RDS with Data API enabled. ALWAYS provide params object. Examples: ExecuteStatement {command:'ExecuteStatement', params:{resourceArn:'arn:aws:rds:...', secretArn:'arn:aws:secretsmanager:...', database:'db', sql:'SELECT 1'}}.",
+        "userDescription": "Run SQL and manage transactions via the RDS Data API",
+        "tags": [
+          "aws",
+          "rds",
+          "data",
+          "aurora",
+          "sql"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(server-process)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "BatchExecuteStatement",
+                "BeginTransaction",
+                "CommitTransaction",
+                "ExecuteStatement",
+                "RollbackTransaction"
+              ],
+              "description": "The RDS Data API command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Use Data API field names (e.g., resourceArn, secretArn, database, sql, transactionId, parameters).",
+              "properties": {
+                "resourceArn": {
+                  "type": "string",
+                  "description": "ARN of the Aurora/RDS cluster"
+                },
+                "secretArn": {
+                  "type": "string",
+                  "description": "ARN of the Secrets Manager secret with credentials"
+                },
+                "database": {
+                  "type": "string"
+                },
+                "schema": {
+                  "type": "string"
+                },
+                "sql": {
+                  "type": "string"
+                },
+                "transactionId": {
+                  "type": "string"
+                },
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "object",
+                        "properties": {
+                          "isNull": {
+                            "type": "boolean"
+                          },
+                          "booleanValue": {
+                            "type": "boolean"
+                          },
+                          "longValue": {
+                            "type": "number"
+                          },
+                          "doubleValue": {
+                            "type": "number"
+                          },
+                          "stringValue": {
+                            "type": "string"
+                          },
+                          "blobValue": {
+                            "type": "string"
+                          },
+                          "arrayValue": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "includeResultMetadata": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "CloudFormationTool",
+        "toolReferenceName": "CloudFormationTool",
+        "displayName": "CloudFormation Tool",
+        "modelDescription": "Execute AWS CloudFormation describe, list, get, and drift detection commands. ALWAYS provide params object.",
+        "userDescription": "Inspect stacks, resources, changesets, types, and drift",
+        "tags": [
+          "aws",
+          "cloudformation",
+          "stacks",
+          "infrastructure"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(tools)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "BatchDescribeTypeConfigurations",
+                "DescribeAccountLimits",
+                "DescribeChangeSet",
+                "DescribeChangeSetHooks",
+                "DescribeGeneratedTemplate",
+                "DescribeOrganizationsAccess",
+                "DescribePublisher",
+                "DescribeResourceScan",
+                "DescribeStackDriftDetectionStatus",
+                "DescribeStackEvents",
+                "DescribeStackInstance",
+                "DescribeStackRefactor",
+                "DescribeStackResource",
+                "DescribeStackResourceDrifts",
+                "DescribeStackResources",
+                "DescribeStacks",
+                "DescribeStackSet",
+                "DescribeStackSetOperation",
+                "DescribeType",
+                "DescribeTypeRegistration",
+                "DetectStackDrift",
+                "DetectStackResourceDrift",
+                "DetectStackSetDrift",
+                "GetGeneratedTemplate",
+                "GetHookResult",
+                "GetStackPolicy",
+                "GetTemplate",
+                "GetTemplateSummary",
+                "ListChangeSets",
+                "ListExports",
+                "ListGeneratedTemplates",
+                "ListHookResults",
+                "ListImports",
+                "ListResourceScanRelatedResources",
+                "ListResourceScanResources",
+                "ListResourceScans",
+                "ListStackInstanceResourceDrifts",
+                "ListStackInstances",
+                "ListStackRefactorActions",
+                "ListStackRefactors",
+                "ListStackResources",
+                "ListStacks",
+                "ListStackSetAutoDeploymentTargets",
+                "ListStackSetOperationResults",
+                "ListStackSetOperations",
+                "ListStackSets",
+                "ListTypeRegistrations",
+                "ListTypes",
+                "ListTypeVersions"
+              ],
+              "description": "The CloudFormation command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Use CloudFormation field names (e.g., StackName, StackSetName, ChangeSetName, TypeName, NextToken, MaxResults).",
+              "properties": {
+                "StackName": {
+                  "type": "string"
+                },
+                "StackSetName": {
+                  "type": "string"
+                },
+                "ChangeSetName": {
+                  "type": "string"
+                },
+                "TypeName": {
+                  "type": "string"
+                },
+                "TypeArn": {
+                  "type": "string"
+                },
+                "NextToken": {
+                  "type": "string"
+                },
+                "MaxResults": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "SNSTool",
+        "toolReferenceName": "SNSTool",
+        "displayName": "SNS Tool",
+        "modelDescription": "Execute AWS SNS (Simple Notification Service) commands. ALWAYS provide params object. Examples: ListTopics {command:'ListTopics', params:{}}. GetTopicAttributes {command:'GetTopicAttributes', params:{TopicArn:'arn:...'}}. Publish {command:'Publish', params:{TopicArn:'arn:...', Message:'hello'}}.",
+        "userDescription": "Manage SNS topics, subscriptions, endpoints and publishing",
+        "tags": [
+          "aws",
+          "sns",
+          "notifications",
+          "topics",
+          "subscriptions",
+          "sms"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(megaphone)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "CheckIfPhoneNumberIsOptedOut",
+                "GetEndpointAttributes",
+                "GetPlatformApplicationAttributes",
+                "GetSMSAttributes",
+                "GetSubscriptionAttributes",
+                "GetTopicAttributes",
+                "ListPhoneNumbersOptedOut",
+                "ListSubscriptionsByTopic",
+                "ListSubscriptions",
+                "ListTagsForResource",
+                "ListTopics",
+                "Publish"
+              ],
+              "description": "The SNS command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty.",
+              "properties": {
+                "phoneNumber": {
+                  "type": "string",
+                  "description": "E.164 phone number (for CheckIfPhoneNumberIsOptedOut, Publish)"
+                },
+                "EndpointArn": {
+                  "type": "string",
+                  "description": "Endpoint ARN (for GetEndpointAttributes)"
+                },
+                "PlatformApplicationArn": {
+                  "type": "string",
+                  "description": "Platform application ARN (for GetPlatformApplicationAttributes)"
+                },
+                "attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "SMS attribute names (optional for GetSMSAttributes)"
+                },
+                "SubscriptionArn": {
+                  "type": "string",
+                  "description": "Subscription ARN (for GetSubscriptionAttributes)"
+                },
+                "TopicArn": {
+                  "type": "string",
+                  "description": "Topic ARN (for GetTopicAttributes, ListSubscriptionsByTopic, Publish)"
+                },
+                "ResourceArn": {
+                  "type": "string",
+                  "description": "Resource ARN (for ListTagsForResource)"
+                },
+                "NextToken": {
+                  "type": "string",
+                  "description": "Pagination token (optional for list operations)"
+                },
+                "Message": {
+                  "type": "string",
+                  "description": "Message body (REQUIRED for Publish unless using phoneNumber/TargetArn)"
+                },
+                "TargetArn": {
+                  "type": "string",
+                  "description": "Target ARN (optional for Publish)"
+                },
+                "Subject": {
+                  "type": "string",
+                  "description": "Message subject (optional for Publish)"
+                },
+                "MessageStructure": {
+                  "type": "string",
+                  "description": "Message structure (e.g., 'json') (optional for Publish)"
+                },
+                "MessageAttributes": {
+                  "type": "object",
+                  "description": "Message attributes (optional for Publish)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "S3Tool",
+        "toolReferenceName": "S3Tool",
+        "displayName": "S3 Tool",
+        "modelDescription": "Execute S3 commands. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}. CopyObject {command:'CopyObject', params:{Bucket:'name', CopySource:'/bucket/key', Key:'new-path'}}. OpenS3Explorer {command:'OpenS3Explorer', params:{Bucket:'bucket-name', Key:'optional/path/'}}.",
+        "userDescription": "Execute S3 commands including read, write, delete operations, and open S3 Explorer view",
+        "tags": [
+          "aws",
+          "s3",
+          "bucket",
+          "object",
+          "generic",
+          "upload",
+          "download",
+          "delete",
+          "copy"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(database)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "HeadBucket",
+                "HeadObject",
+                "ListBuckets",
+                "ListObjectsV2",
+                "ListObjectVersions",
+                "GetBucketPolicy",
+                "GetBucketNotificationConfiguration",
+                "GetObject",
+                "PutObject",
+                "DeleteObject",
+                "CopyObject",
+                "SelectObjectContent",
+                "OpenS3Explorer"
+              ],
+              "description": "The S3 command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. For write operations ensure Bucket and Key are provided.",
+              "properties": {
+                "Bucket": {
+                  "type": "string",
+                  "description": "Bucket name (REQUIRED for all commands except ListBuckets)"
+                },
+                "Key": {
+                  "type": "string",
+                  "description": "Object key path (REQUIRED for HeadObject, PutObject, DeleteObject, CopyObject)"
+                },
+                "CopySource": {
+                  "type": "string",
+                  "description": "Source object path for copy command (REQUIRED for CopyObject, format: /bucket/key)"
+                },
+                "Body": {
+                  "type": "string",
+                  "description": "Object content as string or base64 (optional for PutObject)"
+                },
+                "ContentType": {
+                  "type": "string",
+                  "description": "MIME type for the object (optional for PutObject)"
+                },
+                "Prefix": {
+                  "type": "string",
+                  "description": "Filter objects by prefix path (optional for ListObjectsV2, ListObjectVersions)"
+                },
+                "Delimiter": {
+                  "type": "string",
+                  "description": "Delimiter character for grouping keys, typically / (optional)"
+                },
+                "MaxKeys": {
+                  "type": "number",
+                  "description": "Maximum number of keys to return (optional, default 1000)"
+                },
+                "ContinuationToken": {
+                  "type": "string",
+                  "description": "Token for pagination from previous response (optional)"
+                },
+                "StartAfter": {
+                  "type": "string",
+                  "description": "Start listing after this key name (optional)"
+                },
+                "VersionId": {
+                  "type": "string",
+                  "description": "Specific version ID of object (optional for HeadObject, DeleteObject)"
+                },
+                "KeyMarker": {
+                  "type": "string",
+                  "description": "Key marker for version pagination (optional for ListObjectVersions)"
+                },
+                "VersionIdMarker": {
+                  "type": "string",
+                  "description": "Version ID marker for pagination (optional for ListObjectVersions)"
+                },
+                "Metadata": {
+                  "type": "object",
+                  "description": "Custom metadata key-value pairs (optional for PutObject, CopyObject)"
+                },
+                "MetadataDirective": {
+                  "type": "string",
+                  "description": "How to handle metadata in CopyObject: COPY or REPLACE (optional)"
+                },
+                "DownloadToTemp": {
+                  "type": "boolean",
+                  "description": "Download file to temp folder and return local path (optional for GetObject)"
+                },
+                "AsText": {
+                  "type": "boolean",
+                  "description": "Return file content as text for analysis (optional for GetObject)"
+                },
+                "Expression": {
+                  "type": "string",
+                  "description": "SQL expression for querying object content (REQUIRED for SelectObjectContent, e.g., 'SELECT * FROM S3Object')"
+                },
+                "ExpressionType": {
+                  "type": "string",
+                  "description": "Type of expression (REQUIRED for SelectObjectContent, value: SQL)"
+                },
+                "InputSerialization": {
+                  "type": "object",
+                  "description": "Format of the input data (REQUIRED for SelectObjectContent, e.g., {CSV: {FileHeaderInfo: 'USE'}} or {JSON: {Type: 'DOCUMENT'}})"
+                },
+                "OutputSerialization": {
+                  "type": "object",
+                  "description": "Format for output data (REQUIRED for SelectObjectContent, e.g., {CSV: {}} or {JSON: {}})"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "FileOperationsTool",
+        "toolReferenceName": "FileOperationsTool",
+        "displayName": "File Operations Tool",
+        "modelDescription": "Perform file operations: ReadFile to read file content, ReadFileStream to get file metadata, ReadFileAsBase64 to read as Base64, GetFileInfo to get file statistics, ListFiles to list directory contents, ZipTextFile to create a zip archive of a file or directory.",
+        "userDescription": "Read and manage files with various encoding and format options",
+        "tags": [
+          "file",
+          "read",
+          "write",
+          "operations",
+          "filesystem",
+          "base64"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(file)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "ReadFile",
+                "ReadFileStream",
+                "ReadFileAsBase64",
+                "GetFileInfo",
+                "ListFiles",
+                "ZipTextFile"
+              ],
+              "description": "The file operation command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "Command parameters. ReadFile: {filePath, encoding?}. ReadFileStream: {filePath}. ReadFileAsBase64: {filePath}. GetFileInfo: {filePath}. ListFiles: {dirPath, recursive?}. ZipTextFile: {filePath, outputPath?}",
+              "properties": {
+                "filePath": {
+                  "type": "string",
+                  "description": "File path (required for ReadFile, ReadFileStream, ReadFileAsBase64, GetFileInfo, ZipTextFile)"
+                },
+                "dirPath": {
+                  "type": "string",
+                  "description": "Directory path (required for ListFiles)"
+                },
+                "encoding": {
+                  "type": "string",
+                  "description": "File encoding for ReadFile (optional, default: utf8). Examples: utf8, ascii, base64, utf16le"
+                },
+                "recursive": {
+                  "type": "boolean",
+                  "description": "Recursively list files in subdirectories (optional for ListFiles, default: false)"
+                },
+                "outputPath": {
+                  "type": "string",
+                  "description": "Custom output path for zip file (optional for ZipTextFile, default: temp directory)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "CloudWatchLogTool",
+        "toolReferenceName": "CloudWatchLogTool",
+        "displayName": "CloudWatch Logs Tool",
+        "modelDescription": "Execute CloudWatch Logs commands. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. DescribeLogStreams {command:'DescribeLogStreams', params:{logGroupName:'my-group'}}. GetLogEvents {command:'GetLogEvents', params:{logGroupName:'my-group', logStreamName:'stream', limit:50}}. OpenCloudWatchLogView {command:'OpenCloudWatchLogView', params:{logGroupName:'my-group', logStreamName:'optional-stream'}}.",
+        "userDescription": "Query CloudWatch log groups, streams, events, and open log viewer",
+        "tags": [
+          "aws",
+          "cloudwatch",
+          "logs",
+          "monitoring"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(list-selection)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "DescribeLogGroups",
+                "DescribeLogStreams",
+                "GetLogEvents",
+                "OpenCloudWatchLogView"
+              ],
+              "description": "The CloudWatch Logs command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide logGroupName/logStreamName where needed.",
+              "properties": {
+                "logGroupNamePrefix": {
+                  "type": "string",
+                  "description": "Prefix filter for log group names (optional for DescribeLogGroups)"
+                },
+                "logGroupName": {
+                  "type": "string",
+                  "description": "Target log group name (required for DescribeLogStreams, GetLogEvents)"
+                },
+                "logStreamNamePrefix": {
+                  "type": "string",
+                  "description": "Prefix filter for log stream names (optional for DescribeLogStreams)"
+                },
+                "orderBy": {
+                  "type": "string",
+                  "enum": [
+                    "LogStreamName",
+                    "LastEventTime"
+                  ],
+                  "description": "Ordering for DescribeLogStreams (optional)"
+                },
+                "descending": {
+                  "type": "boolean",
+                  "description": "Whether to sort descending for DescribeLogStreams (optional)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum items to return where supported (optional)"
+                },
+                "nextToken": {
+                  "type": "string",
+                  "description": "Pagination token (optional)"
+                },
+                "logStreamName": {
+                  "type": "string",
+                  "description": "Target log stream name (required for GetLogEvents)"
+                },
+                "startTime": {
+                  "type": "number",
+                  "description": "Start time in epoch milliseconds (optional for GetLogEvents)"
+                },
+                "endTime": {
+                  "type": "number",
+                  "description": "End time in epoch milliseconds (optional for GetLogEvents)"
+                },
+                "startFromHead": {
+                  "type": "boolean",
+                  "description": "Return events starting from the beginning of the stream (optional for GetLogEvents)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "LambdaTool",
+        "toolReferenceName": "LambdaTool",
+        "displayName": "Lambda Tool",
+        "modelDescription": "Execute AWS Lambda commands. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
+        "userDescription": "Manage and invoke AWS Lambda functions",
+        "tags": [
+          "aws",
+          "lambda",
+          "function",
+          "serverless",
+          "invoke"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(symbol-method)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "ListFunctions",
+                "GetFunction",
+                "GetFunctionConfiguration",
+                "UpdateFunctionCode",
+                "ListTags",
+                "TagResource",
+                "UntagResource",
+                "Invoke"
+              ],
+              "description": "The Lambda command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty.",
+              "properties": {
+                "FunctionName": {
+                  "type": "string",
+                  "description": "Lambda function name or ARN (REQUIRED for GetFunction, GetFunctionConfiguration, UpdateFunctionCode, Invoke)"
+                },
+                "Qualifier": {
+                  "type": "string",
+                  "description": "Function version or alias (optional)"
+                },
+                "FunctionVersion": {
+                  "type": "string",
+                  "description": "Set to ALL to include all versions (optional for ListFunctions)"
+                },
+                "Marker": {
+                  "type": "string",
+                  "description": "Pagination marker from previous response (optional for ListFunctions)"
+                },
+                "MaxItems": {
+                  "type": "number",
+                  "description": "Maximum number of functions to return (optional for ListFunctions)"
+                },
+                "MasterRegion": {
+                  "type": "string",
+                  "description": "For Lambda@Edge, the AWS Region of the master function (optional)"
+                },
+                "ZipFile": {
+                  "type": "string",
+                  "description": "Base64-encoded zip file containing function code (optional for UpdateFunctionCode)"
+                },
+                "S3Bucket": {
+                  "type": "string",
+                  "description": "S3 bucket containing the function code (optional for UpdateFunctionCode)"
+                },
+                "S3Key": {
+                  "type": "string",
+                  "description": "S3 object key for the function code (optional for UpdateFunctionCode)"
+                },
+                "S3ObjectVersion": {
+                  "type": "string",
+                  "description": "S3 object version (optional for UpdateFunctionCode)"
+                },
+                "ImageUri": {
+                  "type": "string",
+                  "description": "URI of a container image in Amazon ECR (optional for UpdateFunctionCode)"
+                },
+                "Publish": {
+                  "type": "boolean",
+                  "description": "Publish a new version after updating code (optional for UpdateFunctionCode)"
+                },
+                "DryRun": {
+                  "type": "boolean",
+                  "description": "Validate the request without updating code (optional for UpdateFunctionCode)"
+                },
+                "RevisionId": {
+                  "type": "string",
+                  "description": "Update only if revision ID matches (optional for UpdateFunctionCode)"
+                },
+                "Architectures": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Instruction set architecture: x86_64 or arm64 (optional for UpdateFunctionCode)"
+                },
+                "Resource": {
+                  "type": "string",
+                  "description": "Function ARN (REQUIRED for ListTags, TagResource, UntagResource)"
+                },
+                "Tags": {
+                  "type": "object",
+                  "description": "Key-value pairs for tags (REQUIRED for TagResource)"
+                },
+                "TagKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Tag keys to remove (REQUIRED for UntagResource)"
+                },
+                "InvocationType": {
+                  "type": "string",
+                  "enum": [
+                    "Event",
+                    "RequestResponse",
+                    "DryRun"
+                  ],
+                  "description": "Invocation type (optional for Invoke, default: RequestResponse)"
+                },
+                "LogType": {
+                  "type": "string",
+                  "enum": [
+                    "None",
+                    "Tail"
+                  ],
+                  "description": "Set to Tail to include execution log in response (optional for Invoke)"
+                },
+                "ClientContext": {
+                  "type": "string",
+                  "description": "Base64-encoded client context data (optional for Invoke)"
+                },
+                "Payload": {
+                  "type": "string",
+                  "description": "JSON string payload to pass to function (optional for Invoke)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "StepFuncTool",
+        "toolReferenceName": "StepFuncTool",
+        "displayName": "Step Functions Tool",
+        "modelDescription": "Execute AWS Step Functions commands. ALWAYS provide params object. Examples: ListStateMachines {command:'ListStateMachines', params:{maxResults:10}}. StartExecution {command:'StartExecution', params:{stateMachineArn:'arn:aws:states:...', input:'{\\\"key\\\":\\\"value\\\"}'}}. DescribeExecution {command:'DescribeExecution', params:{executionArn:'arn:aws:states:...'}}.",
+        "userDescription": "Manage and run AWS Step Functions state machines",
+        "tags": [
+          "aws",
+          "stepfunctions",
+          "workflow",
+          "state-machine"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(circuit-board)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "DescribeExecution",
+                "DescribeStateMachine",
+                "ListExecutions",
+                "ListStateMachines",
+                "StartExecution",
+                "UpdateStateMachine"
+              ],
+              "description": "The Step Functions command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide stateMachineArn/executionArn as needed.",
+              "properties": {
+                "executionArn": {
+                  "type": "string",
+                  "description": "Execution ARN (REQUIRED for DescribeExecution)"
+                },
+                "stateMachineArn": {
+                  "type": "string",
+                  "description": "State machine ARN (REQUIRED for DescribeStateMachine, StartExecution, UpdateStateMachine; optional for ListExecutions)"
+                },
+                "maxResults": {
+                  "type": "number",
+                  "description": "Maximum items to return where supported (optional)"
+                },
+                "nextToken": {
+                  "type": "string",
+                  "description": "Pagination token (optional)"
+                },
+                "statusFilter": {
+                  "type": "string",
+                  "enum": [
+                    "RUNNING",
+                    "SUCCEEDED",
+                    "FAILED",
+                    "TIMED_OUT",
+                    "ABORTED"
+                  ],
+                  "description": "Filter executions by status (optional for ListExecutions)"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Execution name (optional for StartExecution)"
+                },
+                "input": {
+                  "type": "string",
+                  "description": "JSON string input for execution (optional for StartExecution)"
+                },
+                "traceHeader": {
+                  "type": "string",
+                  "description": "X-Ray trace header (optional for StartExecution)"
+                },
+                "definition": {
+                  "type": "string",
+                  "description": "State machine definition in Amazon States Language (optional for UpdateStateMachine)"
+                },
+                "roleArn": {
+                  "type": "string",
+                  "description": "IAM role ARN for the state machine (optional for UpdateStateMachine)"
+                },
+                "loggingConfiguration": {
+                  "type": "object",
+                  "description": "Logging configuration object (optional for UpdateStateMachine)"
+                },
+                "tracingConfiguration": {
+                  "type": "object",
+                  "description": "Tracing configuration object (optional for UpdateStateMachine)"
+                },
+                "publish": {
+                  "type": "boolean",
+                  "description": "Set true to publish a new version (optional for UpdateStateMachine)"
+                },
+                "versionDescription": {
+                  "type": "string",
+                  "description": "Description for the published version (optional for UpdateStateMachine)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "GlueTool",
+        "toolReferenceName": "GlueTool",
+        "displayName": "Glue Tool",
+        "modelDescription": "Execute AWS Glue commands. ALWAYS provide params object. Examples: ListJobs {command:'ListJobs', params:{MaxResults:10}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
+        "userDescription": "Manage and run AWS Glue ETL jobs and triggers",
+        "tags": [
+          "aws",
+          "glue",
+          "etl",
+          "jobs",
+          "triggers"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(database)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "CreateJob",
+                "GetJob",
+                "GetJobRun",
+                "GetJobRuns",
+                "GetTags",
+                "GetTrigger",
+                "GetTriggers",
+                "ListJobs",
+                "ListTriggers",
+                "StartJobRun"
+              ],
+              "description": "The Glue command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide Name/JobName/ResourceArn as needed.",
+              "properties": {
+                "Name": {
+                  "type": "string",
+                  "description": "Job or trigger name (REQUIRED for CreateJob, GetJob, GetTrigger, StartJobRun)"
+                },
+                "JobName": {
+                  "type": "string",
+                  "description": "Job name (REQUIRED for GetJobRun, GetJobRuns, StartJobRun)"
+                },
+                "RunId": {
+                  "type": "string",
+                  "description": "Job run ID (REQUIRED for GetJobRun)"
+                },
+                "ResourceArn": {
+                  "type": "string",
+                  "description": "Resource ARN (REQUIRED for GetTags)"
+                },
+                "Role": {
+                  "type": "string",
+                  "description": "IAM role ARN (REQUIRED for CreateJob)"
+                },
+                "Command": {
+                  "type": "object",
+                  "description": "Command configuration object (REQUIRED for CreateJob, should include Name property)"
+                },
+                "Description": {
+                  "type": "string",
+                  "description": "Job description (optional for CreateJob)"
+                },
+                "LogUri": {
+                  "type": "string",
+                  "description": "S3 URI for job logs (optional for CreateJob)"
+                },
+                "DefaultArguments": {
+                  "type": "object",
+                  "description": "Default job arguments (optional for CreateJob)"
+                },
+                "MaxRetries": {
+                  "type": "number",
+                  "description": "Maximum retries (optional for CreateJob)"
+                },
+                "Timeout": {
+                  "type": "number",
+                  "description": "Job timeout in minutes (optional)"
+                },
+                "MaxCapacity": {
+                  "type": "number",
+                  "description": "Maximum capacity for DPU units (optional)"
+                },
+                "WorkerType": {
+                  "type": "string",
+                  "enum": [
+                    "Standard",
+                    "G.1X",
+                    "G.2X",
+                    "G.025X"
+                  ],
+                  "description": "Worker type (optional for CreateJob)"
+                },
+                "NumberOfWorkers": {
+                  "type": "number",
+                  "description": "Number of workers (optional for CreateJob)"
+                },
+                "Tags": {
+                  "type": "object",
+                  "description": "Key-value tags (optional for CreateJob)"
+                },
+                "JobRunId": {
+                  "type": "string",
+                  "description": "Job run ID (optional for StartJobRun)"
+                },
+                "Arguments": {
+                  "type": "object",
+                  "description": "Job run arguments (optional for StartJobRun)"
+                },
+                "AllocatedCapacity": {
+                  "type": "number",
+                  "description": "Allocated capacity for the job run (optional)"
+                },
+                "SecurityConfiguration": {
+                  "type": "string",
+                  "description": "Security configuration name (optional for StartJobRun)"
+                },
+                "nextToken": {
+                  "type": "string",
+                  "description": "Pagination token (optional)"
+                },
+                "MaxResults": {
+                  "type": "number",
+                  "description": "Maximum items to return (optional)"
+                },
+                "DependencyJobName": {
+                  "type": "string",
+                  "description": "Filter by dependent job name (optional for GetTriggers)"
+                },
+                "DependentJobName": {
+                  "type": "string",
+                  "description": "Filter by dependent job name (optional for ListTriggers)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "EMRTool",
+        "toolReferenceName": "EMRTool",
+        "displayName": "EMR Tool",
+        "modelDescription": "Describe and list EMR clusters, steps, studios, notebook executions, release labels, and security settings. Commands are read-only: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
+        "userDescription": "Inspect EMR clusters, notebooks, steps, studios, and related configurations",
+        "tags": [
+          "aws",
+          "emr",
+          "hadoop",
+          "spark",
+          "cluster"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(server-process)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "DescribeCluster",
+                "DescribeJobFlows",
+                "DescribeNotebookExecution",
+                "DescribePersistentAppUI",
+                "DescribeReleaseLabel",
+                "DescribeSecurityConfiguration",
+                "DescribeStep",
+                "DescribeStudio",
+                "GetAutoTerminationPolicy",
+                "GetBlockPublicAccessConfiguration",
+                "GetClusterSessionCredentials",
+                "GetManagedScalingPolicy",
+                "GetOnClusterAppUIPresignedURL",
+                "GetPersistentAppUIPresignedURL",
+                "GetStudioSessionMapping",
+                "ListBootstrapActions",
+                "ListClusters",
+                "ListInstanceFleets",
+                "ListInstanceGroups",
+                "ListInstances",
+                "ListNotebookExecutions",
+                "ListReleaseLabels",
+                "ListSecurityConfigurations",
+                "ListSteps",
+                "ListStudios",
+                "ListStudioSessionMappings",
+                "ListSupportedInstanceTypes"
+              ],
+              "description": "The EMR command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide ClusterId, StudioId, ReleaseLabel, or other identifiers as needed.",
+              "properties": {
+                "ClusterId": {
+                  "type": "string",
+                  "description": "EMR cluster ID (for describe/get/list operations scoped to a cluster)"
+                },
+                "StepId": {
+                  "type": "string",
+                  "description": "Step ID (for DescribeStep)"
+                },
+                "JobFlowIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Job flow IDs filter (optional for DescribeJobFlows)"
+                },
+                "NotebookExecutionId": {
+                  "type": "string",
+                  "description": "Notebook execution ID (for DescribeNotebookExecution)"
+                },
+                "StudioId": {
+                  "type": "string",
+                  "description": "Studio ID (for DescribeStudio, GetStudioSessionMapping, ListStudioSessionMappings)"
+                },
+                "ReleaseLabel": {
+                  "type": "string",
+                  "description": "Release label (for DescribeReleaseLabel, ListSupportedInstanceTypes)"
+                },
+                "SecurityConfigurationName": {
+                  "type": "string",
+                  "description": "Security configuration name (for DescribeSecurityConfiguration)"
+                },
+                "ApplicationId": {
+                  "type": "string",
+                  "description": "Application ID for UI presigned URL commands"
+                },
+                "IdentityType": {
+                  "type": "string",
+                  "description": "Identity type (USER or GROUP) for studio session mappings"
+                },
+                "IdentityId": {
+                  "type": "string",
+                  "description": "Identity ID for studio session mappings"
+                },
+                "InstanceFleetId": {
+                  "type": "string",
+                  "description": "Instance fleet ID (for ListInstances)"
+                },
+                "InstanceGroupId": {
+                  "type": "string",
+                  "description": "Instance group ID (for ListInstances)"
+                },
+                "InstanceStates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Instance states filter (optional for ListInstances)"
+                },
+                "StepStates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Step states filter (optional for ListSteps)"
+                },
+                "ClusterStates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Cluster state filters (optional for ListClusters)"
+                },
+                "CreatedAfter": {
+                  "type": "string",
+                  "description": "ISO date string to filter clusters or job flows created after this time"
+                },
+                "CreatedBefore": {
+                  "type": "string",
+                  "description": "ISO date string to filter clusters or job flows created before this time"
+                },
+                "MaxResults": {
+                  "type": "number",
+                  "description": "Maximum items to return where supported"
+                },
+                "NextToken": {
+                  "type": "string",
+                  "description": "Pagination token for list APIs"
+                },
+                "Marker": {
+                  "type": "string",
+                  "description": "Pagination marker where supported"
+                },
+                "CredentialType": {
+                  "type": "string",
+                  "description": "Credential type for GetClusterSessionCredentials"
+                },
+                "ExecutionRoleArn": {
+                  "type": "string",
+                  "description": "Execution role ARN for session credentials"
+                },
+                "DurationSeconds": {
+                  "type": "number",
+                  "description": "Lifetime for session credentials (seconds)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "IAMTool",
+        "toolReferenceName": "IAMTool",
+        "displayName": "IAM Tool",
+        "modelDescription": "Execute AWS IAM commands. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}. GetPolicyVersion {command:'GetPolicyVersion', params:{PolicyArn:'arn:aws:iam::123:policy/p', VersionId:'v1'}}.",
+        "userDescription": "Inspect IAM roles and policies",
+        "tags": [
+          "aws",
+          "iam",
+          "roles",
+          "policies"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(shield)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "GetRole",
+                "GetRolePolicy",
+                "ListAttachedRolePolicies",
+                "ListRolePolicies",
+                "ListRoles",
+                "ListRoleTags",
+                "GetPolicy",
+                "GetPolicyVersion",
+                "ListPolicies",
+                "ListPolicyVersions"
+              ],
+              "description": "The IAM command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide RoleName/PolicyArn as needed.",
+              "properties": {
+                "RoleName": {
+                  "type": "string",
+                  "description": "Target IAM role name (REQUIRED for GetRole, GetRolePolicy, ListAttachedRolePolicies, ListRolePolicies, ListRoleTags)"
+                },
+                "PolicyName": {
+                  "type": "string",
+                  "description": "Inline policy name (REQUIRED for GetRolePolicy)"
+                },
+                "PathPrefix": {
+                  "type": "string",
+                  "description": "Path prefix to filter results (optional for ListAttachedRolePolicies, ListRoles, ListPolicies)"
+                },
+                "Marker": {
+                  "type": "string",
+                  "description": "Pagination marker (optional where supported)"
+                },
+                "MaxItems": {
+                  "type": "number",
+                  "description": "Maximum items to return (optional where supported)"
+                },
+                "PolicyArn": {
+                  "type": "string",
+                  "description": "IAM policy ARN (REQUIRED for GetPolicy, GetPolicyVersion, ListPolicyVersions)"
+                },
+                "VersionId": {
+                  "type": "string",
+                  "description": "Policy version ID (REQUIRED for GetPolicyVersion)"
+                },
+                "Scope": {
+                  "type": "string",
+                  "enum": [
+                    "All",
+                    "AWS",
+                    "Local"
+                  ],
+                  "description": "Scope filter for ListPolicies (optional)"
+                },
+                "OnlyAttached": {
+                  "type": "boolean",
+                  "description": "Set true to list only attached policies (optional for ListPolicies)"
+                },
+                "PolicyUsageFilter": {
+                  "type": "string",
+                  "enum": [
+                    "PermissionsPolicy",
+                    "PermissionsBoundary"
+                  ],
+                  "description": "Filter policies by usage (optional for ListPolicies)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "DynamoDBTool",
+        "toolReferenceName": "DynamoDBTool",
+        "displayName": "DynamoDB Tool",
+        "modelDescription": "Execute DynamoDB commands. ALWAYS provide params object. Examples: ListTables {command:'ListTables', params:{Limit:10}}. DescribeTable {command:'DescribeTable', params:{TableName:'my-table'}}. Query {command:'Query', params:{TableName:'my-table', KeyConditionExpression:'pk = :pk', ExpressionAttributeValues:{':pk':{'S':'id'}}}}.",
+        "userDescription": "Manage DynamoDB tables and items",
+        "tags": [
+          "aws",
+          "dynamodb",
+          "database",
+          "nosql"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(server)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "ListTables",
+                "DescribeTable",
+                "CreateTable",
+                "DeleteTable",
+                "Query",
+                "Scan",
+                "PutItem",
+                "UpdateItem",
+                "DeleteItem",
+                "GetItem",
+                "UpdateTable",
+                "UpdateTimeToLive",
+                "ListTagsOfResource"
+              ],
+              "description": "The DynamoDB command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty. Provide TableName and key attributes where needed.",
+              "properties": {
+                "TableName": {
+                  "type": "string",
+                  "description": "Target DynamoDB table name (REQUIRED for most table/item operations)"
+                },
+                "Limit": {
+                  "type": "number",
+                  "description": "Maximum number of items to return (optional for ListTables, Query)"
+                },
+                "ExclusiveStartTableName": {
+                  "type": "string",
+                  "description": "Pagination start table name (optional for ListTables)"
+                },
+                "KeyConditionExpression": {
+                  "type": "string",
+                  "description": "Key condition expression (optional for Query)"
+                },
+                "FilterExpression": {
+                  "type": "string",
+                  "description": "Filter expression (optional for Query)"
+                },
+                "ExpressionAttributeValues": {
+                  "type": "object",
+                  "description": "Expression attribute values map (optional for Query/UpdateItem)"
+                },
+                "ExpressionAttributeNames": {
+                  "type": "object",
+                  "description": "Expression attribute names map (optional)"
+                },
+                "IndexName": {
+                  "type": "string",
+                  "description": "Secondary index name (optional for Query)"
+                },
+                "Select": {
+                  "type": "string",
+                  "description": "Projection selection (optional for Query)"
+                },
+                "Key": {
+                  "type": "object",
+                  "description": "Primary key map (REQUIRED for GetItem/DeleteItem/UpdateItem)"
+                },
+                "Item": {
+                  "type": "object",
+                  "description": "Item attributes map (REQUIRED for PutItem)"
+                },
+                "AttributeUpdates": {
+                  "type": "object",
+                  "description": "Legacy attribute updates map (optional for UpdateItem)"
+                },
+                "UpdateExpression": {
+                  "type": "string",
+                  "description": "Update expression (optional for UpdateItem)"
+                },
+                "ConditionExpression": {
+                  "type": "string",
+                  "description": "Condition expression (optional for write operations)"
+                },
+                "ProvisionedThroughput": {
+                  "type": "object",
+                  "description": "Provisioned throughput config (optional for CreateTable/UpdateTable)"
+                },
+                "AttributeDefinitions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Attribute definitions (REQUIRED for CreateTable)"
+                },
+                "KeySchema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Key schema definitions (REQUIRED for CreateTable)"
+                },
+                "BillingMode": {
+                  "type": "string",
+                  "description": "Billing mode: PROVISIONED or PAY_PER_REQUEST (optional for CreateTable/UpdateTable)"
+                },
+                "GlobalSecondaryIndexUpdates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Updates to GSIs (optional for UpdateTable)"
+                },
+                "TimeToLiveSpecification": {
+                  "type": "object",
+                  "description": "TTL specification (REQUIRED for UpdateTimeToLive)"
+                },
+                "ResourceArn": {
+                  "type": "string",
+                  "description": "Table resource ARN (REQUIRED for ListTagsOfResource)"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Awsflow: MCP",
+      "properties": {
+        "awsflow.mcp.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable the MCP stdio host. When disabled, MCP sessions cannot be started."
+        },
+        "awsflow.mcp.host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Host interface for the MCP bridge server."
+        },
+        "awsflow.mcp.port": {
+          "type": "number",
+          "default": 37114,
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "TCP port for the MCP bridge server."
+        },
+        "awsflow.mcp.sessionCap": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "description": "Maximum concurrent MCP stdio sessions. Additional requests queue until a slot is free."
+        },
+        "awsflow.mcp.disabledTools": {
+          "type": "array",
+          "description": "List of tool names to disable for MCP sessions (independent from Service Access settings).",
+          "items": {
+            "type": "string",
+            "enum": [
+              "TestAwsConnectionTool",
+              "STSTool",
+              "S3Tool",
+              "SNSTool",
+              "SQSTool",
+              "EC2Tool",
+              "FileOperationsTool",
+              "SessionTool",
+              "CloudWatchLogTool",
+              "LambdaTool",
+              "StepFuncTool",
+              "GlueTool",
+              "IAMTool",
+              "DynamoDBTool",
+              "APIGatewayTool",
+              "RDSTool",
+              "RDSDataTool",
+              "CloudFormationTool",
+              "EMRTool"
+            ]
+          },
+          "default": []
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "awsflow.RefreshCredentials",
+        "title": "Awsflow:Refresh Credentials"
+      },
+      {
+        "command": "awsflow.ListAwsProfiles",
+        "title": "Awsflow:List Profiles"
+      },
+      {
+        "command": "awsflow.SetAwsProfile",
+        "title": "Awsflow:Set Active Profile"
+      },
+      {
+        "command": "awsflow.TestAwsConnectivity",
+        "title": "Awsflow:Test Aws Connectivity"
+      },
+      {
+        "command": "awsflow.SetAwsEndpoint",
+        "title": "Awsflow:Set AWS Endpoint"
+      },
+      {
+        "command": "awsflow.SetDefaultRegion",
+        "title": "Awsflow:Set Default AWS Region"
+      },
+      {
+        "command": "awsflow.OpenCloudWatchView",
+        "title": "Awsflow:Open CloudWatch Log View"
+      },
+      {
+        "command": "awsflow.OpenS3ExplorerView",
+        "title": "Awsflow:Open S3 Explorer View"
+      },
+      {
+        "command": "awsflow.ShowCommandHistory",
+        "title": "Awsflow:Show Command History"
+      },
+      {
+        "command": "awsflow.OpenServiceAccessView",
+        "title": "Awsflow:Service Access Settings"
+      },
+      {
+        "command": "awsflow.StartMcpServer",
+        "title": "Awsflow:Start MCP Server"
+      },
+      {
+        "command": "awsflow.StopMcpServers",
+        "title": "Awsflow:Stop MCP Servers"
+      },
+      {
+        "command": "awsflow.OpenMcpManageView",
+        "title": "Awsflow:MCP Management"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^9.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.0.0",
+    "@types/tmp": "^0.2.6",
+    "@types/vscode": "^1.104.0",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.39.1",
+    "glob": "^13.0.0",
+    "mocha": "^11.7.5",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-api-gateway": "^3.948.0",
+    "@aws-sdk/client-cloudformation": "^3.948.0",
+    "@aws-sdk/client-cloudwatch-logs": "^3.948.0",
+    "@aws-sdk/client-dynamodb": "^3.948.0",
+    "@aws-sdk/client-ec2": "^3.948.0",
+    "@aws-sdk/client-emr": "^3.955.0",
+    "@aws-sdk/client-glue": "^3.948.0",
+    "@aws-sdk/client-iam": "^3.948.0",
+    "@aws-sdk/client-lambda": "^3.948.0",
+    "@aws-sdk/client-rds": "^3.948.0",
+    "@aws-sdk/client-rds-data": "^3.948.0",
+    "@aws-sdk/client-s3": "^3.948.0",
+    "@aws-sdk/client-sfn": "^3.948.0",
+    "@aws-sdk/client-sns": "^3.948.0",
+    "@aws-sdk/client-sqs": "^3.948.0",
+    "@aws-sdk/client-sts": "^3.948.0",
+    "@aws-sdk/credential-provider-node": "^3.948.0",
+    "@aws-sdk/credential-providers": "^3.948.0",
+    "@aws-sdk/types": "^3.936.0",
+    "@types/archiver": "^7.0.0",
+    "@vscode-elements/elements": "^2.3.1",
+    "@vscode/codicons": "^0.0.44",
+    "archiver": "^7.0.1",
+    "js-tiktoken": "^1.0.21",
+    "tmp": "^0.2.5"
+  }
+}
