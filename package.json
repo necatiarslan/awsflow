@@ -890,6 +890,89 @@
         }
       },
       {
+        "name": "S3FileOperationsTool",
+        "toolReferenceName": "S3FileOperationsTool",
+        "displayName": "S3 File Operations Tool",
+        "modelDescription": "Execute S3 file operations: UploadFile to upload one or multiple files, DownloadFile to download one or multiple files, UploadFolder to upload folders with preserved structure, DownloadFolder to download folders with preserved structure. ALWAYS provide params object.",
+        "userDescription": "Upload and download files and folders to/from S3 with folder structure preservation",
+        "tags": [
+          "aws",
+          "s3",
+          "upload",
+          "download",
+          "file",
+          "folder"
+        ],
+        "canBeReferencedInPrompt": true,
+        "icon": "$(cloud-upload)",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "command",
+            "params"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "enum": [
+                "UploadFile",
+                "DownloadFile",
+                "UploadFolder",
+                "DownloadFolder"
+              ],
+              "description": "The S3 file operation command to execute"
+            },
+            "params": {
+              "type": "object",
+              "description": "REQUIRED parameters object. Always include this even if empty.",
+              "properties": {
+                "Bucket": {
+                  "type": "string",
+                  "description": "S3 bucket name (REQUIRED for all commands)"
+                },
+                "LocalPaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of local file or folder paths (REQUIRED for UploadFile, UploadFolder)"
+                },
+                "S3Keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of S3 object keys (REQUIRED for DownloadFile)"
+                },
+                "S3KeyPrefixes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of S3 key prefixes/folders (REQUIRED for DownloadFolder)"
+                },
+                "LocalDirectory": {
+                  "type": "string",
+                  "description": "Local directory path to download to (REQUIRED for DownloadFile, DownloadFolder)"
+                },
+                "S3KeyPrefix": {
+                  "type": "string",
+                  "description": "S3 key prefix/folder to upload to (optional for UploadFile, UploadFolder)"
+                },
+                "ContentType": {
+                  "type": "string",
+                  "description": "MIME type for uploaded files (optional for UploadFile)"
+                },
+                "PreserveStructure": {
+                  "type": "boolean",
+                  "description": "Whether to preserve folder structure (optional, default: true for folders, can be set for file downloads)"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
         "name": "SNSTool",
         "toolReferenceName": "SNSTool",
         "displayName": "SNS Tool",
@@ -2123,6 +2206,7 @@
               "TestAwsConnectionTool",
               "STSTool",
               "S3Tool",
+              "S3FileOperationsTool",
               "SNSTool",
               "SQSTool",
               "EC2Tool",

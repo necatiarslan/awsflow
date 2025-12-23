@@ -5,6 +5,7 @@ import { BaseTool } from '../common/BaseTool';
 import { Session } from '../common/Session';
 import { McpRequest, McpResponse } from './types';
 import { S3Tool } from '../s3/S3Tool';
+import { S3FileOperationsTool } from '../s3/S3FileOperationsTool';
 import { SNSTool } from '../sns/SNSTool';
 import { SQSTool } from '../sqs/SQSTool';
 import { EC2Tool } from '../ec2/EC2Tool';
@@ -64,6 +65,7 @@ export class McpDispatcher {
             { name: 'TestAwsConnectionTool', instance: new TestAwsConnectionTool() as BaseTool<any> },
             { name: 'STSTool', instance: new STSTool() as BaseTool<any> },
             { name: 'S3Tool', instance: new S3Tool() as BaseTool<any> },
+            { name: 'S3FileOperationsTool', instance: new S3FileOperationsTool() as BaseTool<any> },
             { name: 'SNSTool', instance: new SNSTool() as BaseTool<any> },
             { name: 'SQSTool', instance: new SQSTool() as BaseTool<any> },
             { name: 'EC2Tool', instance: new EC2Tool() as BaseTool<any> },

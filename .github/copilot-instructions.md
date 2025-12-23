@@ -8,3 +8,5 @@ When you are asked to add a new language tool for an aws service
 - update package.json
 - update src/common/ServiceAccessView.ts
 - update src/extension.ts
+- update src/mcp/McpDispatcher.ts
+- update src/mcp/McpManager.ts

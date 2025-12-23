@@ -153,6 +153,7 @@ export class McpManager implements vscode.Disposable {
             'TestAwsConnectionTool',
             'STSTool',
             'S3Tool',
+            'S3FileOperationsTool',
             'SNSTool',
             'SQSTool',
             'EC2Tool',

@@ -8,6 +8,7 @@ import { STSTool } from './sts/STSTool';
 import * as stsAPI from './sts/API';
 import { AIHandler } from './chat/AIHandler';
 import { S3Tool } from './s3/S3Tool';
+import { S3FileOperationsTool } from './s3/S3FileOperationsTool';
 import { SNSTool } from './sns/SNSTool';
 import { SQSTool } from './sqs/SQSTool';
 import { EC2Tool } from './ec2/EC2Tool';
@@ -58,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.lm.registerTool('SQSTool', new SQSTool()),
 			vscode.lm.registerTool('EC2Tool', new EC2Tool()),
 			vscode.lm.registerTool('S3Tool', new S3Tool()),
+			vscode.lm.registerTool('S3FileOperationsTool', new S3FileOperationsTool()),
 			vscode.lm.registerTool('SNSTool', new SNSTool()),
 			vscode.lm.registerTool('APIGatewayTool', new APIGatewayTool()),
 			vscode.lm.registerTool('RDSTool', new RDSTool()),

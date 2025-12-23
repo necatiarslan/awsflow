@@ -32,6 +32,10 @@ This document provides a comprehensive reference of all AWS language model tools
 | **S3** | GetBucketPolicy | Get bucket policy document | "Show bucket policy for my-bucket" |
 | **S3** | ListObjectVersions | List all versions of objects | "List versions in bucket my-bucket" |
 | **S3** | OpenS3Explorer | Open interactive S3 browser view | "Browse my S3 bucket", "Open S3 explorer for bucket" |
+| **S3 File Ops** | UploadFile | Upload one or multiple local files to S3 | "Upload file.txt to s3://bucket/", "Upload multiple files to S3" |
+| **S3 File Ops** | DownloadFile | Download one or multiple S3 objects to local | "Download s3://bucket/file.txt", "Download multiple files from S3" |
+| **S3 File Ops** | UploadFolder | Upload folder(s) with preserved structure to S3 | "Upload ./data folder to s3://bucket/", "Upload multiple folders to S3" |
+| **S3 File Ops** | DownloadFolder | Download S3 folder(s) with preserved structure | "Download s3://bucket/logs/ folder", "Download multiple folders from S3" |
 | **SQS** | ListQueues | List all SQS queues | "List my SQS queues", "Show all queues" |
 | **SQS** | GetQueueUrl | Get URL for a queue by name | "Get URL for queue my-queue" |
 | **SQS** | GetQueueAttributes | Get queue configuration and metrics | "Show attributes for queue my-queue" |

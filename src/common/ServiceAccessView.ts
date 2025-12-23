@@ -34,6 +34,11 @@ const TOOL_REGISTRY: ToolDefinition[] = [
                   "DeleteObject", "CopyObject", "SelectObjectContent", "OpenS3Explorer"]
     },
     {
+        name: "S3FileOperationsTool",
+        displayName: "S3 File Operations",
+        commands: ["UploadFile", "DownloadFile", "UploadFolder", "DownloadFolder"]
+    },
+    {
         name: "SNSTool",
         displayName: "SNS (Simple Notification Service)",
         commands: ["CheckIfPhoneNumberIsOptedOut", "GetEndpointAttributes", "GetPlatformApplicationAttributes",
