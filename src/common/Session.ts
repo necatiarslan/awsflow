@@ -103,6 +103,7 @@ export class Session implements vscode.Disposable {
             Session.Current.SaveState();
             ui.showInfoMessage('AWS Endpoint updated');
             ui.logToOutput('AWS Endpoint set to ' + (Session.Current.AwsEndPoint || 'undefined'));
+            Session.Current.ClearCredentials();
         }
     }
 
@@ -120,6 +121,7 @@ export class Session implements vscode.Disposable {
             }
             Session.Current.AwsRegion = value.trim() || 'us-east-1';
             Session.Current.SaveState();
+            Session.Current.ClearCredentials();
             ui.showInfoMessage('Default AWS Region updated');
             ui.logToOutput('AWS Region set to ' + (Session.Current.AwsRegion || 'us-east-1'));
         }

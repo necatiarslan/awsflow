@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.lm.registerTool('RDSDataTool', new RDSDataTool()),
 			vscode.lm.registerTool('CloudFormationTool', new CloudFormationTool()),
 			vscode.lm.registerTool('FileOperationsTool', new FileOperationsTool()),
-			vscode.lm.registerTool('session', new SessionTool()),
+			vscode.lm.registerTool('SessionTool', new SessionTool()),
 			vscode.lm.registerTool('CloudWatchLogTool', new CloudWatchLogTool()),
 			vscode.lm.registerTool('LambdaTool', new LambdaTool()),
 			vscode.lm.registerTool('StepFuncTool', new StepFuncTool()),
@@ -84,6 +84,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register Commands
 	context.subscriptions.push(
+		vscode.commands.registerCommand('awsflow.AskAwsflow', async () => { await AIHandler.Current.askAI(); }),
+
 		vscode.commands.registerCommand('awsflow.SetAwsEndpoint', async () => { Session.Current?.SetAwsEndpoint(); }),
 
 		vscode.commands.registerCommand('awsflow.SetDefaultRegion', async () => { Session.Current?.SetAwsRegion(); }),
@@ -94,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		vscode.commands.registerCommand('awsflow.SetAwsProfile', () => { StatusBarItem.Current.SetAwsProfile(); }),
 
-		vscode.commands.registerCommand('awsflow.TestAwsConnectivity', async () => {
+		vscode.commands.registerCommand('awsflow.TestAwsConnection', async () => {
 			const result = await stsAPI.TestAwsConnection();
 			if (result.isSuccessful) {
 				ui.showInfoMessage('AWS connectivity test successful.');

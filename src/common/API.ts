@@ -88,7 +88,7 @@ export const GetCredentialsFilepath = () =>
 export const GetConfigFilepath = () =>
   process.env[ENV_CREDENTIALS_PATH] || join(GetHomeDir(), ".aws", "config");
 
-export async function TestAwsConnectivity(): Promise<boolean> {
+export async function TestAwsConnection(): Promise<boolean> {
   try {
     const credentials = await GetCredentials();
 

@@ -99,6 +99,7 @@ export class StatusBarItem implements vscode.Disposable {
                     Session.Current!.AwsProfile = value;
                     //this.ShowLoading();
                     Session.Current!.SaveState();
+                    Session.Current!.ClearCredentials();
                 }
             });
         }
@@ -171,15 +172,15 @@ export class StatusBarItem implements vscode.Disposable {
 
     public static async StatusBarClicked() {
         ui.logToOutput('StatusBarItem.StatusBarClicked Started');
-        if (Session.Current?.IsHostSupportLanguageTools()) 
-        {
-            AIHandler.Current.askAI();
-        }
-        else 
-        {
-            StatusBarItem.OpenCommandPalette();
-        }
-        
+        // if (Session.Current?.IsHostSupportLanguageTools()) 
+        // {
+        //     AIHandler.Current.askAI();
+        // }
+        // else 
+        // {
+        //     StatusBarItem.OpenCommandPalette();
+        // }
+        StatusBarItem.OpenCommandPalette();
     }
 
     public static async RefreshButtonClicked() {

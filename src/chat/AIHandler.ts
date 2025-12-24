@@ -237,6 +237,7 @@ export class AIHandler {
         const errorMessage = `Tool execution failed: ${
           err instanceof Error ? err.message : String(err)
         }`;
+        ui.logToOutput(`AIHandler: ${errorMessage}`);
         messages.push(
           vscode.LanguageModelChatMessage.User([
             new vscode.LanguageModelToolResultPart(toolCall.callId, [
