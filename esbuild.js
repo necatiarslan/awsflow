@@ -8,22 +8,30 @@ async function main() {
     entryPoints: ['src/extension.ts'],
     bundle: true,
     format: 'cjs',
+    platform: 'node',
+    target: 'node18', // Node 18 LTS is the safest baseline for VS Code extensions
+
+    outfile: 'dist/extension.js',
+    external: ['vscode'],
+
     minify: production,
     sourcemap: !production,
     sourcesContent: false,
-    platform: 'node',
-    outfile: 'dist/extension.js',
-    external: ['vscode'],
-    logLevel: 'warning',
-    plugins: [
-      /* add to the end of plugins array */
-      esbuildProblemMatcherPlugin
-    ]
+
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(
+        production ? 'production' : 'development'
+      )
+    },
+
+    logLevel: 'info',
+
+    plugins: [esbuildProblemMatcherPlugin]
   });
+
   if (watch) {
     await ctx.watch();
   } else {
-    await ctx.rebuild();
     await ctx.dispose();
   }
 }
@@ -33,23 +41,26 @@ async function main() {
  */
 const esbuildProblemMatcherPlugin = {
   name: 'esbuild-problem-matcher',
-
   setup(build) {
     build.onStart(() => {
-      console.log('[watch] build started');
+      if (watch) console.log('[watch] build started');
     });
+
     build.onEnd(result => {
       result.errors.forEach(({ text, location }) => {
         console.error(`✘ [ERROR] ${text}`);
-        if (location == null) return;
-        console.error(`    ${location.file}:${location.line}:${location.column}:`);
+        if (!location) return;
+        console.error(
+          `    ${location.file}:${location.line}:${location.column}`
+        );
       });
-      console.log('[watch] build finished');
+
+      if (watch) console.log('[watch] build finished');
     });
   }
 };
 
-main().catch(e => {
-  console.error(e);
+main().catch(err => {
+  console.error(err);
   process.exit(1);
 });
