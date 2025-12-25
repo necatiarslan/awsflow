@@ -3,7 +3,7 @@ import * as ui from './UI';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';
 import { join, dirname, basename } from 'path';
-import * as archiver from 'archiver';
+import archive from 'archiver';
 import * as os from 'os';
 import { AIHandler } from '../chat/AIHandler';
 import { BaseTool, BaseToolInput } from './BaseTool';
@@ -283,36 +283,36 @@ export class FileOperationsTool extends BaseTool<FileOperationsToolInput> {
       // Create zip file
       return await new Promise((resolve, reject) => {
         const output = fs.createWriteStream(zipPath);
-        const archive = archiver('zip', {
+        const zipArchive = archive('zip', {
           zlib: { level: 9 } // Maximum compression
         });
         
         output.on('close', () => {
-          ui.logToOutput(`FileOperationsTool: Zip file created: ${zipPath} (${archive.pointer()} bytes)`);
+          ui.logToOutput(`FileOperationsTool: Zip file created: ${zipPath} (${zipArchive.pointer()} bytes)`);
           resolve({
             success: true,
             result: zipPath,
             sourcePath: filePath,
             zipPath: zipPath,
-            size: archive.pointer(),
+            size: zipArchive.pointer(),
             message: `Successfully created zip file at ${zipPath}`
           });
         });
         
-        archive.on('error', (err: Error) => {
+        zipArchive.on('error', (err: Error) => {
           reject(new Error(`Failed to create zip: ${err.message}`));
         });
         
-        archive.pipe(output);
+        zipArchive.pipe(output);
         
         // Add file or directory to archive
         if (stats.isDirectory()) {
-          archive.directory(filePath, false);
+          zipArchive.directory(filePath, false);
         } else {
-          archive.file(filePath, { name: basename(filePath) });
+          zipArchive.file(filePath, { name: basename(filePath) });
         }
         
-        archive.finalize();
+        zipArchive.finalize();
       });
     } catch (error: any) {
       throw new Error(`Failed to zip file ${filePath}: ${error.message}`);
