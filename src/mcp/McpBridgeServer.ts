@@ -17,8 +17,8 @@ export class McpBridgeServer implements vscode.Disposable {
         private readonly getActiveSessionCount: () => number,
         options?: { host?: string; port?: number },
     ) {
-        this.port = options?.port ?? (parseInt(process.env.AWS_AI_ASSISTANT_MCP_PORT || '37114', 10) || 37114);
-        this.host = options?.host || process.env.AWS_AI_ASSISTANT_MCP_HOST || '127.0.0.1';
+        this.port = options?.port ?? (parseInt(process.env.AWSFLOW_MCP_PORT || '37114', 10) || 37114);
+        this.host = options?.host || process.env.AWSFLOW_MCP_HOST || '127.0.0.1';
     }
 
     start(): void {

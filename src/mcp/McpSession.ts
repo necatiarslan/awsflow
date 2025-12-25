@@ -3,6 +3,7 @@ import { McpDispatcher } from './McpDispatcher';
 import { McpRequest, McpResponse } from './types';
 
 export class McpSession implements vscode.Pseudoterminal {
+    public static Current: McpSession | undefined;
     private readonly writeEmitter = new vscode.EventEmitter<string>();
     private readonly closeEmitter = new vscode.EventEmitter<void>();
     onDidWrite: vscode.Event<string> = this.writeEmitter.event;
@@ -15,12 +16,12 @@ export class McpSession implements vscode.Pseudoterminal {
         private readonly dispatcher: McpDispatcher,
         private readonly onSessionClosed: (id: number) => void
     ) {
+        McpSession.Current = this;
         this.onDidClose = this.closeEmitter.event;
     }
 
     open(): void {
-        this.writeLine(`MCP session ${this.sessionId} started. Send JSON per line.`);
-        this.writeLine('Methods: list_tools, call_tool {tool, command, params}');
+        this.writeLine(`Awsflow MCP session ${this.sessionId} started.`);
         this.writeLine('Type Ctrl+C to close this session.');
     }
 
@@ -28,6 +29,7 @@ export class McpSession implements vscode.Pseudoterminal {
         this.writeLine(`MCP session ${this.sessionId} closed.`);
         this.closeEmitter.fire();
         this.onSessionClosed(this.sessionId);
+        McpSession.Current = undefined;
     }
 
     handleInput(data: string): void {
@@ -67,7 +69,7 @@ export class McpSession implements vscode.Pseudoterminal {
         }
     }
 
-    private writeLine(text: string): void {
+    public writeLine(text: string): void {
         this.writeEmitter.fire(text + '\r\n');
     }
 }

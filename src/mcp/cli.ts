@@ -2,8 +2,8 @@
 import * as net from 'net';
 import * as readline from 'readline';
 
-const PORT = parseInt(process.env.AWS_AI_ASSISTANT_MCP_PORT || '37114', 10);
-const HOST = process.env.AWS_AI_ASSISTANT_MCP_HOST || '127.0.0.1';
+const PORT = parseInt(process.env.AWSFLOW_MCP_PORT || '37114', 10);
+const HOST = process.env.AWSFLOW_MCP_HOST || '127.0.0.1';
 
 function fail(message: string) {
   process.stderr.write(`MCP Client Error: ${message}\n`);

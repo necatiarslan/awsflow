@@ -12,5 +12,3 @@ docs/**
 vsix/**
 .github/**
 justfile
-README*
-CHANGELOG*

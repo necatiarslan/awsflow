@@ -12,7 +12,7 @@ Awsflow is a Visual Studio Code (and forks including Google Antigravity, Windsur
 
 ## 🔌 MCP Support
 - **Vscode**: No need to setup MCP server. Awsflow is build in Vscode Chat (Copilot) and no extra setup is required. Just start a chat about your AWS resources.
-- **Google Antigravity / Windsurf / Others**: You need a local MCP server to connect these editors with Awsflow. See the "MCP Access (Local Only)" section below for setup instructions.
+- **Google Antigravity / Windsurf / Others**: You need a local MCP server to connect these editors with Awsflow. See the [README_MCP](README_MCP.md) for detailed setup instructions.
 
 ## 🔑 Supported AWS Services
 | | | | |
@@ -89,21 +89,15 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
 
 ## 📋 Quick Start
 
-1. **Set profile/region**: Use the status bar AWS selector or run "Awsflow: Set AWS Profile" / "Awsflow: Set Default Region" from the Command Palette.
-2. **Test connectivity**: Run "Awsflow: Test AWS Connection" to verify AWS access.
-3. **Open Chat**: Open Chat (use @aws in Ask or Edit Mode) and ask a question, for example:
+1. **Aws Credentials**: Ensure you have AWS credentials configured locally. You can use AWS CLI to set up profiles or SSO. 
+2. **Test connectivity**: Click "🔌Aws" in the status bar and Run "Awsflow: Test AWS Connection" to verify AWS access. You can set default profile, region and endpoint (for Localstack) if you need.
+3. **Google Antigravity / Windsurf / Others**: You need a local MCP server to connect these editors with Awsflow. See the [README_MCP](README_MCP.md) for detailed setup instructions.
+4. **Open Chat**: Open Chat (use @aws in Ask or Edit Mode) and ask a question, for example:
    - List my S3 buckets
    - Tail the latest CloudWatch log events for /aws/lambda/my-fn
    - Describe EC2 instances in us-west-2
    - Publish a message to my SNS topic
-4. **Review results**: The assistant will call the appropriate tool, stream results, and suggest follow-up actions.
-
-## 🛰️ MCP Access (Local Only)
-
-- Start a local MCP stdio session with the Command Palette: **Awsflow: Start MCP Server**. Each session opens in a dedicated terminal and speaks newline-delimited JSON (methods: `list_tools`, `call_tool`).
-- Up to 3 concurrent MCP sessions run at once by default; additional start requests queue until a slot is free. Configure the cap and per-service disablement via Settings (`awsflow.mcp.*`).
-- Stop all active MCP sessions with **Awsflow: Stop MCP Servers**.
-- Mutating actions still prompt for confirmation; MCP enablement/disablement is independent from the Service Access UI.
+5. **Review results**: The assistant will call the appropriate tool, stream results, and suggest follow-up actions.
 
 ## 👮 Authentication & Security
 

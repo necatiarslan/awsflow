@@ -37,8 +37,8 @@ You can get your customized snippet from the MCP Server Manager UI as well.
         "/Users/necatiarslan/github/awsflow/out/mcp/cli.js"
       ],
       "env": {
-        "AWS_AI_ASSISTANT_MCP_PORT": "37114",
-        "AWS_AI_ASSISTANT_MCP_HOST": "127.0.0.1"
+        "AWSFLOW_MCP_PORT": "37114",
+        "AWSFLOW_MCP_HOST": "127.0.0.1"
       }
     }
   }
@@ -53,8 +53,8 @@ Override the bridge settings by defining these variables before starting the MCP
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
-| `AWS_AI_ASSISTANT_MCP_PORT` | `37114` | TCP port for the bridge server |
-| `AWS_AI_ASSISTANT_MCP_HOST` | `127.0.0.1` | Network host for the bridge server |
+| `AWSFLOW_MCP_PORT` | `37114` | TCP port for the bridge server |
+| `AWSFLOW_MCP_HOST` | `127.0.0.1` | Network host for the bridge server |
 
 ## 6. Security and Manual Confirmations
 

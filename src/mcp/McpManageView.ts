@@ -66,8 +66,8 @@ export class McpManageView {
                     command: 'node',
                     args: [normalizedPath],
                     env: {
-                        AWS_AI_ASSISTANT_MCP_PORT: String(snapshot.port),
-                        AWS_AI_ASSISTANT_MCP_HOST: snapshot.host
+                        AWSFLOW_MCP_PORT: String(snapshot.port),
+                        AWSFLOW_MCP_HOST: snapshot.host
                     }
                 }
             }

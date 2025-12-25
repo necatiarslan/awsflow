@@ -24,6 +24,7 @@ import { CloudFormationTool } from '../cloudformation/CloudFormationTool';
 import { EMRTool } from '../emr/EMRTool';
 import { STSTool } from '../sts/STSTool';
 import { TestAwsConnectionTool } from '../sts/TestAwsConnectionTool';
+import { McpSession } from './McpSession';
 //import { needsConfirmation, confirmProceed } from '../common/ActionGuard';
 
 interface ToolRecord {
@@ -148,6 +149,8 @@ export class McpDispatcher {
 
     public async handle(request: McpRequest): Promise<McpResponse | undefined> {
         try {
+            McpSession.Current?.writeLine(`Request Method: ${request.method}`);
+
             if (request.method === 'initialize') {
                 return {
                     id: request.id!,
@@ -232,6 +235,8 @@ export class McpDispatcher {
                 const args = (request.params?.params || request.params?.arguments) as Record<string, any> || {};
                 const command = (request.params?.command || args?.command) as string;
                 const params = (args?.params || args) as Record<string, any>;
+
+                McpSession.Current?.writeLine(`Calling toolName: ${toolName}, command: ${command}`);
 
                 if (!toolName || !command) {
                     return { id: request.id!, jsonrpc: '2.0', error: { message: 'tool and command (or name and arguments) are required', code: -32602 } };
