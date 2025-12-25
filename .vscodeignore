@@ -10,3 +10,7 @@ vsc-extension-quickstart.md
 **/*.ts
 docs/**
 vsix/**
+.github/**
+justfile
+README*
+CHANGELOG*

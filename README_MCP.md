@@ -26,6 +26,7 @@ Prefer a UI? Open the Command Palette and run `Awsflow: MCP Management` to launc
 ## 4. MCP Configuration (Example: Antigravity)
 
 To use this server with an MCP-compatible client like Antigravity, Windsurf, etc. add this to your `mcp_config.json`:
+You can get your customized snippet from the MCP Server Manager UI as well.
 
 ```json
 {

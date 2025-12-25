@@ -28,6 +28,13 @@ npm-install:
     npm install
     npx tsc --noEmit
 
+npm-clean:
+    npm list --depth=0                    # Audit current deps
+    depcheck                              # Find unused
+    npm ci --omit=dev                     # Test production-only build
+    npm prune                             # Remove orphaned packages
+    npm dedupe                            # Consolidate versions
+
 localstack_start:
     localstack start
 
