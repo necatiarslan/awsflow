@@ -12,6 +12,12 @@ const DEFAULT_PROMPT = "What can you do to help me with AWS tasks?";
 export class AIHandler {
   public static Current: AIHandler;
 
+  // Token management constants
+  private static readonly MAX_TOKEN_BUDGET_RATIO = 0.75; // Use 75% of model's max tokens
+  private static readonly MAX_TOOL_RESULT_CHARS = 8000; // ~2000 tokens per result
+  private static readonly MAX_RESOURCES_TO_KEEP = 5; // Limit resource context
+  private static readonly SLIDING_WINDOW_SIZE = 10; // Keep last N messages in loop
+
   private latestResources: {
     [type: string]: { type: string; name: string; arn?: string };
   } = {};
@@ -38,15 +44,22 @@ export class AIHandler {
   }
 
   private getLatestResources(): vscode.LanguageModelChatMessage[] {
-    const messages: vscode.LanguageModelChatMessage[] = [];
-    for (const resource of Object.values(this.latestResources)) {
-      const resourceInfo: string =
-        `Recent AWS resources: Type=${resource.type} Name=${resource.name}` +
-        (resource.arn ? `, ARN=${resource.arn}` : "");
-      messages.push(vscode.LanguageModelChatMessage.User(resourceInfo));
+    const resources = Object.values(this.latestResources);
+    if (resources.length === 0) {
+      return [];
     }
 
-    return messages;
+    // Keep only the most recent resources
+    const recentResources = resources.slice(-AIHandler.MAX_RESOURCES_TO_KEEP);
+    
+    // Combine into single concise message
+    const resourceSummary = recentResources
+      .map(r => `${r.type}: ${r.name}${r.arn ? ` (${r.arn})` : ''}`)
+      .join('; ');
+    
+    return [
+      vscode.LanguageModelChatMessage.User(`Recent AWS resources: ${resourceSummary}`)
+    ];
   }
 
   public registerChatParticipant(): void {
@@ -159,6 +172,79 @@ export class AIHandler {
     return messages;
   }
 
+  /**
+   * Estimate token count for messages (rough approximation)
+   * More accurate than character count, less overhead than full tokenization
+   */
+  private estimateTokenCount(messages: vscode.LanguageModelChatMessage[]): number {
+    let totalChars = 0;
+    
+    for (const message of messages) {
+      const content = message.content as string | vscode.LanguageModelTextPart[];
+      if (typeof content === 'string') 
+      {
+        totalChars += content.length;
+      } else if (Array.isArray(content)) {
+        for (const part of content) {
+          if (part instanceof vscode.LanguageModelTextPart) {
+            totalChars += part.value.length;
+          }
+        }
+      }
+    }
+    
+    // Rough estimate: 1 token ≈ 4 characters for English text
+    // Add 10% overhead for message structure
+    return Math.ceil(totalChars / 4 * 1.1);
+  }
+
+  /**
+   * Get max tokens based on model family
+   */
+  private getModelMaxTokens(model: vscode.LanguageModelChat): number {
+    // Default context windows for common model families
+    const family = model.family.toLowerCase();
+    
+    if (family.includes('claude')) {
+      return 200000; // Claude 3.5 Sonnet has 200k context
+    } else if (family.includes('gpt-4')) {
+      return 128000; // GPT-4 Turbo
+    } else if (family.includes('gpt-3.5')) {
+      return 16000;
+    }
+    
+    // Conservative default
+    return 8000;
+  }
+
+  /**
+   * Prune messages to fit within token budget
+   * Keeps system prompt + user prompt + recent conversation
+   */
+  private pruneMessages(
+    messages: vscode.LanguageModelChatMessage[],
+    maxTokens: number
+  ): vscode.LanguageModelChatMessage[] {
+    const estimatedTokens = this.estimateTokenCount(messages);
+    
+    if (estimatedTokens <= maxTokens) {
+      return messages;
+    }
+
+    ui.logToOutput(`AIHandler: Pruning messages - ${estimatedTokens} tokens exceeds ${maxTokens}`);
+
+    // Always keep: system prompt (first message) + user prompt (last N messages)
+    const systemMessages = messages.slice(0, 1);
+    const recentMessages = messages.slice(-AIHandler.SLIDING_WINDOW_SIZE);
+    
+    const prunedMessages = [...systemMessages, ...recentMessages];
+    const newTokenCount = this.estimateTokenCount(prunedMessages);
+    
+    ui.logToOutput(`AIHandler: After pruning - ${newTokenCount} tokens`);
+    
+    return prunedMessages;
+  }
+
   private async runToolCallingLoop(
     model: vscode.LanguageModelChat,
     messages: vscode.LanguageModelChatMessage[],
@@ -166,11 +252,19 @@ export class AIHandler {
     stream: vscode.ChatResponseStream,
     token: vscode.CancellationToken
   ): Promise<void> {
+    const modelMaxTokens = this.getModelMaxTokens(model);
+    const tokenBudget = Math.floor(modelMaxTokens * AIHandler.MAX_TOKEN_BUDGET_RATIO);
+    
+    ui.logToOutput(`AIHandler: Token budget set to ${tokenBudget} (${Math.floor(AIHandler.MAX_TOKEN_BUDGET_RATIO * 100)}% of ${modelMaxTokens})`);
+
     let keepGoing = true;
     while (keepGoing && !token.isCancellationRequested) {
       keepGoing = false;
 
-      const chatResponse = await model.sendRequest(messages, { tools }, token);
+      // Prune messages before sending to stay within token budget
+      const prunedMessages = this.pruneMessages(messages, tokenBudget);
+
+      const chatResponse = await model.sendRequest(prunedMessages, { tools }, token);
       const toolCalls = await this.collectToolCalls(chatResponse, stream);
 
       if (toolCalls.length > 0) {
@@ -252,10 +346,58 @@ export class AIHandler {
   }
 
   private extractResultText(result: vscode.LanguageModelToolResult): string {
-    return result.content
+    const fullText = result.content
       .filter((part) => part instanceof vscode.LanguageModelTextPart)
       .map((part) => (part as vscode.LanguageModelTextPart).value)
       .join("\n");
+    
+    return this.truncateToolResult(fullText);
+  }
+
+  /**
+   * Truncate large tool results to prevent token overflow
+   * Preserves JSON structure when possible
+   */
+  private truncateToolResult(resultText: string): string {
+    if (resultText.length <= AIHandler.MAX_TOOL_RESULT_CHARS) {
+      return resultText;
+    }
+
+    ui.logToOutput(`AIHandler: Truncating tool result from ${resultText.length} to ${AIHandler.MAX_TOOL_RESULT_CHARS} chars`);
+
+    // Try to parse as JSON and truncate intelligently
+    try {
+      const parsed = JSON.parse(resultText);
+      
+      // If it has an array of items, truncate the array
+      if (parsed.items && Array.isArray(parsed.items)) {
+        const originalCount = parsed.items.length;
+        const maxItems = 10; // Keep first 10 items
+        
+        if (originalCount > maxItems) {
+          parsed.items = parsed.items.slice(0, maxItems);
+          parsed.truncated = true;
+          parsed.totalItems = originalCount;
+          parsed.showingItems = maxItems;
+          
+          const truncatedJson = JSON.stringify(parsed, null, 2);
+          return truncatedJson + `\n\n... (Showing ${maxItems} of ${originalCount} items)`;
+        }
+      }
+      
+      // If still too large, do simple truncation on stringified version
+      const stringified = JSON.stringify(parsed, null, 2);
+      if (stringified.length > AIHandler.MAX_TOOL_RESULT_CHARS) {
+        return stringified.slice(0, AIHandler.MAX_TOOL_RESULT_CHARS) + 
+               `\n... (truncated from ${stringified.length} chars)`;
+      }
+      
+      return stringified;
+    } catch (e) {
+      // Not JSON, do simple text truncation
+      return resultText.slice(0, AIHandler.MAX_TOOL_RESULT_CHARS) + 
+             `\n... (truncated from ${resultText.length} chars)`;
+    }
   }
 
   private checkForPaginationToken(
