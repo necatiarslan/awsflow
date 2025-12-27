@@ -96,15 +96,15 @@
               "properties": {
                 "AwsProfile": {
                   "type": "string",
-                  "description": "AWS profile name to set (optional)"
+                  "description": "AWS profile name to set (Used by: SetSession)"
                 },
                 "AwsEndPoint": {
                   "type": "string",
-                  "description": "Custom AWS/S3-compatible endpoint to set (optional)"
+                  "description": "Custom AWS/S3-compatible endpoint to set (Used by: SetSession)"
                 },
                 "AwsRegion": {
                   "type": "string",
-                  "description": "AWS region to set (optional, default us-east-1 if set to empty)"
+                  "description": "AWS region to set (Used by: SetSession)"
                 }
               }
             }
@@ -152,27 +152,27 @@
               "properties": {
                 "AccessKeyId": {
                   "type": "string",
-                  "description": "AWS access key ID (REQUIRED for GetAccessKeyInfo)"
+                  "description": "AWS access key ID (Used by: GetAccessKeyInfo (Required))"
                 },
                 "RoleArn": {
                   "type": "string",
-                  "description": "IAM role ARN (REQUIRED for GetDelegatedAccessToken, GetWebIdentityToken)"
+                  "description": "IAM role ARN (Used by: GetDelegatedAccessToken (Required), GetWebIdentityToken (Required))"
                 },
                 "DurationSeconds": {
                   "type": "number",
-                  "description": "Token lifetime in seconds (optional, default varies by command)"
+                  "description": "Token lifetime in seconds (Used by: GetDelegatedAccessToken, GetFederationToken, GetSessionToken, GetWebIdentityToken)"
                 },
                 "DelegationTokenLifetimeSeconds": {
                   "type": "number",
-                  "description": "Delegated token lifetime in seconds (optional for GetDelegatedAccessToken)"
+                  "description": "Delegated token lifetime in seconds (Used by: GetDelegatedAccessToken)"
                 },
                 "Name": {
                   "type": "string",
-                  "description": "Session or federation token name (REQUIRED for GetFederationToken)"
+                  "description": "Session or federation token name (Used by: GetFederationToken (Required))"
                 },
                 "Policy": {
                   "type": "string",
-                  "description": "IAM policy JSON string for the temporary credentials (optional for GetFederationToken)"
+                  "description": "IAM policy JSON string for the temporary credentials (Used by: GetFederationToken)"
                 },
                 "Tags": {
                   "type": "array",
@@ -187,27 +187,27 @@
                       }
                     }
                   },
-                  "description": "Session tags (optional for GetFederationToken)"
+                  "description": "Session tags (Used by: GetFederationToken)"
                 },
                 "SerialNumber": {
                   "type": "string",
-                  "description": "MFA device serial number (optional for GetSessionToken)"
+                  "description": "MFA device serial number (Used by: GetSessionToken)"
                 },
                 "TokenCode": {
                   "type": "string",
-                  "description": "MFA token code (optional for GetSessionToken)"
+                  "description": "MFA token code (Used by: GetSessionToken)"
                 },
                 "RoleSessionName": {
                   "type": "string",
-                  "description": "Role session name (REQUIRED for GetWebIdentityToken)"
+                  "description": "Role session name (Used by: GetWebIdentityToken (Required))"
                 },
                 "WebIdentityToken": {
                   "type": "string",
-                  "description": "Web identity token (REQUIRED for GetWebIdentityToken)"
+                  "description": "Web identity token (Used by: GetWebIdentityToken (Required))"
                 },
                 "ProviderId": {
                   "type": "string",
-                  "description": "Identity provider ID (optional for GetWebIdentityToken)"
+                  "description": "Identity provider ID (Used by: GetWebIdentityToken)"
                 }
               }
             }
@@ -256,77 +256,77 @@
               "properties": {
                 "QueueUrl": {
                   "type": "string",
-                  "description": "Queue URL (REQUIRED for most queue operations except GetQueueUrl and ListQueues)"
+                  "description": "Queue URL (Used by: ListDeadLetterSourceQueues (Required), ListQueueTags (Required), GetQueueAttributes (Required), SendMessage (Required), ReceiveMessage (Required), DeleteMessage (Required))"
                 },
                 "QueueName": {
                   "type": "string",
-                  "description": "Queue name (REQUIRED for GetQueueUrl)"
+                  "description": "Queue name (Used by: GetQueueUrl (Required))"
                 },
                 "QueueNamePrefix": {
                   "type": "string",
-                  "description": "Queue name prefix filter (optional for ListQueues)"
+                  "description": "Queue name prefix filter (Used by: ListQueues)"
                 },
                 "QueueOwnerAWSAccountId": {
                   "type": "string",
-                  "description": "Queue owner AWS account ID (optional for GetQueueUrl)"
+                  "description": "Queue owner AWS account ID (Used by: GetQueueUrl)"
                 },
                 "AttributeNames": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "List of attribute names to retrieve (optional for GetQueueAttributes, ReceiveMessage). Use ['All'] for all attributes."
+                  "description": "List of attribute names to retrieve. Use ['All'] for all attributes. (Used by: GetQueueAttributes, ReceiveMessage)"
                 },
                 "MessageBody": {
                   "type": "string",
-                  "description": "Message body text (REQUIRED for SendMessage)"
+                  "description": "Message body text (Used by: SendMessage (Required))"
                 },
                 "DelaySeconds": {
                   "type": "number",
-                  "description": "Delay in seconds before message becomes available (optional for SendMessage, 0-900)"
+                  "description": "Delay in seconds before message becomes available (Used by: SendMessage)"
                 },
                 "MessageAttributes": {
                   "type": "object",
-                  "description": "Custom message attributes (optional for SendMessage)"
+                  "description": "Custom message attributes (Used by: SendMessage)"
                 },
                 "MessageDeduplicationId": {
                   "type": "string",
-                  "description": "Deduplication ID for FIFO queues (optional for SendMessage)"
+                  "description": "Deduplication ID for FIFO queues (Used by: SendMessage)"
                 },
                 "MessageGroupId": {
                   "type": "string",
-                  "description": "Message group ID for FIFO queues (optional for SendMessage)"
+                  "description": "Message group ID for FIFO queues (Used by: SendMessage)"
                 },
                 "MaxNumberOfMessages": {
                   "type": "number",
-                  "description": "Maximum number of messages to receive (optional for ReceiveMessage, 1-10, default 1)"
+                  "description": "Maximum number of messages to receive (Used by: ReceiveMessage)"
                 },
                 "VisibilityTimeout": {
                   "type": "number",
-                  "description": "Visibility timeout in seconds (optional for ReceiveMessage, 0-43200)"
+                  "description": "Visibility timeout in seconds (Used by: ReceiveMessage)"
                 },
                 "WaitTimeSeconds": {
                   "type": "number",
-                  "description": "Long polling wait time in seconds (optional for ReceiveMessage, 0-20)"
+                  "description": "Long polling wait time in seconds (Used by: ReceiveMessage)"
                 },
                 "MessageAttributeNames": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Message attribute names to retrieve (optional for ReceiveMessage)"
+                  "description": "Message attribute names to retrieve (Used by: ReceiveMessage)"
                 },
                 "ReceiptHandle": {
                   "type": "string",
-                  "description": "Message receipt handle (REQUIRED for DeleteMessage)"
+                  "description": "Message receipt handle (Used by: DeleteMessage (Required))"
                 },
                 "MaxResults": {
                   "type": "number",
-                  "description": "Maximum number of results (optional for ListQueues, ListDeadLetterSourceQueues)"
+                  "description": "Maximum number of results (Used by: ListQueues, ListDeadLetterSourceQueues)"
                 },
                 "NextToken": {
                   "type": "string",
-                  "description": "Pagination token (optional for ListQueues, ListDeadLetterSourceQueues)"
+                  "description": "Pagination token (Used by: ListQueues, ListDeadLetterSourceQueues)"
                 }
               }
             }
@@ -385,47 +385,47 @@
               "properties": {
                 "InstanceId": {
                   "type": "string",
-                  "description": "Single instance ID (for GetConsoleOutput, GetPasswordData)"
+                  "description": "Single instance ID (Used by: GetConsoleOutput (Required), GetPasswordData (Required))"
                 },
                 "InstanceIds": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "List of instance IDs (for DescribeInstances, DescribeInstanceStatus)"
+                  "description": "List of instance IDs (Used by: DescribeInstances, DescribeInstanceStatus)"
                 },
                 "Filters": {
                   "type": "array",
                   "items": {
                     "type": "object"
                   },
-                  "description": "EC2 filter array with Name and Values[]"
+                  "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
                 },
                 "Owners": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Image owners (for DescribeImages)"
+                  "description": "Image owners (Used by: DescribeImages)"
                 },
                 "DryRun": {
                   "type": "boolean",
-                  "description": "Validate permissions without running the request"
+                  "description": "Validate permissions without running the request (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeRegions, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
                 },
                 "MaxResults": {
                   "type": "number",
-                  "description": "Pagination: maximum results"
+                  "description": "Pagination: maximum results (Used by: DescribeImages, DescribeInstances, DescribeSnapshots, DescribeVolumes)"
                 },
                 "NextToken": {
                   "type": "string",
-                  "description": "Pagination token for next page"
+                  "description": "Pagination token for next page (Used by: DescribeImages, DescribeInstances, DescribeSnapshots, DescribeVolumes)"
                 },
                 "RegionNames": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Specific region names (for DescribeRegions)"
+                  "description": "Specific region names (Used by: DescribeRegions)"
                 }
               }
             }
@@ -510,47 +510,47 @@
               "properties": {
                 "restApiId": {
                   "type": "string",
-                  "description": "REST API identifier (for many resource operations)"
+                  "description": "REST API identifier (Used by: GetAuthorizers (Required), GetBasePathMappings (Required), GetDeployments (Required), GetDocumentationParts (Required), GetDocumentationVersions (Required), GetGatewayResponses (Required), GetModels (Required), GetRequestValidators (Required), GetResources (Required), GetRestApi (Required), GetStages (Required))"
                 },
                 "resourceId": {
                   "type": "string",
-                  "description": "Resource ID"
+                  "description": "Resource ID (Used by: GetIntegration (Required), GetIntegrationResponse (Required), GetMethod (Required), GetResource (Required))"
                 },
                 "httpMethod": {
                   "type": "string",
-                  "description": "HTTP method (e.g., GET, POST)"
+                  "description": "HTTP method (Used by: GetIntegration (Required), GetIntegrationResponse (Required), GetMethod (Required))"
                 },
                 "usagePlanId": {
                   "type": "string",
-                  "description": "Usage plan ID"
+                  "description": "Usage plan ID (Used by: GetUsagePlan (Required), GetUsagePlanKey (Required), GetUsagePlanKeys (Required))"
                 },
                 "keyId": {
                   "type": "string",
-                  "description": "Usage plan key ID"
+                  "description": "Usage plan key ID (Used by: GetUsagePlanKey (Required), GetUsagePlanKeys (Required))"
                 },
                 "domainName": {
                   "type": "string",
-                  "description": "Custom domain name"
+                  "description": "Custom domain name (Used by: GetDomainName (Required), GetBasePathMappings (Required), GetBasePathMapping (Required))"
                 },
                 "stageName": {
                   "type": "string",
-                  "description": "Stage name"
+                  "description": "Stage name (Used by: GetStage (Required))"
                 },
                 "position": {
                   "type": "string",
-                  "description": "Pagination position token"
+                  "description": "Pagination position token (Used by: GetApiKeys, GetAuthorizers, GetBasePathMappings, GetClientCertificates, GetDeployments, GetDocumentationParts, GetDocumentationVersions, GetDomainNames, GetModels, GetRequestValidators, GetResources, GetRestApis, GetStages, GetUsagePlanKeys, GetUsagePlans, GetVpcLinks)"
                 },
                 "limit": {
                   "type": "number",
-                  "description": "Maximum results for list operations"
+                  "description": "Maximum results for list operations (Used by: GetApiKeys, GetAuthorizers, GetBasePathMappings, GetClientCertificates, GetDeployments, GetDocumentationParts, GetDocumentationVersions, GetDomainNames, GetModels, GetRequestValidators, GetResources, GetRestApis, GetStages, GetUsagePlanKeys, GetUsagePlans, GetVpcLinks)"
                 },
                 "name": {
                   "type": "string",
-                  "description": "Common name filter for certain commands"
+                  "description": "Common name filter (Used by: GetApiKeys, GetRestApis)"
                 },
                 "includeCredentials": {
                   "type": "boolean",
-                  "description": "Whether to include credentials where supported"
+                  "description": "Whether to include credentials (Used by: GetExport)"
                 }
               }
             }
@@ -624,25 +624,32 @@
               "description": "REQUIRED parameters object. Use RDS field names (e.g., DBInstanceIdentifier, DBClusterIdentifier, Marker, MaxRecords).",
               "properties": {
                 "DBInstanceIdentifier": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "DB instance identifier (Used by: DescribeDBInstances, DescribeDBLogFiles (Required), DescribePendingMaintenanceActions, DownloadDBLogFilePortion (Required), DescribeValidDBInstanceModifications (Required))"
                 },
                 "DBClusterIdentifier": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "DB cluster identifier (Used by: DescribeDBClusters, DescribeDBClusterSnapshots, DescribeDBClusterAutomatedBackups)"
                 },
                 "DBParameterGroupName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "DB parameter group name (Used by: DescribeDBParameterGroups)"
                 },
                 "Engine": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Database engine (Used by: DescribeDBEngineVersions, DescribeOrderableDBInstanceOptions)"
                 },
                 "EngineVersion": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Database engine version (Used by: DescribeDBEngineVersions, DescribeOrderableDBInstanceOptions)"
                 },
                 "Marker": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Pagination marker (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
                 },
                 "MaxRecords": {
-                  "type": "number"
+                  "type": "number",
+                  "description": "Maximum records (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
                 },
                 "Filters": {
                   "type": "array",
@@ -659,22 +666,28 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "description": "Filters for the request (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
                 },
                 "StartTime": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Start time (Used by: DescribeEvents)"
                 },
                 "EndTime": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "End time (Used by: DescribeEvents)"
                 },
                 "Duration": {
-                  "type": "number"
+                  "type": "number",
+                  "description": "Duration (Used by: DescribeEvents)"
                 },
                 "ResourceName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Resource ARN/Name (Used by: ListTagsForResource (Required))"
                 },
                 "LogFileName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Log file name (Used by: DownloadDBLogFilePortion (Required))"
                 }
               }
             }
@@ -720,23 +733,27 @@
               "properties": {
                 "resourceArn": {
                   "type": "string",
-                  "description": "ARN of the Aurora/RDS cluster"
+                  "description": "ARN of the Aurora/RDS cluster (Used by: BatchExecuteStatement (Required), BeginTransaction (Required), CommitTransaction (Required), ExecuteStatement (Required), RollbackTransaction (Required))"
                 },
                 "secretArn": {
                   "type": "string",
-                  "description": "ARN of the Secrets Manager secret with credentials"
+                  "description": "ARN of the Secrets Manager secret with credentials (Used by: BatchExecuteStatement (Required), BeginTransaction (Required), CommitTransaction (Required), ExecuteStatement (Required), RollbackTransaction (Required))"
                 },
                 "database": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Database name (Used by: BatchExecuteStatement, BeginTransaction, CommitTransaction, ExecuteStatement, RollbackTransaction)"
                 },
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Database schema (Used by: BatchExecuteStatement, ExecuteStatement)"
                 },
                 "sql": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "SQL statement (Used by: BatchExecuteStatement (Required), ExecuteStatement (Required))"
                 },
                 "transactionId": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Transaction ID (Used by: BatchExecuteStatement, CommitTransaction (Required), ExecuteStatement, RollbackTransaction (Required))"
                 },
                 "parameters": {
                   "type": "array",
@@ -773,10 +790,12 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "description": "SQL parameters (Used by: BatchExecuteStatement, ExecuteStatement)"
                 },
                 "includeResultMetadata": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Include result metadata (Used by: ExecuteStatement)"
                 }
               }
             }
@@ -864,25 +883,32 @@
               "description": "REQUIRED parameters object. Use CloudFormation field names (e.g., StackName, StackSetName, ChangeSetName, TypeName, NextToken, MaxResults).",
               "properties": {
                 "StackName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Stack name or ID (Used by: DescribeStacks (Required), DescribeStackResources (Required), DescribeStackEvents (Required), DescribeStackDriftDetectionStatus (Required), GetStackPolicy (Required), GetTemplate (Required), GetTemplateSummary (Required), ListStackResources (Required), DetectStackDrift (Required))"
                 },
                 "StackSetName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Stack set name or ID (Used by: DescribeStackSet (Required), DescribeStackSetOperation (Required), ListStackSetAutoDeploymentTargets (Required), ListStackSetOperationResults (Required), ListStackSetOperations (Required), DetectStackSetDrift (Required), ListStackInstances (Required))"
                 },
                 "ChangeSetName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Change set name or ID (Used by: DescribeChangeSet (Required), ListChangeSets (Required))"
                 },
                 "TypeName": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Resource type name (Used by: DescribeType (Required), ListTypeVersions (Required), DescribeTypeRegistration (Required))"
                 },
                 "TypeArn": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Resource type ARN (Used by: DescribeType (Required))"
                 },
                 "NextToken": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Pagination token (Used by: most List commands)"
                 },
                 "MaxResults": {
-                  "type": "number"
+                  "type": "number",
+                  "description": "Maximum records to return (Used by: most List commands)"
                 }
               }
             }
@@ -928,44 +954,44 @@
               "properties": {
                 "Bucket": {
                   "type": "string",
-                  "description": "S3 bucket name (REQUIRED for all commands)"
+                  "description": "S3 bucket name (Used by: UploadFile (Required), DownloadFile (Required), UploadFolder (Required), DownloadFolder (Required))"
                 },
                 "LocalPaths": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Array of local file or folder paths (REQUIRED for UploadFile, UploadFolder)"
+                  "description": "Array of local file or folder paths (Used by: UploadFile (Required), UploadFolder (Required))"
                 },
                 "S3Keys": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Array of S3 object keys (REQUIRED for DownloadFile)"
+                  "description": "Array of S3 object keys (Used by: DownloadFile (Required))"
                 },
                 "S3KeyPrefixes": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Array of S3 key prefixes/folders (REQUIRED for DownloadFolder)"
+                  "description": "Array of S3 key prefixes/folders (Used by: DownloadFolder (Required))"
                 },
                 "LocalDirectory": {
                   "type": "string",
-                  "description": "Local directory path to download to (REQUIRED for DownloadFile, DownloadFolder)"
+                  "description": "Local directory path to download to (Used by: DownloadFile (Required), DownloadFolder (Required))"
                 },
                 "S3KeyPrefix": {
                   "type": "string",
-                  "description": "S3 key prefix/folder to upload to (optional for UploadFile, UploadFolder)"
+                  "description": "S3 key prefix/folder to upload to (Used by: UploadFile, UploadFolder)"
                 },
                 "ContentType": {
                   "type": "string",
-                  "description": "MIME type for uploaded files (optional for UploadFile)"
+                  "description": "MIME type for uploaded files (Used by: UploadFile)"
                 },
                 "PreserveStructure": {
                   "type": "boolean",
-                  "description": "Whether to preserve folder structure (optional, default: true for folders, can be set for file downloads)"
+                  "description": "Whether to preserve folder structure (Used by: DownloadFile, DownloadFolder, UploadFolder)"
                 }
               }
             }
@@ -1019,58 +1045,58 @@
               "properties": {
                 "phoneNumber": {
                   "type": "string",
-                  "description": "E.164 phone number (for CheckIfPhoneNumberIsOptedOut, Publish)"
+                  "description": "E.164 phone number (Used by: CheckIfPhoneNumberIsOptedOut (Required), Publish)"
                 },
                 "EndpointArn": {
                   "type": "string",
-                  "description": "Endpoint ARN (for GetEndpointAttributes)"
+                  "description": "Endpoint ARN (Used by: GetEndpointAttributes (Required))"
                 },
                 "PlatformApplicationArn": {
                   "type": "string",
-                  "description": "Platform application ARN (for GetPlatformApplicationAttributes)"
+                  "description": "Platform application ARN (Used by: GetPlatformApplicationAttributes (Required))"
                 },
                 "attributes": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "SMS attribute names (optional for GetSMSAttributes)"
+                  "description": "SMS attribute names (Used by: GetSMSAttributes)"
                 },
                 "SubscriptionArn": {
                   "type": "string",
-                  "description": "Subscription ARN (for GetSubscriptionAttributes)"
+                  "description": "Subscription ARN (Used by: GetSubscriptionAttributes (Required))"
                 },
                 "TopicArn": {
                   "type": "string",
-                  "description": "Topic ARN (for GetTopicAttributes, ListSubscriptionsByTopic, Publish)"
+                  "description": "Topic ARN (Used by: GetTopicAttributes (Required), ListSubscriptionsByTopic (Required), Publish (Required))"
                 },
                 "ResourceArn": {
                   "type": "string",
-                  "description": "Resource ARN (for ListTagsForResource)"
+                  "description": "Resource ARN (Used by: ListTagsForResource (Required))"
                 },
                 "NextToken": {
                   "type": "string",
-                  "description": "Pagination token (optional for list operations)"
+                  "description": "Pagination token (Used by: list operations)"
                 },
                 "Message": {
                   "type": "string",
-                  "description": "Message body (REQUIRED for Publish unless using phoneNumber/TargetArn)"
+                  "description": "Message body (Used by: Publish (Required))"
                 },
                 "TargetArn": {
                   "type": "string",
-                  "description": "Target ARN (optional for Publish)"
+                  "description": "Target ARN (Used by: Publish)"
                 },
                 "Subject": {
                   "type": "string",
-                  "description": "Message subject (optional for Publish)"
+                  "description": "Message subject (Used by: Publish)"
                 },
                 "MessageStructure": {
                   "type": "string",
-                  "description": "Message structure (e.g., 'json') (optional for Publish)"
+                  "description": "Message structure (Used by: Publish)"
                 },
                 "MessageAttributes": {
                   "type": "object",
-                  "description": "Message attributes (optional for Publish)"
+                  "description": "Message attributes (Used by: Publish)"
                 }
               }
             }
@@ -1128,87 +1154,87 @@
               "properties": {
                 "Bucket": {
                   "type": "string",
-                  "description": "Bucket name (REQUIRED for all commands except ListBuckets)"
+                  "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
                 },
                 "Key": {
                   "type": "string",
-                  "description": "Object key path (REQUIRED for HeadObject, PutObject, DeleteObject, CopyObject)"
+                  "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
                 },
                 "CopySource": {
                   "type": "string",
-                  "description": "Source object path for copy command (REQUIRED for CopyObject, format: /bucket/key)"
+                  "description": "Source object path for copy command (Used by: CopyObject (Required))"
                 },
                 "Body": {
                   "type": "string",
-                  "description": "Object content as string or base64 (optional for PutObject)"
+                  "description": "Object content as string or base64 (Used by: PutObject)"
                 },
                 "ContentType": {
                   "type": "string",
-                  "description": "MIME type for the object (optional for PutObject)"
+                  "description": "MIME type for the object (Used by: PutObject)"
                 },
                 "Prefix": {
                   "type": "string",
-                  "description": "Filter objects by prefix path (optional for ListObjectsV2, ListObjectVersions)"
+                  "description": "Filter objects by prefix path (Used by: ListObjectsV2, ListObjectVersions, OpenS3Explorer)"
                 },
                 "Delimiter": {
                   "type": "string",
-                  "description": "Delimiter character for grouping keys, typically / (optional)"
+                  "description": "Delimiter character for grouping keys, typically / (Used by: ListObjectsV2, ListObjectVersions)"
                 },
                 "MaxKeys": {
                   "type": "number",
-                  "description": "Maximum number of keys to return (optional, default 1000)"
+                  "description": "Maximum number of keys to return (Used by: ListObjectsV2, ListObjectVersions)"
                 },
                 "ContinuationToken": {
                   "type": "string",
-                  "description": "Token for pagination from previous response (optional)"
+                  "description": "Token for pagination from previous response (Used by: ListObjectsV2)"
                 },
                 "StartAfter": {
                   "type": "string",
-                  "description": "Start listing after this key name (optional)"
+                  "description": "Start listing after this key name (Used by: ListObjectsV2)"
                 },
                 "VersionId": {
                   "type": "string",
-                  "description": "Specific version ID of object (optional for HeadObject, DeleteObject)"
+                  "description": "Specific version ID of object (Used by: HeadObject, GetObject, DeleteObject)"
                 },
                 "KeyMarker": {
                   "type": "string",
-                  "description": "Key marker for version pagination (optional for ListObjectVersions)"
+                  "description": "Key marker for version pagination (Used by: ListObjectVersions)"
                 },
                 "VersionIdMarker": {
                   "type": "string",
-                  "description": "Version ID marker for pagination (optional for ListObjectVersions)"
+                  "description": "Version ID marker for pagination (Used by: ListObjectVersions)"
                 },
                 "Metadata": {
                   "type": "object",
-                  "description": "Custom metadata key-value pairs (optional for PutObject, CopyObject)"
+                  "description": "Custom metadata key-value pairs (Used by: PutObject, CopyObject)"
                 },
                 "MetadataDirective": {
                   "type": "string",
-                  "description": "How to handle metadata in CopyObject: COPY or REPLACE (optional)"
+                  "description": "How to handle metadata in CopyObject: COPY or REPLACE (Used by: CopyObject)"
                 },
                 "DownloadToTemp": {
                   "type": "boolean",
-                  "description": "Download file to temp folder and return local path (optional for GetObject)"
+                  "description": "Download file to temp folder and return local path (Used by: GetObject)"
                 },
                 "AsText": {
                   "type": "boolean",
-                  "description": "Return file content as text for analysis (optional for GetObject)"
+                  "description": "Return file content as text for analysis (Used by: GetObject)"
                 },
                 "Expression": {
                   "type": "string",
-                  "description": "SQL expression for querying object content (REQUIRED for SelectObjectContent, e.g., 'SELECT * FROM S3Object')"
+                  "description": "SQL expression for querying object content (Used by: SelectObjectContent (Required))"
                 },
                 "ExpressionType": {
                   "type": "string",
-                  "description": "Type of expression (REQUIRED for SelectObjectContent, value: SQL)"
+                  "description": "Type of expression (Used by: SelectObjectContent (Required))"
                 },
                 "InputSerialization": {
                   "type": "object",
-                  "description": "Format of the input data (REQUIRED for SelectObjectContent, e.g., {CSV: {FileHeaderInfo: 'USE'}} or {JSON: {Type: 'DOCUMENT'}})"
+                  "description": "Format of the input data (Used by: SelectObjectContent (Required))"
                 },
                 "OutputSerialization": {
                   "type": "object",
-                  "description": "Format for output data (REQUIRED for SelectObjectContent, e.g., {CSV: {}} or {JSON: {}})"
+                  "description": "Format for output data (Used by: SelectObjectContent (Required))"
                 }
               }
             }
@@ -1256,23 +1282,23 @@
               "properties": {
                 "filePath": {
                   "type": "string",
-                  "description": "File path (required for ReadFile, ReadFileStream, ReadFileAsBase64, GetFileInfo, ZipTextFile)"
+                  "description": "File path (Used by: ReadFile (Required), ReadFileStream (Required), ReadFileAsBase64 (Required), GetFileInfo (Required), ZipTextFile (Required))"
                 },
                 "dirPath": {
                   "type": "string",
-                  "description": "Directory path (required for ListFiles)"
+                  "description": "Directory path (Used by: ListFiles (Required))"
                 },
                 "encoding": {
                   "type": "string",
-                  "description": "File encoding for ReadFile (optional, default: utf8). Examples: utf8, ascii, base64, utf16le"
+                  "description": "File encoding for ReadFile (Used by: ReadFile)"
                 },
                 "recursive": {
                   "type": "boolean",
-                  "description": "Recursively list files in subdirectories (optional for ListFiles, default: false)"
+                  "description": "Recursively list files in subdirectories (Used by: ListFiles)"
                 },
                 "outputPath": {
                   "type": "string",
-                  "description": "Custom output path for zip file (optional for ZipTextFile, default: temp directory)"
+                  "description": "Custom output path for zip file (Used by: ZipTextFile)"
                 }
               }
             }
@@ -1316,15 +1342,15 @@
               "properties": {
                 "logGroupNamePrefix": {
                   "type": "string",
-                  "description": "Prefix filter for log group names (optional for DescribeLogGroups)"
+                  "description": "Prefix filter for log group names (Used by: DescribeLogGroups)"
                 },
                 "logGroupName": {
                   "type": "string",
-                  "description": "Target log group name (required for DescribeLogStreams, GetLogEvents)"
+                  "description": "Target log group name (Used by: DescribeLogStreams (Required), GetLogEvents (Required), OpenCloudWatchLogView (Required))"
                 },
                 "logStreamNamePrefix": {
                   "type": "string",
-                  "description": "Prefix filter for log stream names (optional for DescribeLogStreams)"
+                  "description": "Prefix filter for log stream names (Used by: DescribeLogStreams)"
                 },
                 "orderBy": {
                   "type": "string",
@@ -1332,35 +1358,35 @@
                     "LogStreamName",
                     "LastEventTime"
                   ],
-                  "description": "Ordering for DescribeLogStreams (optional)"
+                  "description": "Ordering for DescribeLogStreams (Used by: DescribeLogStreams)"
                 },
                 "descending": {
                   "type": "boolean",
-                  "description": "Whether to sort descending for DescribeLogStreams (optional)"
+                  "description": "Whether to sort descending for DescribeLogStreams (Used by: DescribeLogStreams)"
                 },
                 "limit": {
                   "type": "number",
-                  "description": "Maximum items to return where supported (optional)"
+                  "description": "Maximum items to return where supported (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
                 },
                 "nextToken": {
                   "type": "string",
-                  "description": "Pagination token (optional)"
+                  "description": "Pagination token (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
                 },
                 "logStreamName": {
                   "type": "string",
-                  "description": "Target log stream name (required for GetLogEvents)"
+                  "description": "Target log stream name (Used by: GetLogEvents (Required), OpenCloudWatchLogView)"
                 },
                 "startTime": {
                   "type": "number",
-                  "description": "Start time in epoch milliseconds (optional for GetLogEvents)"
+                  "description": "Start time in epoch milliseconds (Used by: GetLogEvents)"
                 },
                 "endTime": {
                   "type": "number",
-                  "description": "End time in epoch milliseconds (optional for GetLogEvents)"
+                  "description": "End time in epoch milliseconds (Used by: GetLogEvents)"
                 },
                 "startFromHead": {
                   "type": "boolean",
-                  "description": "Return events starting from the beginning of the stream (optional for GetLogEvents)"
+                  "description": "Return events starting from the beginning of the stream (Used by: GetLogEvents)"
                 }
               }
             }
@@ -1409,81 +1435,81 @@
               "properties": {
                 "FunctionName": {
                   "type": "string",
-                  "description": "Lambda function name or ARN (REQUIRED for GetFunction, GetFunctionConfiguration, UpdateFunctionCode, Invoke)"
+                  "description": "Lambda function name or ARN (Used by: GetFunction (Required), GetFunctionConfiguration (Required), UpdateFunctionCode (Required), Invoke (Required))"
                 },
                 "Qualifier": {
                   "type": "string",
-                  "description": "Function version or alias (optional)"
+                  "description": "Function version or alias (Used by: GetFunction, GetFunctionConfiguration, Invoke)"
                 },
                 "FunctionVersion": {
                   "type": "string",
-                  "description": "Set to ALL to include all versions (optional for ListFunctions)"
+                  "description": "Set to ALL to include all versions (Used by: ListFunctions)"
                 },
                 "Marker": {
                   "type": "string",
-                  "description": "Pagination marker from previous response (optional for ListFunctions)"
+                  "description": "Pagination marker from previous response (Used by: ListFunctions)"
                 },
                 "MaxItems": {
                   "type": "number",
-                  "description": "Maximum number of functions to return (optional for ListFunctions)"
+                  "description": "Maximum number of functions to return (Used by: ListFunctions)"
                 },
                 "MasterRegion": {
                   "type": "string",
-                  "description": "For Lambda@Edge, the AWS Region of the master function (optional)"
+                  "description": "For Lambda@Edge, the AWS Region of the master function (Used by: ListFunctions)"
                 },
                 "ZipFile": {
                   "type": "string",
-                  "description": "Base64-encoded zip file containing function code (optional for UpdateFunctionCode)"
+                  "description": "Base64-encoded zip file containing function code (Used by: UpdateFunctionCode)"
                 },
                 "S3Bucket": {
                   "type": "string",
-                  "description": "S3 bucket containing the function code (optional for UpdateFunctionCode)"
+                  "description": "S3 bucket containing the function code (Used by: UpdateFunctionCode)"
                 },
                 "S3Key": {
                   "type": "string",
-                  "description": "S3 object key for the function code (optional for UpdateFunctionCode)"
+                  "description": "S3 object key for the function code (Used by: UpdateFunctionCode)"
                 },
                 "S3ObjectVersion": {
                   "type": "string",
-                  "description": "S3 object version (optional for UpdateFunctionCode)"
+                  "description": "S3 object version (Used by: UpdateFunctionCode)"
                 },
                 "ImageUri": {
                   "type": "string",
-                  "description": "URI of a container image in Amazon ECR (optional for UpdateFunctionCode)"
+                  "description": "URI of a container image in Amazon ECR (Used by: UpdateFunctionCode)"
                 },
                 "Publish": {
                   "type": "boolean",
-                  "description": "Publish a new version after updating code (optional for UpdateFunctionCode)"
+                  "description": "Publish a new version after updating code (Used by: UpdateFunctionCode)"
                 },
                 "DryRun": {
                   "type": "boolean",
-                  "description": "Validate the request without updating code (optional for UpdateFunctionCode)"
+                  "description": "Validate the request without updating code (Used by: UpdateFunctionCode)"
                 },
                 "RevisionId": {
                   "type": "string",
-                  "description": "Update only if revision ID matches (optional for UpdateFunctionCode)"
+                  "description": "Update only if revision ID matches (Used by: UpdateFunctionCode)"
                 },
                 "Architectures": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Instruction set architecture: x86_64 or arm64 (optional for UpdateFunctionCode)"
+                  "description": "Instruction set architecture: x86_64 or arm64 (Used by: UpdateFunctionCode)"
                 },
                 "Resource": {
                   "type": "string",
-                  "description": "Function ARN (REQUIRED for ListTags, TagResource, UntagResource)"
+                  "description": "Function ARN (Used by: ListTags (Required), TagResource (Required), UntagResource (Required))"
                 },
                 "Tags": {
                   "type": "object",
-                  "description": "Key-value pairs for tags (REQUIRED for TagResource)"
+                  "description": "Key-value pairs for tags (Used by: TagResource (Required))"
                 },
                 "TagKeys": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Tag keys to remove (REQUIRED for UntagResource)"
+                  "description": "Tag keys to remove (Used by: UntagResource (Required))"
                 },
                 "InvocationType": {
                   "type": "string",
@@ -1492,7 +1518,7 @@
                     "RequestResponse",
                     "DryRun"
                   ],
-                  "description": "Invocation type (optional for Invoke, default: RequestResponse)"
+                  "description": "Invocation type (Used by: Invoke)"
                 },
                 "LogType": {
                   "type": "string",
@@ -1500,15 +1526,15 @@
                     "None",
                     "Tail"
                   ],
-                  "description": "Set to Tail to include execution log in response (optional for Invoke)"
+                  "description": "Set to Tail to include execution log in response (Used by: Invoke)"
                 },
                 "ClientContext": {
                   "type": "string",
-                  "description": "Base64-encoded client context data (optional for Invoke)"
+                  "description": "Base64-encoded client context data (Used by: Invoke)"
                 },
                 "Payload": {
                   "type": "string",
-                  "description": "JSON string payload to pass to function (optional for Invoke)"
+                  "description": "JSON string payload to pass to function (Used by: Invoke)"
                 }
               }
             }
@@ -1554,19 +1580,19 @@
               "properties": {
                 "executionArn": {
                   "type": "string",
-                  "description": "Execution ARN (REQUIRED for DescribeExecution)"
+                  "description": "Execution ARN (Used by: DescribeExecution (Required))"
                 },
                 "stateMachineArn": {
                   "type": "string",
-                  "description": "State machine ARN (REQUIRED for DescribeStateMachine, StartExecution, UpdateStateMachine; optional for ListExecutions)"
+                  "description": "State machine ARN (Used by: DescribeStateMachine (Required), ListExecutions, StartExecution (Required), UpdateStateMachine (Required))"
                 },
                 "maxResults": {
                   "type": "number",
-                  "description": "Maximum items to return where supported (optional)"
+                  "description": "Maximum items to return where supported (Used by: ListExecutions, ListStateMachines)"
                 },
                 "nextToken": {
                   "type": "string",
-                  "description": "Pagination token (optional)"
+                  "description": "Pagination token (Used by: ListExecutions, ListStateMachines)"
                 },
                 "statusFilter": {
                   "type": "string",
@@ -1577,43 +1603,43 @@
                     "TIMED_OUT",
                     "ABORTED"
                   ],
-                  "description": "Filter executions by status (optional for ListExecutions)"
+                  "description": "Filter executions by status (Used by: ListExecutions)"
                 },
                 "name": {
                   "type": "string",
-                  "description": "Execution name (optional for StartExecution)"
+                  "description": "Execution name (Used by: StartExecution)"
                 },
                 "input": {
                   "type": "string",
-                  "description": "JSON string input for execution (optional for StartExecution)"
+                  "description": "JSON string input for execution (Used by: StartExecution)"
                 },
                 "traceHeader": {
                   "type": "string",
-                  "description": "X-Ray trace header (optional for StartExecution)"
+                  "description": "X-Ray trace header (Used by: StartExecution)"
                 },
                 "definition": {
                   "type": "string",
-                  "description": "State machine definition in Amazon States Language (optional for UpdateStateMachine)"
+                  "description": "State machine definition in Amazon States Language (Used by: UpdateStateMachine)"
                 },
                 "roleArn": {
                   "type": "string",
-                  "description": "IAM role ARN for the state machine (optional for UpdateStateMachine)"
+                  "description": "IAM role ARN for the state machine (Used by: UpdateStateMachine)"
                 },
                 "loggingConfiguration": {
                   "type": "object",
-                  "description": "Logging configuration object (optional for UpdateStateMachine)"
+                  "description": "Logging configuration object (Used by: UpdateStateMachine)"
                 },
                 "tracingConfiguration": {
                   "type": "object",
-                  "description": "Tracing configuration object (optional for UpdateStateMachine)"
+                  "description": "Tracing configuration object (Used by: UpdateStateMachine)"
                 },
                 "publish": {
                   "type": "boolean",
-                  "description": "Set true to publish a new version (optional for UpdateStateMachine)"
+                  "description": "Set true to publish a new version (Used by: UpdateStateMachine)"
                 },
                 "versionDescription": {
                   "type": "string",
-                  "description": "Description for the published version (optional for UpdateStateMachine)"
+                  "description": "Description for the published version (Used by: UpdateStateMachine)"
                 }
               }
             }
@@ -1664,51 +1690,51 @@
               "properties": {
                 "Name": {
                   "type": "string",
-                  "description": "Job or trigger name (REQUIRED for CreateJob, GetTrigger, StartJobRun)"
+                  "description": "Job or trigger name (Used by: CreateJob (Required), GetTrigger (Required), StartJobRun (Required))"
                 },
                 "JobName": {
                   "type": "string",
-                  "description": "Job name (REQUIRED for GetJob, GetJobRun, GetJobRuns, StartJobRun)"
+                  "description": "Job name (Used by: GetJob (Required), GetJobRun (Required), GetJobRuns (Required), StartJobRun (Required))"
                 },
                 "RunId": {
                   "type": "string",
-                  "description": "Job run ID (REQUIRED for GetJobRun)"
+                  "description": "Job run ID (Used by: GetJobRun (Required))"
                 },
                 "ResourceArn": {
                   "type": "string",
-                  "description": "Resource ARN (REQUIRED for GetTags)"
+                  "description": "Resource ARN (Used by: GetTags (Required))"
                 },
                 "Role": {
                   "type": "string",
-                  "description": "IAM role ARN (REQUIRED for CreateJob)"
+                  "description": "IAM role ARN (Used by: CreateJob (Required))"
                 },
                 "Command": {
                   "type": "object",
-                  "description": "Command configuration object (REQUIRED for CreateJob, should include Name property)"
+                  "description": "Command configuration object (Used by: CreateJob (Required))"
                 },
                 "Description": {
                   "type": "string",
-                  "description": "Job description (optional for CreateJob)"
+                  "description": "Job description (Used by: CreateJob)"
                 },
                 "LogUri": {
                   "type": "string",
-                  "description": "S3 URI for job logs (optional for CreateJob)"
+                  "description": "S3 URI for job logs (Used by: CreateJob)"
                 },
                 "DefaultArguments": {
                   "type": "object",
-                  "description": "Default job arguments (optional for CreateJob)"
+                  "description": "Default job arguments (Used by: CreateJob)"
                 },
                 "MaxRetries": {
                   "type": "number",
-                  "description": "Maximum retries (optional for CreateJob)"
+                  "description": "Maximum retries (Used by: CreateJob)"
                 },
                 "Timeout": {
                   "type": "number",
-                  "description": "Job timeout in minutes (optional)"
+                  "description": "Job timeout in minutes (Used by: CreateJob, StartJobRun)"
                 },
                 "MaxCapacity": {
                   "type": "number",
-                  "description": "Maximum capacity for DPU units (optional)"
+                  "description": "Maximum capacity for DPU units (Used by: CreateJob, StartJobRun)"
                 },
                 "WorkerType": {
                   "type": "string",
@@ -1718,47 +1744,47 @@
                     "G.2X",
                     "G.025X"
                   ],
-                  "description": "Worker type (optional for CreateJob)"
+                  "description": "Worker type (Used by: CreateJob, StartJobRun)"
                 },
                 "NumberOfWorkers": {
                   "type": "number",
-                  "description": "Number of workers (optional for CreateJob)"
+                  "description": "Number of workers (Used by: CreateJob, StartJobRun)"
                 },
                 "Tags": {
                   "type": "object",
-                  "description": "Key-value tags (optional for CreateJob)"
+                  "description": "Key-value tags (Used by: CreateJob)"
                 },
                 "JobRunId": {
                   "type": "string",
-                  "description": "Job run ID (optional for StartJobRun)"
+                  "description": "Job run ID (Used by: StartJobRun)"
                 },
                 "Arguments": {
                   "type": "object",
-                  "description": "Job run arguments (optional for StartJobRun)"
+                  "description": "Job run arguments (Used by: StartJobRun)"
                 },
                 "AllocatedCapacity": {
                   "type": "number",
-                  "description": "Allocated capacity for the job run (optional)"
+                  "description": "Allocated capacity (Used by: StartJobRun)"
                 },
                 "SecurityConfiguration": {
                   "type": "string",
-                  "description": "Security configuration name (optional for StartJobRun)"
+                  "description": "Security configuration name (Used by: CreateJob, StartJobRun)"
                 },
                 "nextToken": {
                   "type": "string",
-                  "description": "Pagination token (optional)"
+                  "description": "Pagination token (Used by: GetJobRuns, GetTriggers, ListJobs, ListTriggers)"
                 },
                 "MaxResults": {
                   "type": "number",
-                  "description": "Maximum items to return (optional)"
+                  "description": "Maximum items to return (Used by: GetJobRuns, GetTriggers, ListJobs, ListTriggers)"
                 },
                 "DependencyJobName": {
                   "type": "string",
-                  "description": "Filter by dependent job name (optional for GetTriggers)"
+                  "description": "Filter by dependency job name (Used by: GetTriggers)"
                 },
                 "DependentJobName": {
                   "type": "string",
-                  "description": "Filter by dependent job name (optional for ListTriggers)"
+                  "description": "Filter by dependent job name (Used by: ListTriggers)"
                 }
               }
             }
@@ -1826,107 +1852,107 @@
               "properties": {
                 "ClusterId": {
                   "type": "string",
-                  "description": "EMR cluster ID (for describe/get/list operations scoped to a cluster)"
+                  "description": "EMR cluster ID (Used by: DescribeCluster (Required), GetAutoTerminationPolicy (Required), GetManagedScalingPolicy (Required), ListBootstrapActions (Required), ListInstanceFleets (Required), ListInstanceGroups (Required), ListInstances (Required), ListSteps (Required), GetClusterSessionCredentials (Required))"
                 },
                 "StepId": {
                   "type": "string",
-                  "description": "Step ID (for DescribeStep)"
+                  "description": "Step ID (Used by: DescribeStep (Required))"
                 },
                 "JobFlowIds": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Job flow IDs filter (optional for DescribeJobFlows)"
+                  "description": "Job flow IDs filter (Used by: DescribeJobFlows)"
                 },
                 "NotebookExecutionId": {
                   "type": "string",
-                  "description": "Notebook execution ID (for DescribeNotebookExecution)"
+                  "description": "Notebook execution ID (Used by: DescribeNotebookExecution (Required))"
                 },
                 "StudioId": {
                   "type": "string",
-                  "description": "Studio ID (for DescribeStudio, GetStudioSessionMapping, ListStudioSessionMappings)"
+                  "description": "Studio ID (Used by: DescribeStudio (Required), GetStudioSessionMapping (Required), ListStudioSessionMappings (Required))"
                 },
                 "ReleaseLabel": {
                   "type": "string",
-                  "description": "Release label (for DescribeReleaseLabel, ListSupportedInstanceTypes)"
+                  "description": "Release label (Used by: DescribeReleaseLabel (Required), ListSupportedInstanceTypes)"
                 },
                 "SecurityConfigurationName": {
                   "type": "string",
-                  "description": "Security configuration name (for DescribeSecurityConfiguration)"
+                  "description": "Security configuration name (Used by: DescribeSecurityConfiguration (Required))"
                 },
                 "ApplicationId": {
                   "type": "string",
-                  "description": "Application ID for UI presigned URL commands"
+                  "description": "Application ID for UI presigned URL commands (Used by: GetOnClusterAppUIPresignedURL (Required), GetPersistentAppUIPresignedURL (Required))"
                 },
                 "IdentityType": {
                   "type": "string",
-                  "description": "Identity type (USER or GROUP) for studio session mappings"
+                  "description": "Identity type (USER or GROUP) (Used by: GetStudioSessionMapping (Required), ListStudioSessionMappings (Required))"
                 },
                 "IdentityId": {
                   "type": "string",
-                  "description": "Identity ID for studio session mappings"
+                  "description": "Identity ID (Used by: GetStudioSessionMapping (Required))"
                 },
                 "InstanceFleetId": {
                   "type": "string",
-                  "description": "Instance fleet ID (for ListInstances)"
+                  "description": "Instance fleet ID (Used by: ListInstances)"
                 },
                 "InstanceGroupId": {
                   "type": "string",
-                  "description": "Instance group ID (for ListInstances)"
+                  "description": "Instance group ID (Used by: ListInstances)"
                 },
                 "InstanceStates": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Instance states filter (optional for ListInstances)"
+                  "description": "Instance states filter (Used by: ListInstances)"
                 },
                 "StepStates": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Step states filter (optional for ListSteps)"
+                  "description": "Step states filter (Used by: ListSteps)"
                 },
                 "ClusterStates": {
                   "type": "array",
                   "items": {
                     "type": "string"
                   },
-                  "description": "Cluster state filters (optional for ListClusters)"
+                  "description": "Cluster state filters (Used by: ListClusters)"
                 },
                 "CreatedAfter": {
                   "type": "string",
-                  "description": "ISO date string to filter clusters or job flows created after this time"
+                  "description": "ISO date string filter (Used by: ListClusters, DescribeJobFlows, ListNotebookExecutions)"
                 },
                 "CreatedBefore": {
                   "type": "string",
-                  "description": "ISO date string to filter clusters or job flows created before this time"
+                  "description": "ISO date string filter (Used by: ListClusters, DescribeJobFlows, ListNotebookExecutions)"
                 },
                 "MaxResults": {
                   "type": "number",
-                  "description": "Maximum items to return where supported"
+                  "description": "Maximum items to return where supported (Used by: list operations)"
                 },
                 "NextToken": {
                   "type": "string",
-                  "description": "Pagination token for list APIs"
+                  "description": "Pagination token (Used by: list operations)"
                 },
                 "Marker": {
                   "type": "string",
-                  "description": "Pagination marker where supported"
+                  "description": "Pagination marker (Used by: list operations)"
                 },
                 "CredentialType": {
                   "type": "string",
-                  "description": "Credential type for GetClusterSessionCredentials"
+                  "description": "Credential type (Used by: GetClusterSessionCredentials (Required))"
                 },
                 "ExecutionRoleArn": {
                   "type": "string",
-                  "description": "Execution role ARN for session credentials"
+                  "description": "Execution role ARN (Used by: GetClusterSessionCredentials)"
                 },
                 "DurationSeconds": {
                   "type": "number",
-                  "description": "Lifetime for session credentials (seconds)"
+                  "description": "Lifetime in seconds (Used by: GetClusterSessionCredentials)"
                 }
               }
             }
@@ -1976,31 +2002,31 @@
               "properties": {
                 "RoleName": {
                   "type": "string",
-                  "description": "Target IAM role name (REQUIRED for GetRole, GetRolePolicy, ListAttachedRolePolicies, ListRolePolicies, ListRoleTags)"
+                  "description": "Target IAM role name (Used by: GetRole (Required), GetRolePolicy (Required), ListAttachedRolePolicies (Required), ListRolePolicies (Required), ListRoleTags (Required))"
                 },
                 "PolicyName": {
                   "type": "string",
-                  "description": "Inline policy name (REQUIRED for GetRolePolicy)"
+                  "description": "Inline policy name (Used by: GetRolePolicy (Required))"
                 },
                 "PathPrefix": {
                   "type": "string",
-                  "description": "Path prefix to filter results (optional for ListAttachedRolePolicies, ListRoles, ListPolicies)"
+                  "description": "Path prefix filter (Used by: ListRoles, ListPolicies, ListAttachedRolePolicies)"
                 },
                 "Marker": {
                   "type": "string",
-                  "description": "Pagination marker (optional where supported)"
+                  "description": "Pagination marker (Used by: ListRoles, ListPolicies, ListAttachedRolePolicies, ListRolePolicies, ListPolicyVersions)"
                 },
                 "MaxItems": {
                   "type": "number",
-                  "description": "Maximum items to return (optional where supported)"
+                  "description": "Maximum items to return (Used by: ListRoles, ListPolicies, ListAttachedRolePolicies, ListRolePolicies, ListPolicyVersions)"
                 },
                 "PolicyArn": {
                   "type": "string",
-                  "description": "IAM policy ARN (REQUIRED for GetPolicy, GetPolicyVersion, ListPolicyVersions)"
+                  "description": "IAM policy ARN (Used by: GetPolicy (Required), GetPolicyVersion (Required), ListPolicyVersions (Required), ListAttachedRolePolicies (Required))"
                 },
                 "VersionId": {
                   "type": "string",
-                  "description": "Policy version ID (REQUIRED for GetPolicyVersion)"
+                  "description": "Policy version ID (Used by: GetPolicyVersion (Required))"
                 },
                 "Scope": {
                   "type": "string",
@@ -2009,11 +2035,11 @@
                     "AWS",
                     "Local"
                   ],
-                  "description": "Scope filter for ListPolicies (optional)"
+                  "description": "Scope filter for ListPolicies (Used by: ListPolicies)"
                 },
                 "OnlyAttached": {
                   "type": "boolean",
-                  "description": "Set true to list only attached policies (optional for ListPolicies)"
+                  "description": "Set true to list only attached policies (Used by: ListPolicies)"
                 },
                 "PolicyUsageFilter": {
                   "type": "string",
@@ -2021,7 +2047,7 @@
                     "PermissionsPolicy",
                     "PermissionsBoundary"
                   ],
-                  "description": "Filter policies by usage (optional for ListPolicies)"
+                  "description": "Filter policies by usage (Used by: ListPolicies)"
                 }
               }
             }
@@ -2074,96 +2100,96 @@
               "properties": {
                 "TableName": {
                   "type": "string",
-                  "description": "Target DynamoDB table name (REQUIRED for most table/item operations)"
+                  "description": "Target DynamoDB table name (Used by: DescribeTable (Required), CreateTable (Required), DeleteTable (Required), Query (Required), Scan (Required), PutItem (Required), UpdateItem (Required), DeleteItem (Required), GetItem (Required), UpdateTable (Required), UpdateTimeToLive (Required))"
                 },
                 "Limit": {
                   "type": "number",
-                  "description": "Maximum number of items to return (optional for ListTables, Query)"
+                  "description": "Maximum number of items to return (Used by: ListTables, Query, Scan)"
                 },
                 "ExclusiveStartTableName": {
                   "type": "string",
-                  "description": "Pagination start table name (optional for ListTables)"
+                  "description": "Pagination start table name (Used by: ListTables)"
                 },
                 "KeyConditionExpression": {
                   "type": "string",
-                  "description": "Key condition expression (optional for Query)"
+                  "description": "Key condition expression (Used by: Query)"
                 },
                 "FilterExpression": {
                   "type": "string",
-                  "description": "Filter expression (optional for Query)"
+                  "description": "Filter expression (Used by: Query, Scan)"
                 },
                 "ExpressionAttributeValues": {
                   "type": "object",
-                  "description": "Expression attribute values map (optional for Query/UpdateItem)"
+                  "description": "Expression attribute values map (Used by: Query, Scan, UpdateItem, PutItem, DeleteItem)"
                 },
                 "ExpressionAttributeNames": {
                   "type": "object",
-                  "description": "Expression attribute names map (optional)"
+                  "description": "Expression attribute names map (Used by: Query, Scan, UpdateItem, PutItem, DeleteItem, CreateTable)"
                 },
                 "IndexName": {
                   "type": "string",
-                  "description": "Secondary index name (optional for Query)"
+                  "description": "Secondary index name (Used by: Query, Scan)"
                 },
                 "Select": {
                   "type": "string",
-                  "description": "Projection selection (optional for Query)"
+                  "description": "Projection selection (Used by: Query, Scan)"
                 },
                 "Key": {
                   "type": "object",
-                  "description": "Primary key map (REQUIRED for GetItem/DeleteItem/UpdateItem)"
+                  "description": "Primary key map (Used by: GetItem (Required), DeleteItem (Required), UpdateItem (Required))"
                 },
                 "Item": {
                   "type": "object",
-                  "description": "Item attributes map (REQUIRED for PutItem)"
+                  "description": "Item attributes map (Used by: PutItem (Required))"
                 },
                 "AttributeUpdates": {
                   "type": "object",
-                  "description": "Legacy attribute updates map (optional for UpdateItem)"
+                  "description": "Legacy attribute updates map (Used by: UpdateItem)"
                 },
                 "UpdateExpression": {
                   "type": "string",
-                  "description": "Update expression (optional for UpdateItem)"
+                  "description": "Update expression (Used by: UpdateItem)"
                 },
                 "ConditionExpression": {
                   "type": "string",
-                  "description": "Condition expression (optional for write operations)"
+                  "description": "Condition expression (Used by: PutItem, UpdateItem, DeleteItem)"
                 },
                 "ProvisionedThroughput": {
                   "type": "object",
-                  "description": "Provisioned throughput config (optional for CreateTable/UpdateTable)"
+                  "description": "Provisioned throughput config (Used by: CreateTable, UpdateTable)"
                 },
                 "AttributeDefinitions": {
                   "type": "array",
                   "items": {
                     "type": "object"
                   },
-                  "description": "Attribute definitions (REQUIRED for CreateTable)"
+                  "description": "Attribute definitions (Used by: CreateTable (Required))"
                 },
                 "KeySchema": {
                   "type": "array",
                   "items": {
                     "type": "object"
                   },
-                  "description": "Key schema definitions (REQUIRED for CreateTable)"
+                  "description": "Key schema definitions (Used by: CreateTable (Required))"
                 },
                 "BillingMode": {
                   "type": "string",
-                  "description": "Billing mode: PROVISIONED or PAY_PER_REQUEST (optional for CreateTable/UpdateTable)"
+                  "description": "Billing mode: PROVISIONED or PAY_PER_REQUEST (Used by: CreateTable, UpdateTable)"
                 },
                 "GlobalSecondaryIndexUpdates": {
                   "type": "array",
                   "items": {
                     "type": "object"
                   },
-                  "description": "Updates to GSIs (optional for UpdateTable)"
+                  "description": "Updates to GSIs (Used by: UpdateTable)"
                 },
                 "TimeToLiveSpecification": {
                   "type": "object",
-                  "description": "TTL specification (REQUIRED for UpdateTimeToLive)"
+                  "description": "TTL specification (Used by: UpdateTimeToLive (Required))"
                 },
                 "ResourceArn": {
                   "type": "string",
-                  "description": "Table resource ARN (REQUIRED for ListTagsOfResource)"
+                  "description": "Table resource ARN (Used by: ListTagsOfResource (Required))"
                 }
               }
             }
