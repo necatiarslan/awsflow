@@ -1,7 +1,7 @@
 {
   "name": "awsflow",
   "displayName": "Awsflow: AWS AI Assistant",
-  "description": "Master AWS, stay in your flow. Access AWS services through AI chat and interactive tools directly within VS Code.",
+  "description": "Let AI access AWS services and work for you",
   "version": "1.0.0",
   "publisher": "NecatiARSLAN",
   "repository": {
