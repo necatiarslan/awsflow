@@ -225,8 +225,8 @@ export async function GetLogEvents(Region: string, LogGroupName: string, LogStre
   } catch (error: any) {
     result.isSuccessful = false;
     result.error = error;
-    ui.showErrorMessage('api.GetLogEvents Error !!!', error);
-    ui.logToOutput("api.GetLogEvents Error !!!", error); 
+    ui.showErrorMessage(`api.GetLogEvents Error !!! \n${LogGroupName} - ${LogStreamName}`, error);
+    ui.logToOutput(`api.GetLogEvents Error !!! \n${LogGroupName} - ${LogStreamName}`, error); 
   }
 
   return result;

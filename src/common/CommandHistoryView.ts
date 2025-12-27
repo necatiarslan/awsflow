@@ -63,6 +63,7 @@ export class CommandHistoryView {
                         <td>${toolName}</td>
                         <td>${command}</td>
                         <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${paramsStr.replace(/"/g, '&quot;')}">${paramsStr}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${responseStr.replace(/"/g, '&quot;')}">${responseStr}</td>
                         <td style="color: ${statusColor}">${entry.success ? "Success" : "Failed"}</td>
                         <td>${durationMs}ms</td>
                     </tr>
@@ -70,7 +71,7 @@ export class CommandHistoryView {
                 rowNumber--;
             }
         } else {
-            historyRows = '<tr><td colspan="7">No history yet.</td></tr>';
+            historyRows = '<tr><td colspan="8">No history yet.</td></tr>';
         }
 
         return /*html*/ `
@@ -104,6 +105,7 @@ export class CommandHistoryView {
                     <th>Tool</th>
                     <th>Command</th>
                     <th>Params</th>
+                    <th>Response</th>
                     <th>Status</th>
                     <th>Duration</th>
                 </tr>

@@ -1664,11 +1664,11 @@
               "properties": {
                 "Name": {
                   "type": "string",
-                  "description": "Job or trigger name (REQUIRED for CreateJob, GetJob, GetTrigger, StartJobRun)"
+                  "description": "Job or trigger name (REQUIRED for CreateJob, GetTrigger, StartJobRun)"
                 },
                 "JobName": {
                   "type": "string",
-                  "description": "Job name (REQUIRED for GetJobRun, GetJobRuns, StartJobRun)"
+                  "description": "Job name (REQUIRED for GetJob, GetJobRun, GetJobRuns, StartJobRun)"
                 },
                 "RunId": {
                   "type": "string",
