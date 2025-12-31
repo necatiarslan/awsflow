@@ -96,7 +96,6 @@ export class CommandHistoryView {
                 <vscode-button appearance="primary" id="refresh">Refresh</vscode-button>
                 <vscode-button appearance="secondary" id="clear">Clear History</vscode-button>
                 <vscode-button appearance="secondary" id="export">Export JSON</vscode-button>
-                <vscode-button appearance="secondary" id="exportChat">Export Chat History</vscode-button>
             </div>
             <table>
                 <tr>
@@ -122,9 +121,6 @@ export class CommandHistoryView {
                 document.getElementById('export').addEventListener('click', () => {
                     vscode.postMessage({ command: 'export' });
                 });
-                document.getElementById('exportChat').addEventListener('click', () => {
-                    vscode.postMessage({ command: 'exportChat' });
-                });
             </script>
         </body>
         </html>
@@ -145,9 +141,6 @@ export class CommandHistoryView {
                         return;
                     case "export":
                         void this._exportHistory();
-                        return;
-                    case "exportChat":
-                        //todo: implement chat history export
                         return;
                 }
             },
