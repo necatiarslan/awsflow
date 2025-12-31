@@ -1322,7 +1322,7 @@
         "name": "CloudWatchLogTool",
         "toolReferenceName": "CloudWatchLogTool",
         "displayName": "CloudWatch Logs Tool",
-        "modelDescription": "Execute CloudWatch Logs commands. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. DescribeLogStreams {command:'DescribeLogStreams', params:{logGroupName:'my-group'}}. GetLogEvents {command:'GetLogEvents', params:{logGroupName:'my-group', logStreamName:'stream', limit:50}}. OpenCloudWatchLogView {command:'OpenCloudWatchLogView', params:{logGroupName:'my-group', logStreamName:'optional-stream'}}.",
+        "modelDescription": "Execute CloudWatch Logs commands. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. DescribeLogStreams {command:'DescribeLogStreams', params:{logGroupName:'my-group'}}. GetLogEvents {command:'GetLogEvents', params:{logGroupName:'my-group', logStreamName:'stream', limit:50}}. FilterLogEvents {command:'FilterLogEvents', params:{logGroupName:'my-group', filterPattern:'ERROR'}}. OpenCloudWatchLogView {command:'OpenCloudWatchLogView', params:{logGroupName:'my-group', logStreamName:'optional-stream'}}.",
         "userDescription": "Query CloudWatch log groups, streams, events, and open log viewer",
         "tags": [
           "aws",
@@ -1345,6 +1345,7 @@
                 "DescribeLogGroups",
                 "DescribeLogStreams",
                 "GetLogEvents",
+                "FilterLogEvents",
                 "OpenCloudWatchLogView"
               ],
               "description": "The CloudWatch Logs command to execute"
@@ -1359,7 +1360,7 @@
                 },
                 "logGroupName": {
                   "type": "string",
-                  "description": "Target log group name (Used by: DescribeLogStreams (Required), GetLogEvents (Required), OpenCloudWatchLogView (Required))"
+                  "description": "Target log group name (Used by: DescribeLogStreams (Required), GetLogEvents (Required), FilterLogEvents (Required), OpenCloudWatchLogView (Required))"
                 },
                 "logStreamNamePrefix": {
                   "type": "string",
@@ -1400,6 +1401,14 @@
                 "startFromHead": {
                   "type": "boolean",
                   "description": "Return events starting from the beginning of the stream (Used by: GetLogEvents)"
+                },
+                "filterPattern": {
+                  "type": "string",
+                  "description": "Search pattern to filter log events (Used by: FilterLogEvents)"
+                },
+                "interleaved": {
+                  "type": "boolean",
+                  "description": "Return interleaved results from multiple log streams (Used by: FilterLogEvents)"
                 }
               }
             }

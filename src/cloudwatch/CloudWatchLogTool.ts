@@ -6,6 +6,7 @@ import {
   DescribeLogGroupsCommand,
   DescribeLogStreamsCommand,
   GetLogEventsCommand,
+  FilterLogEventsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { AIHandler } from '../chat/AIHandler';
 import { CloudWatchLogView } from './CloudWatchLogView';
@@ -15,6 +16,7 @@ type CloudWatchCommand =
   | 'DescribeLogGroups'
   | 'DescribeLogStreams'
   | 'GetLogEvents'
+  | 'FilterLogEvents'
   | 'OpenCloudWatchLogView';
 
 // Input interface - command + params object
@@ -71,6 +73,8 @@ export class CloudWatchLogTool extends BaseTool<CloudWatchToolInput> {
         return await client.send(new DescribeLogStreamsCommand(params as any));
       case 'GetLogEvents':
         return await client.send(new GetLogEventsCommand(params as any));
+      case 'FilterLogEvents':
+        return await client.send(new FilterLogEventsCommand(params as any));
       case 'OpenCloudWatchLogView':
         return await this.executeOpenCloudWatchLogView(params);
       default:

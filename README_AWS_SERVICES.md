@@ -81,6 +81,7 @@ This document provides a comprehensive reference of all AWS language model tools
 | **CloudWatch Logs** | DescribeLogGroups | List log groups | "List CloudWatch log groups", "Show log groups" |
 | **CloudWatch Logs** | DescribeLogStreams | List log streams in a group | "List log streams in /aws/lambda/my-function" |
 | **CloudWatch Logs** | GetLogEvents | Get log events from a stream | "Get logs from /aws/lambda/my-function", "Show recent logs" |
+| **CloudWatch Logs** | FilterLogEvents | Filter log events across streams in a log group | "Filter logs in /aws/lambda/my-function for errors", "Search logs for 'ERROR'" |
 | **CloudWatch Logs** | OpenCloudWatchLogView | Open interactive log viewer | "Open log viewer for /aws/lambda/my-function" |
 | **CloudFormation** | ListStacks | List CloudFormation stacks | "List my CloudFormation stacks", "Show all stacks" |
 | **CloudFormation** | DescribeStacks | Get stack details | "Describe stack my-stack" |
