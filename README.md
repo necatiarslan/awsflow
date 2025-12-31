@@ -105,6 +105,14 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
 - **Privacy**: No credentials are persisted outside VS Code global state. You can refresh or clear cached credentials from the Command Palette.
 - **Permissions**: The assistant invokes AWS APIs using your account permissions. Use least-privilege IAM policies and verify the active profile before running mutating actions.
 
+##  TODO
+- Add more AWS services and actions.
+   - ECS, EKS, ELB, Route 53, ElastiCache, KMS, Secrets Manager
+   - EventBridge, AppSync, CodeDeploy, ECR, Simple Systems Manager, Config Service
+   - Athena, Kinesis, Redshift, Open Search, Bedrock, SageMaker
+   - WAF, Shield, Cost Explorer
+
+- Improve natural language understanding for AWS-specific queries.
 
 ## 💖 Links
 
