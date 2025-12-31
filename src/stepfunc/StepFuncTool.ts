@@ -7,6 +7,7 @@ import {
   ListExecutionsCommand,
   ListStateMachinesCommand,
   StartExecutionCommand,
+  GetExecutionHistoryCommand,
   UpdateStateMachineCommand,
 } from '@aws-sdk/client-sfn';
 import { AIHandler } from '../chat/AIHandler';
@@ -18,6 +19,7 @@ type StepFuncCommand =
   | 'ListExecutions'
   | 'ListStateMachines'
   | 'StartExecution'
+  | 'GetExecutionHistory'
   | 'UpdateStateMachine';
 
 // Input interface - command + params object
@@ -63,6 +65,13 @@ interface UpdateStateMachineParams {
   versionDescription?: string;
 }
 
+interface GetExecutionHistoryParams {
+  executionArn: string;
+  maxResults?: number;
+  reverseOrder?: boolean;
+  nextToken?: string;
+}
+
 export class StepFuncTool extends BaseTool<StepFuncToolInput> {
   protected readonly toolName = 'StepFuncTool';
 
@@ -80,6 +89,9 @@ export class StepFuncTool extends BaseTool<StepFuncToolInput> {
   protected updateResourceContext(command: string, params: Record<string, any>): void {
     if ("stateMachineArn" in params) {
         AIHandler.Current.updateLatestResource({ type: 'Step Function State Machine', name: params.stateMachineArn });
+    }
+    if ("executionArn" in params) {
+        AIHandler.Current.updateLatestResource({ type: 'Step Function Execution', name: params.executionArn });
     }
   }
 
@@ -101,6 +113,9 @@ export class StepFuncTool extends BaseTool<StepFuncToolInput> {
 
       case 'StartExecution':
         return await this.executeStartExecution(params as StartExecutionParams);
+
+      case 'GetExecutionHistory':
+        return await client.send(new GetExecutionHistoryCommand(params as GetExecutionHistoryParams));
 
       case 'UpdateStateMachine':
         return await client.send(new UpdateStateMachineCommand(params as UpdateStateMachineParams));

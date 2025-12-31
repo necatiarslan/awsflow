@@ -1567,7 +1567,7 @@
         "name": "StepFuncTool",
         "toolReferenceName": "StepFuncTool",
         "displayName": "Step Functions Tool",
-        "modelDescription": "Execute AWS Step Functions commands. ALWAYS provide params object. Examples: ListStateMachines {command:'ListStateMachines', params:{maxResults:10}}. StartExecution {command:'StartExecution', params:{stateMachineArn:'arn:aws:states:...', input:'{\\\"key\\\":\\\"value\\\"}'}}. DescribeExecution {command:'DescribeExecution', params:{executionArn:'arn:aws:states:...'}}.",
+        "modelDescription": "Execute AWS Step Functions commands. ALWAYS provide params object. Examples: ListStateMachines {command:'ListStateMachines', params:{maxResults:10}}. StartExecution {command:'StartExecution', params:{stateMachineArn:'arn:aws:states:...', input:'{\\\"key\\\":\\\"value\\\"}'}}. DescribeExecution {command:'DescribeExecution', params:{executionArn:'arn:aws:states:...'}}. GetExecutionHistory {command:'GetExecutionHistory', params:{executionArn:'arn:aws:states:...', maxResults:100}}.",
         "userDescription": "Manage and run AWS Step Functions state machines",
         "tags": [
           "aws",
@@ -1592,6 +1592,7 @@
                 "ListExecutions",
                 "ListStateMachines",
                 "StartExecution",
+                "GetExecutionHistory",
                 "UpdateStateMachine"
               ],
               "description": "The Step Functions command to execute"
@@ -1602,7 +1603,7 @@
               "properties": {
                 "executionArn": {
                   "type": "string",
-                  "description": "Execution ARN (Used by: DescribeExecution (Required))"
+                  "description": "Execution ARN (Used by: DescribeExecution (Required), GetExecutionHistory (Required))"
                 },
                 "stateMachineArn": {
                   "type": "string",
@@ -1610,11 +1611,15 @@
                 },
                 "maxResults": {
                   "type": "number",
-                  "description": "Maximum items to return where supported (Used by: ListExecutions, ListStateMachines)"
+                  "description": "Maximum items to return where supported (Used by: ListExecutions, ListStateMachines, GetExecutionHistory)"
                 },
                 "nextToken": {
                   "type": "string",
-                  "description": "Pagination token (Used by: ListExecutions, ListStateMachines)"
+                  "description": "Pagination token (Used by: ListExecutions, ListStateMachines, GetExecutionHistory)"
+                },
+                "reverseOrder": {
+                  "type": "boolean",
+                  "description": "Whether to return events in reverse chronological order (Used by: GetExecutionHistory)"
                 },
                 "statusFilter": {
                   "type": "string",

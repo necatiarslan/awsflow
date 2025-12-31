@@ -76,6 +76,7 @@ This document provides a comprehensive reference of all AWS language model tools
 | **Step Functions** | DescribeStateMachine | Get state machine details | "Describe state machine arn:..." |
 | **Step Functions** | ListExecutions | List state machine executions | "Show executions for state machine arn:..." |
 | **Step Functions** | DescribeExecution | Get execution details | "Show execution details for arn:..." |
+| **Step Functions** | GetExecutionHistory | Get execution event history | "Get history for execution arn:...", "Show events for execution arn:..." |
 | **Step Functions** | StartExecution | Start state machine execution | "Start execution of state machine with input {}" |
 | **Step Functions** | UpdateStateMachine | Update state machine definition | "Update state machine definition" |
 | **CloudWatch Logs** | DescribeLogGroups | List log groups | "List CloudWatch log groups", "Show log groups" |
