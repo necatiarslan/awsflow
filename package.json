@@ -15,7 +15,20 @@
   "categories": [
     "Other",
     "AI",
-    "Chat"
+    "Chat",
+    "Testing",
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "cloud",
+    "aws",
+    "mcp",
+    "ai",
+    "copilot",
+    "awsflow",
+    "coding",
+    "agent"
   ],
   "activationEvents": [
     "onStartupFinished"
