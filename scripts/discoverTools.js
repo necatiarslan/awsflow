@@ -105,11 +105,11 @@ function findToolFiles(srcDir) {
     return toolFiles;
 }
 function getSchemaFileName(toolClassName) {
-    // Convert ClassName to camelCase for schema file
-    // S3Tool -> s3Tool.json
-    // EC2Tool -> ec2Tool.json
-    // TestAwsConnectionTool -> testAwsConnectionTool.json
-    return toolClassName.charAt(0).toLowerCase() + toolClassName.slice(1) + '.json';
+    // Schema file name matches tool class name exactly (PascalCase)
+    // S3Tool -> S3Tool.json
+    // EC2Tool -> EC2Tool.json
+    // TestAwsConnectionTool -> TestAwsConnectionTool.json
+    return toolClassName + '.json';
 }
 function validateSchema(schemaPath) {
     try {
@@ -183,8 +183,7 @@ function generateToolManifest(tools, outputPath) {
 }
 function generateToolRegistry(tools, manifestPath, outputPath) {
     const imports = tools.map(t => `import { ${t.className} } from '../${t.importPath}';`).join('\n');
-    const extensionTools = tools.map(t => `  { name: '${t.name}', instance: new ${t.className}() }`).join(',\n');
-    const mcpTools = tools.map(t => `  { name: '${t.name}', instance: new ${t.className}() as any }`).join(',\n');
+    const toolsList = tools.map(t => `  { name: '${t.name}', instance: new ${t.className}() }`).join(',\n');
     const code = `/**
  * Auto-generated Tool Registry
  * Generated at: ${new Date().toISOString()}
@@ -201,17 +200,10 @@ export interface ToolRegistryEntry {
 }
 
 /**
- * Tools for VS Code Language Model API registration
+ * Unified tool registry for both VS Code Language Model API and MCP bridge
  */
-export const EXTENSION_TOOLS: ToolRegistryEntry[] = [
-${extensionTools}
-];
-
-/**
- * Tools for MCP (Model Context Protocol) bridge
- */
-export const MCP_TOOLS: ToolRegistryEntry[] = [
-${mcpTools}
+export const TOOLS: ToolRegistryEntry[] = [
+${toolsList}
 ];
 
 /**
@@ -249,7 +241,7 @@ export async function getAllToolMetadata(): Promise<any[]> {
 const rootDir = path.join(__dirname, '..');
 const srcDir = path.join(rootDir, 'src');
 const schemasDir = path.join(srcDir, 'schemas');
-const generatedDir = path.join(srcDir, 'generated');
+const generatedDir = path.join(srcDir, 'tool_registry');
 // Ensure directories exist
 if (!fs.existsSync(schemasDir)) {
     console.error(`❌ Schemas directory not found: ${schemasDir}`);
@@ -265,8 +257,8 @@ if (tools.length === 0) {
     process.exit(1);
 }
 // Generate output files
-const manifestPath = path.join(generatedDir, 'toolManifest.json');
-const registryPath = path.join(generatedDir, 'toolRegistry.ts');
+const manifestPath = path.join(generatedDir, 'ToolManifest.json');
+const registryPath = path.join(generatedDir, 'ToolRegistry.ts');
 generateToolManifest(tools, manifestPath);
 generateToolRegistry(tools, manifestPath, registryPath);
 console.log(`\n✅ Tool discovery complete!\n`);

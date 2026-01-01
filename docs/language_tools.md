@@ -31,8 +31,7 @@ The Awsflow extension provides **20 AWS service tools** for VS Code's Language M
     ┌────────────────────────────────────────┐
     │   src/tool_registry/ToolManifest.json  │
     │   src/tool_registry/ToolRegistry.ts    │
-    │  - EXTENSION_TOOLS array               │
-    │  - MCP_TOOLS array                     │
+    │  - TOOLS array                         │
     │  - Auto-generated imports              │
     └─────────┬──────────────────────────────┘
               │ Used by
@@ -148,15 +147,10 @@ import { S3Tool } from '../s3/S3Tool';
 import { EC2Tool } from '../ec2/EC2Tool';
 // ... 18 more imports
 
-export const EXTENSION_TOOLS = [
+export const TOOLS = [
   { name: 'S3Tool', instance: new S3Tool() },
   { name: 'EC2Tool', instance: new EC2Tool() },
   // ... 18 more tools
-];
-
-export const MCP_TOOLS = [
-  { name: 'S3Tool', instance: new S3Tool() as any },
-  // ... 19 more tools
 ];
 ```
 
@@ -480,28 +474,25 @@ See [DEPRECATION_NOTICE.md](../DEPRECATION_NOTICE.md) for:
 
 ## Tool Registry Details
 
-### EXTENSION_TOOLS
+### TOOLS
 
-Used by `extension.ts` for VS Code Language Model API registration:
+Unified tool registry used by both `extension.ts` for VS Code Language Model API registration and `McpDispatcher.ts` for MCP bridge:
 
 ```typescript
-const { EXTENSION_TOOLS } = require('./tool_registry/ToolRegistry');
+const { TOOLS } = require('./tool_registry/ToolRegistry');
 
-for (const tool of EXTENSION_TOOLS) {
+for (const tool of TOOLS) {
   context.subscriptions.push(
     vscode.lm.registerTool(tool.name, tool.instance)
   );
 }
 ```
 
-### MCP_TOOLS
-
-Used by `McpDispatcher.ts` for Model Context Protocol bridge:
-
 ```typescript
-const { MCP_TOOLS } = require('../tool_registry/ToolRegistry');
+// McpDispatcher.ts also uses the same TOOLS array
+const { TOOLS } = require('../tool_registry/ToolRegistry');
 
-for (const tool of MCP_TOOLS) {
+for (const tool of TOOLS) {
   if (enabledTools.has(tool.name)) {
     this.tools.set(tool.name, tool);
   }

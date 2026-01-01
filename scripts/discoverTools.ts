@@ -199,12 +199,8 @@ function generateToolRegistry(tools: DiscoveredTool[], manifestPath: string, out
     `import { ${t.className} } from '../${t.importPath}';`
   ).join('\n');
   
-  const extensionTools = tools.map(t => 
+  const toolsList = tools.map(t => 
     `  { name: '${t.name}', instance: new ${t.className}() }`
-  ).join(',\n');
-  
-  const mcpTools = tools.map(t =>
-    `  { name: '${t.name}', instance: new ${t.className}() as any }`
   ).join(',\n');
   
   const code = `/**
@@ -223,17 +219,10 @@ export interface ToolRegistryEntry {
 }
 
 /**
- * Tools for VS Code Language Model API registration
+ * Unified tool registry for both VS Code Language Model API and MCP bridge
  */
-export const EXTENSION_TOOLS: ToolRegistryEntry[] = [
-${extensionTools}
-];
-
-/**
- * Tools for MCP (Model Context Protocol) bridge
- */
-export const MCP_TOOLS: ToolRegistryEntry[] = [
-${mcpTools}
+export const TOOLS: ToolRegistryEntry[] = [
+${toolsList}
 ];
 
 /**

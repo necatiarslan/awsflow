@@ -33,13 +33,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	if (Session.Current?.IsHostSupportLanguageTools()) {
 		// Register language model tools dynamically from generated registry
-		const { EXTENSION_TOOLS } = require('./tool_registry/ToolRegistry');
-		for (const tool of EXTENSION_TOOLS) {
+		const { TOOLS } = require('./tool_registry/ToolRegistry');
+		for (const tool of TOOLS) {
 			context.subscriptions.push(
 				vscode.lm.registerTool(tool.name, tool.instance)
 			);
 		}
-		ui.logToOutput(`Registered ${EXTENSION_TOOLS.length} language model tools`);
+		ui.logToOutput(`Registered ${TOOLS.length} language model tools`);
 	}
 	else {
 		ui.logToOutput(`Language model tools registration skipped for ${Session.Current?.HostAppName}`);
