@@ -1,0 +1,100 @@
+{
+  "name": "CloudWatchLogTool",
+  "toolReferenceName": "CloudWatchLogTool",
+  "displayName": "CloudWatch Logs Tool",
+  "modelDescription": "Execute CloudWatch Logs commands. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. DescribeLogStreams {command:'DescribeLogStreams', params:{logGroupName:'my-group'}}. GetLogEvents {command:'GetLogEvents', params:{logGroupName:'my-group', logStreamName:'stream', limit:50}}. FilterLogEvents {command:'FilterLogEvents', params:{logGroupName:'my-group', filterPattern:'ERROR'}}. OpenCloudWatchLogView {command:'OpenCloudWatchLogView', params:{logGroupName:'my-group', logStreamName:'optional-stream'}}.",
+  "userDescription": "Query CloudWatch log groups, streams, events, and open log viewer",
+  "tags": [
+    "aws",
+    "cloudwatch",
+    "logs",
+    "monitoring"
+  ],
+  "icon": "$(list-selection)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "DescribeLogGroups",
+          "DescribeLogStreams",
+          "GetLogEvents",
+          "FilterLogEvents",
+          "OpenCloudWatchLogView"
+        ],
+        "description": "The CloudWatch Logs command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Provide logGroupName/logStreamName where needed.",
+        "properties": {
+          "logGroupNamePrefix": {
+            "type": "string",
+            "description": "Prefix filter for log group names (Used by: DescribeLogGroups)"
+          },
+          "logGroupName": {
+            "type": "string",
+            "description": "Target log group name (Used by: DescribeLogStreams (Required), GetLogEvents (Required), FilterLogEvents (Required), OpenCloudWatchLogView (Required))"
+          },
+          "logStreamNamePrefix": {
+            "type": "string",
+            "description": "Prefix filter for log stream names (Used by: DescribeLogStreams)"
+          },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "LogStreamName",
+              "LastEventTime"
+            ],
+            "description": "Ordering for DescribeLogStreams (Used by: DescribeLogStreams)"
+          },
+          "descending": {
+            "type": "boolean",
+            "description": "Whether to sort descending for DescribeLogStreams (Used by: DescribeLogStreams)"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Maximum items to return where supported (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
+          },
+          "nextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
+          },
+          "logStreamName": {
+            "type": "string",
+            "description": "Target log stream name (Used by: GetLogEvents (Required), OpenCloudWatchLogView)"
+          },
+          "startTime": {
+            "type": "number",
+            "description": "Start time in epoch milliseconds (Used by: GetLogEvents)"
+          },
+          "endTime": {
+            "type": "number",
+            "description": "End time in epoch milliseconds (Used by: GetLogEvents)"
+          },
+          "startFromHead": {
+            "type": "boolean",
+            "description": "Return events starting from the beginning of the stream (Used by: GetLogEvents)"
+          },
+          "filterPattern": {
+            "type": "string",
+            "description": "Search pattern to filter log events (Used by: FilterLogEvents)"
+          },
+          "interleaved": {
+            "type": "boolean",
+            "description": "Return interleaved results from multiple log streams (Used by: FilterLogEvents)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

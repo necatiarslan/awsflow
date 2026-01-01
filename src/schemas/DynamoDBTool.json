@@ -1,0 +1,145 @@
+{
+  "name": "DynamoDBTool",
+  "toolReferenceName": "DynamoDBTool",
+  "displayName": "DynamoDB Tool",
+  "modelDescription": "Execute DynamoDB commands. ALWAYS provide params object. Examples: ListTables {command:'ListTables', params:{Limit:10}}. DescribeTable {command:'DescribeTable', params:{TableName:'my-table'}}. Query {command:'Query', params:{TableName:'my-table', KeyConditionExpression:'pk = :pk', ExpressionAttributeValues:{':pk':{'S':'id'}}}}.",
+  "userDescription": "Manage DynamoDB tables and items",
+  "tags": [
+    "aws",
+    "dynamodb",
+    "database",
+    "nosql"
+  ],
+  "icon": "$(server)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "ListTables",
+          "DescribeTable",
+          "CreateTable",
+          "DeleteTable",
+          "Query",
+          "Scan",
+          "PutItem",
+          "UpdateItem",
+          "DeleteItem",
+          "GetItem",
+          "UpdateTable",
+          "UpdateTimeToLive",
+          "ListTagsOfResource"
+        ],
+        "description": "The DynamoDB command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Provide TableName and key attributes where needed.",
+        "properties": {
+          "TableName": {
+            "type": "string",
+            "description": "Target DynamoDB table name (Used by: DescribeTable (Required), CreateTable (Required), DeleteTable (Required), Query (Required), Scan (Required), PutItem (Required), UpdateItem (Required), DeleteItem (Required), GetItem (Required), UpdateTable (Required), UpdateTimeToLive (Required))"
+          },
+          "Limit": {
+            "type": "number",
+            "description": "Maximum number of items to return (Used by: ListTables, Query, Scan)"
+          },
+          "ExclusiveStartTableName": {
+            "type": "string",
+            "description": "Pagination start table name (Used by: ListTables)"
+          },
+          "KeyConditionExpression": {
+            "type": "string",
+            "description": "Key condition expression (Used by: Query)"
+          },
+          "FilterExpression": {
+            "type": "string",
+            "description": "Filter expression (Used by: Query, Scan)"
+          },
+          "ExpressionAttributeValues": {
+            "type": "object",
+            "description": "Expression attribute values map (Used by: Query, Scan, UpdateItem, PutItem, DeleteItem)"
+          },
+          "ExpressionAttributeNames": {
+            "type": "object",
+            "description": "Expression attribute names map (Used by: Query, Scan, UpdateItem, PutItem, DeleteItem, CreateTable)"
+          },
+          "IndexName": {
+            "type": "string",
+            "description": "Secondary index name (Used by: Query, Scan)"
+          },
+          "Select": {
+            "type": "string",
+            "description": "Projection selection (Used by: Query, Scan)"
+          },
+          "Key": {
+            "type": "object",
+            "description": "Primary key map (Used by: GetItem (Required), DeleteItem (Required), UpdateItem (Required))"
+          },
+          "Item": {
+            "type": "object",
+            "description": "Item attributes map (Used by: PutItem (Required))"
+          },
+          "AttributeUpdates": {
+            "type": "object",
+            "description": "Legacy attribute updates map (Used by: UpdateItem)"
+          },
+          "UpdateExpression": {
+            "type": "string",
+            "description": "Update expression (Used by: UpdateItem)"
+          },
+          "ConditionExpression": {
+            "type": "string",
+            "description": "Condition expression (Used by: PutItem, UpdateItem, DeleteItem)"
+          },
+          "ProvisionedThroughput": {
+            "type": "object",
+            "description": "Provisioned throughput config (Used by: CreateTable, UpdateTable)"
+          },
+          "AttributeDefinitions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Attribute definitions (Used by: CreateTable (Required))"
+          },
+          "KeySchema": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Key schema definitions (Used by: CreateTable (Required))"
+          },
+          "BillingMode": {
+            "type": "string",
+            "description": "Billing mode: PROVISIONED or PAY_PER_REQUEST (Used by: CreateTable, UpdateTable)"
+          },
+          "GlobalSecondaryIndexUpdates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Updates to GSIs (Used by: UpdateTable)"
+          },
+          "TimeToLiveSpecification": {
+            "type": "object",
+            "description": "TTL specification (Used by: UpdateTimeToLive (Required))"
+          },
+          "ResourceArn": {
+            "type": "string",
+            "description": "Table resource ARN (Used by: ListTagsOfResource (Required))"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

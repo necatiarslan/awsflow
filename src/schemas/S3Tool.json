@@ -1,0 +1,141 @@
+{
+  "name": "S3Tool",
+  "toolReferenceName": "S3Tool",
+  "displayName": "S3 Tool",
+  "modelDescription": "Execute S3 commands. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}. CopyObject {command:'CopyObject', params:{Bucket:'name', CopySource:'/bucket/key', Key:'new-path'}}. OpenS3Explorer {command:'OpenS3Explorer', params:{Bucket:'bucket-name', Key:'optional/path/'}}.",
+  "userDescription": "Execute S3 commands including read, write, delete operations, and open S3 Explorer view",
+  "tags": [
+    "aws",
+    "s3",
+    "bucket",
+    "object",
+    "generic",
+    "upload",
+    "download",
+    "delete",
+    "copy"
+  ],
+  "icon": "$(database)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "HeadBucket",
+          "HeadObject",
+          "ListBuckets",
+          "ListObjectsV2",
+          "ListObjectVersions",
+          "GetBucketPolicy",
+          "GetBucketNotificationConfiguration",
+          "GetObject",
+          "PutObject",
+          "DeleteObject",
+          "CopyObject",
+          "SelectObjectContent",
+          "OpenS3Explorer"
+        ],
+        "description": "The S3 command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. For write operations ensure Bucket and Key are provided.",
+        "properties": {
+          "Bucket": {
+            "type": "string",
+            "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+          },
+          "Key": {
+            "type": "string",
+            "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+          },
+          "CopySource": {
+            "type": "string",
+            "description": "Source object path for copy command (Used by: CopyObject (Required))"
+          },
+          "Body": {
+            "type": "string",
+            "description": "Object content as string or base64 (Used by: PutObject)"
+          },
+          "ContentType": {
+            "type": "string",
+            "description": "MIME type for the object (Used by: PutObject)"
+          },
+          "Prefix": {
+            "type": "string",
+            "description": "Filter objects by prefix path (Used by: ListObjectsV2, ListObjectVersions, OpenS3Explorer)"
+          },
+          "Delimiter": {
+            "type": "string",
+            "description": "Delimiter character for grouping keys, typically / (Used by: ListObjectsV2, ListObjectVersions)"
+          },
+          "MaxKeys": {
+            "type": "number",
+            "description": "Maximum number of keys to return (Used by: ListObjectsV2, ListObjectVersions)"
+          },
+          "ContinuationToken": {
+            "type": "string",
+            "description": "Token for pagination from previous response (Used by: ListObjectsV2)"
+          },
+          "StartAfter": {
+            "type": "string",
+            "description": "Start listing after this key name (Used by: ListObjectsV2)"
+          },
+          "VersionId": {
+            "type": "string",
+            "description": "Specific version ID of object (Used by: HeadObject, GetObject, DeleteObject)"
+          },
+          "KeyMarker": {
+            "type": "string",
+            "description": "Key marker for version pagination (Used by: ListObjectVersions)"
+          },
+          "VersionIdMarker": {
+            "type": "string",
+            "description": "Version ID marker for pagination (Used by: ListObjectVersions)"
+          },
+          "Metadata": {
+            "type": "object",
+            "description": "Custom metadata key-value pairs (Used by: PutObject, CopyObject)"
+          },
+          "MetadataDirective": {
+            "type": "string",
+            "description": "How to handle metadata in CopyObject: COPY or REPLACE (Used by: CopyObject)"
+          },
+          "DownloadToTemp": {
+            "type": "boolean",
+            "description": "Download file to temp folder and return local path (Used by: GetObject)"
+          },
+          "AsText": {
+            "type": "boolean",
+            "description": "Return file content as text for analysis (Used by: GetObject)"
+          },
+          "Expression": {
+            "type": "string",
+            "description": "SQL expression for querying object content (Used by: SelectObjectContent (Required))"
+          },
+          "ExpressionType": {
+            "type": "string",
+            "description": "Type of expression (Used by: SelectObjectContent (Required))"
+          },
+          "InputSerialization": {
+            "type": "object",
+            "description": "Format of the input data (Used by: SelectObjectContent (Required))"
+          },
+          "OutputSerialization": {
+            "type": "object",
+            "description": "Format for output data (Used by: SelectObjectContent (Required))"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

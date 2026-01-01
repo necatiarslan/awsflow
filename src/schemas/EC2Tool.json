@@ -1,0 +1,102 @@
+{
+  "name": "EC2Tool",
+  "toolReferenceName": "EC2Tool",
+  "displayName": "EC2 Tool",
+  "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeImages {command:'DescribeImages', params:{Owners:['self']}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
+  "userDescription": "Query EC2 instances, images, networking, and console data",
+  "tags": [
+    "aws",
+    "ec2",
+    "compute",
+    "network",
+    "instances"
+  ],
+  "icon": "$(vm)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "DescribeAccountAttributes",
+          "DescribeAddresses",
+          "DescribeAvailabilityZones",
+          "DescribeImages",
+          "DescribeInstances",
+          "DescribeInstanceStatus",
+          "DescribeKeyPairs",
+          "DescribeRegions",
+          "DescribeSecurityGroups",
+          "DescribeSnapshots",
+          "DescribeSubnets",
+          "DescribeTags",
+          "DescribeVolumes",
+          "DescribeVpcs",
+          "GetConsoleOutput",
+          "GetHostReservationPurchasePreview",
+          "GetLaunchTemplateData",
+          "GetPasswordData"
+        ],
+        "description": "The EC2 command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Use native EC2 API field names (e.g., InstanceIds, Filters, Owners).",
+        "properties": {
+          "InstanceId": {
+            "type": "string",
+            "description": "Single instance ID (Used by: GetConsoleOutput (Required), GetPasswordData (Required))"
+          },
+          "InstanceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of instance IDs (Used by: DescribeInstances, DescribeInstanceStatus)"
+          },
+          "Filters": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
+          },
+          "Owners": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Image owners (Used by: DescribeImages)"
+          },
+          "DryRun": {
+            "type": "boolean",
+            "description": "Validate permissions without running the request (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeRegions, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
+          },
+          "MaxResults": {
+            "type": "number",
+            "description": "Pagination: maximum results (Used by: DescribeImages, DescribeInstances, DescribeSnapshots, DescribeVolumes)"
+          },
+          "NextToken": {
+            "type": "string",
+            "description": "Pagination token for next page (Used by: DescribeImages, DescribeInstances, DescribeSnapshots, DescribeVolumes)"
+          },
+          "RegionNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specific region names (Used by: DescribeRegions)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

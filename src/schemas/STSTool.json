@@ -1,0 +1,106 @@
+{
+  "name": "STSTool",
+  "toolReferenceName": "STSTool",
+  "displayName": "STS Tool",
+  "modelDescription": "Execute AWS STS (Security Token Service) commands. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. GetAccessKeyInfo {command:'GetAccessKeyInfo', params:{AccessKeyId:'AKIA...'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. GetFederationToken {command:'GetFederationToken', params:{Name:'session-name'}}. GetWebIdentityToken {command:'GetWebIdentityToken', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
+  "userDescription": "Get temporary security credentials and caller identity information from AWS STS",
+  "tags": [
+    "aws",
+    "sts",
+    "credentials",
+    "security",
+    "tokens",
+    "identity"
+  ],
+  "icon": "$(key)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "GetCallerIdentity",
+          "GetAccessKeyInfo",
+          "GetDelegatedAccessToken",
+          "GetFederationToken",
+          "GetSessionToken",
+          "GetWebIdentityToken"
+        ],
+        "description": "The STS command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty.",
+        "properties": {
+          "AccessKeyId": {
+            "type": "string",
+            "description": "AWS access key ID (Used by: GetAccessKeyInfo (Required))"
+          },
+          "RoleArn": {
+            "type": "string",
+            "description": "IAM role ARN (Used by: GetDelegatedAccessToken (Required), GetWebIdentityToken (Required))"
+          },
+          "DurationSeconds": {
+            "type": "number",
+            "description": "Token lifetime in seconds (Used by: GetDelegatedAccessToken, GetFederationToken, GetSessionToken, GetWebIdentityToken)"
+          },
+          "DelegationTokenLifetimeSeconds": {
+            "type": "number",
+            "description": "Delegated token lifetime in seconds (Used by: GetDelegatedAccessToken)"
+          },
+          "Name": {
+            "type": "string",
+            "description": "Session or federation token name (Used by: GetFederationToken (Required))"
+          },
+          "Policy": {
+            "type": "string",
+            "description": "IAM policy JSON string for the temporary credentials (Used by: GetFederationToken)"
+          },
+          "Tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Key": {
+                  "type": "string"
+                },
+                "Value": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Session tags (Used by: GetFederationToken)"
+          },
+          "SerialNumber": {
+            "type": "string",
+            "description": "MFA device serial number (Used by: GetSessionToken)"
+          },
+          "TokenCode": {
+            "type": "string",
+            "description": "MFA token code (Used by: GetSessionToken)"
+          },
+          "RoleSessionName": {
+            "type": "string",
+            "description": "Role session name (Used by: GetWebIdentityToken (Required))"
+          },
+          "WebIdentityToken": {
+            "type": "string",
+            "description": "Web identity token (Used by: GetWebIdentityToken (Required))"
+          },
+          "ProviderId": {
+            "type": "string",
+            "description": "Identity provider ID (Used by: GetWebIdentityToken)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

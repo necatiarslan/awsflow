@@ -1,0 +1,27 @@
+{
+  "name": "TestAwsConnectionTool",
+  "toolReferenceName": "TestAwsConnectionTool",
+  "displayName": "Test AWS Connection",
+  "modelDescription": "Tests AWS connectivity using STS GetCallerIdentity. Returns true if the connection is successful.",
+  "userDescription": "Test your AWS connectivity with current session credentials",
+  "tags": [
+    "aws",
+    "connectivity",
+    "test"
+  ],
+  "icon": "$(cloud)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "region": {
+        "type": "string",
+        "description": "The AWS region to test. If not specified, uses the current session region.",
+        "default": "us-east-1"
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

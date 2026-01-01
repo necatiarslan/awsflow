@@ -4,26 +4,6 @@ import * as path from 'path';
 import { BaseTool } from '../common/BaseTool';
 import { Session } from '../common/Session';
 import { McpRequest, McpResponse } from './types';
-import { S3Tool } from '../s3/S3Tool';
-import { S3FileOperationsTool } from '../s3/S3FileOperationsTool';
-import { SNSTool } from '../sns/SNSTool';
-import { SQSTool } from '../sqs/SQSTool';
-import { EC2Tool } from '../ec2/EC2Tool';
-import { FileOperationsTool } from '../common/FileOperationsTool';
-import { SessionTool } from '../common/SessionTool';
-import { CloudWatchLogTool } from '../cloudwatch/CloudWatchLogTool';
-import { LambdaTool } from '../lambda/LambdaTool';
-import { StepFuncTool } from '../stepfunc/StepFuncTool';
-import { GlueTool } from '../glue/GlueTool';
-import { IAMTool } from '../iam/IAMTool';
-import { DynamoDBTool } from '../dynamodb/DynamoDBTool';
-import { APIGatewayTool } from '../apigateway/APIGatewayTool';
-import { RDSTool } from '../rds/RDSTool';
-import { RDSDataTool } from '../rdsdata/RDSDataTool';
-import { CloudFormationTool } from '../cloudformation/CloudFormationTool';
-import { EMRTool } from '../emr/EMRTool';
-import { STSTool } from '../sts/STSTool';
-import { TestAwsConnectionTool } from '../sts/TestAwsConnectionTool';
 import { McpSession } from './McpSession';
 //import { needsConfirmation, confirmProceed } from '../common/ActionGuard';
 
@@ -62,28 +42,12 @@ export class McpDispatcher {
             throw new Error(`Failed to load MCP tool definitions: ${error.message}`);
         }
         
-        const allTools: ToolRecord[] = [
-            { name: 'TestAwsConnectionTool', instance: new TestAwsConnectionTool() as BaseTool<any> },
-            { name: 'STSTool', instance: new STSTool() as BaseTool<any> },
-            { name: 'S3Tool', instance: new S3Tool() as BaseTool<any> },
-            { name: 'S3FileOperationsTool', instance: new S3FileOperationsTool() as BaseTool<any> },
-            { name: 'SNSTool', instance: new SNSTool() as BaseTool<any> },
-            { name: 'SQSTool', instance: new SQSTool() as BaseTool<any> },
-            { name: 'EC2Tool', instance: new EC2Tool() as BaseTool<any> },
-            { name: 'FileOperationsTool', instance: new FileOperationsTool() as BaseTool<any> },
-            { name: 'SessionTool', instance: new SessionTool() as BaseTool<any> },
-            { name: 'CloudWatchLogTool', instance: new CloudWatchLogTool() as BaseTool<any> },
-            { name: 'LambdaTool', instance: new LambdaTool() as BaseTool<any> },
-            { name: 'StepFuncTool', instance: new StepFuncTool() as BaseTool<any> },
-            { name: 'GlueTool', instance: new GlueTool() as BaseTool<any> },
-            { name: 'IAMTool', instance: new IAMTool() as BaseTool<any> },
-            { name: 'DynamoDBTool', instance: new DynamoDBTool() as BaseTool<any> },
-            { name: 'APIGatewayTool', instance: new APIGatewayTool() as BaseTool<any> },
-            { name: 'RDSTool', instance: new RDSTool() as BaseTool<any> },
-            { name: 'RDSDataTool', instance: new RDSDataTool() as BaseTool<any> },
-            { name: 'CloudFormationTool', instance: new CloudFormationTool() as BaseTool<any> },
-            { name: 'EMRTool', instance: new EMRTool() as BaseTool<any> }
-        ];
+        // Load tools dynamically from generated registry
+        const { MCP_TOOLS } = require('../tool_registry/ToolRegistry');
+        const allTools: ToolRecord[] = MCP_TOOLS.map((t: any) => ({
+            name: t.name,
+            instance: t.instance as BaseTool<any>
+        }));
 
         for (const t of allTools) {
             if (enabledTools.has(t.name)) {

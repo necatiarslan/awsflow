@@ -10,137 +10,46 @@ interface ToolDefinition {
     commands: string[];
 }
 
-const TOOL_REGISTRY: ToolDefinition[] = [
-    {
-        name: "TestAwsConnectionTool",
-        displayName: "Test AWS Connection",
-        commands: ["TestConnection"]
-    },
-    {
-        name: "STSTool",
-        displayName: "STS (Security Token Service)",
-        commands: ["GetCallerIdentity", "GetSessionToken", "AssumeRole", "DecodeAuthorizationMessage"]
-    },
-    // {
-    //     name: "SessionTool",
-    //     displayName: "Session Management",
-    //     commands: ["GetSession", "SetSession", "ListProfiles", "RefreshCredentials"]
-    // },
-    {
-        name: "S3Tool",
-        displayName: "S3 (Simple Storage Service)",
-        commands: ["HeadBucket", "HeadObject", "ListBuckets", "ListObjectsV2", "ListObjectVersions", 
-                  "GetBucketPolicy", "GetBucketNotificationConfiguration", "GetObject", "PutObject", 
-                  "DeleteObject", "CopyObject", "SelectObjectContent", "OpenS3Explorer"]
-    },
-    {
-        name: "S3FileOperationsTool",
-        displayName: "S3 File Operations",
-        commands: ["UploadFile", "DownloadFile", "UploadFolder", "DownloadFolder"]
-    },
-    {
-        name: "SNSTool",
-        displayName: "SNS (Simple Notification Service)",
-        commands: ["CheckIfPhoneNumberIsOptedOut", "GetEndpointAttributes", "GetPlatformApplicationAttributes",
-                  "GetSMSAttributes", "GetSubscriptionAttributes", "GetTopicAttributes", 
-                  "ListPhoneNumbersOptedOut", "ListSubscriptionsByTopic", "ListSubscriptions",
-                  "ListTagsForResource", "ListTopics", "Publish"]
-    },
-    {
-        name: "SQSTool",
-        displayName: "SQS (Simple Queue Service)",
-        commands: ["ListQueues", "GetQueueAttributes", "GetQueueUrl", "SendMessage", 
-                  "ReceiveMessage", "DeleteMessage", "PurgeQueue", "ListQueueTags"]
-    },
-    {
-        name: "EC2Tool",
-        displayName: "EC2 (Elastic Compute Cloud)",
-        commands: ["DescribeInstances", "DescribeImages", "DescribeVolumes", "DescribeSnapshots",
-                  "DescribeSecurityGroups", "DescribeKeyPairs", "DescribeVpcs", "DescribeSubnets",
-                  "DescribeRouteTables", "DescribeInternetGateways", "DescribeNatGateways"]
-    },
-    {
-        name: "EMRTool",
-        displayName: "EMR (Elastic MapReduce)",
-        commands: ["DescribeCluster", "DescribeJobFlows", "DescribeNotebookExecution", "DescribePersistentAppUI",
-                  "DescribeReleaseLabel", "DescribeSecurityConfiguration", "DescribeStep", "DescribeStudio",
-                  "GetAutoTerminationPolicy", "GetBlockPublicAccessConfiguration", "GetClusterSessionCredentials",
-                  "GetManagedScalingPolicy", "GetOnClusterAppUIPresignedURL", "GetPersistentAppUIPresignedURL",
-                  "GetStudioSessionMapping", "ListBootstrapActions", "ListClusters", "ListInstanceFleets",
-                  "ListInstanceGroups", "ListInstances", "ListNotebookExecutions", "ListReleaseLabels",
-                  "ListSecurityConfigurations", "ListSteps", "ListStudios", "ListStudioSessionMappings",
-                  "ListSupportedInstanceTypes"]
-    },
-    {
-        name: "LambdaTool",
-        displayName: "Lambda",
-        commands: ["ListFunctions", "GetFunction", "GetFunctionConfiguration", "Invoke",
-                  "ListVersionsByFunction", "ListAliases", "GetPolicy", "ListEventSourceMappings"]
-    },
-    {
-        name: "DynamoDBTool",
-        displayName: "DynamoDB",
-        commands: ["ListTables", "DescribeTable", "CreateTable", "DeleteTable", "Query",
-                  "Scan", "PutItem", "UpdateItem", "DeleteItem", "GetItem", "UpdateTable",
-                  "UpdateTimeToLive", "ListTagsOfResource"]
-    },
-    {
-        name: "RDSTool",
-        displayName: "RDS (Relational Database Service)",
-        commands: ["DescribeDBInstances", "DescribeDBClusters", "DescribeDBSnapshots",
-                  "DescribeDBClusterSnapshots", "DescribeDBEngineVersions", "DescribeDBParameterGroups"]
-    },
-    {
-        name: "RDSDataTool",
-        displayName: "RDS Data API",
-        commands: ["ExecuteStatement", "BatchExecuteStatement", "BeginTransaction", 
-                  "CommitTransaction", "RollbackTransaction"]
-    },
-    {
-        name: "CloudFormationTool",
-        displayName: "CloudFormation",
-        commands: ["ListStacks", "DescribeStacks", "DescribeStackResources", "DescribeStackEvents",
-                  "GetTemplate", "ValidateTemplate", "ListStackResources"]
-    },
-    {
-        name: "CloudWatchLogTool",
-        displayName: "CloudWatch Logs",
-        commands: ["DescribeLogGroups", "DescribeLogStreams", "GetLogEvents", "FilterLogEvents",
-                  "PutLogEvents", "CreateLogGroup", "CreateLogStream", "DeleteLogGroup",
-                  "DeleteLogStream", "OpenCloudWatchView"]
-    },
-    {
-        name: "StepFuncTool",
-        displayName: "Step Functions",
-        commands: ["ListStateMachines", "DescribeStateMachine", "DescribeExecution",
-                  "ListExecutions", "StartExecution", "StopExecution", "GetExecutionHistory"]
-    },
-    {
-        name: "GlueTool",
-        displayName: "Glue",
-        commands: ["GetDatabases", "GetTables", "GetTable", "GetDatabase", "GetJobs",
-                  "GetJob", "GetCrawlers", "GetCrawler", "GetPartitions"]
-    },
-    {
-        name: "IAMTool",
-        displayName: "IAM (Identity & Access Management)",
-        commands: ["ListUsers", "ListGroups", "ListRoles", "ListPolicies", "GetUser",
-                  "GetGroup", "GetRole", "GetPolicy", "ListAttachedUserPolicies",
-                  "ListAttachedGroupPolicies", "ListAttachedRolePolicies"]
-    },
-    {
-        name: "APIGatewayTool",
-        displayName: "API Gateway",
-        commands: ["GetRestApis", "GetResources", "GetStages", "GetDeployments",
-                  "GetIntegration", "GetMethod", "GetApiKeys", "GetUsagePlans"]
-    },
-    {
-        name: "FileOperationsTool",
-        displayName: "File Operations",
-        commands: ["ReadFile", "ReadFileStream", "ReadFileAsBase64", "GetFileInfo",
-                  "ListFiles", "ZipTextFile"]
+/**
+ * Load tool registry dynamically from generated schemas
+ * Falls back to empty array if generation hasn't run yet
+ */
+function loadToolRegistry(): ToolDefinition[] {
+    try {
+        const path = require('path');
+        const fs = require('fs');
+        const manifestPath = path.join(__dirname, '../tool_registry/ToolManifest.json');
+        
+        if (!fs.existsSync(manifestPath)) {
+            console.warn('Tool manifest not found, run npm run generate-tools');
+            return [];
+        }
+        
+        const manifest = require('../tool_registry/ToolManifest.json');
+        const registry: ToolDefinition[] = [];
+        
+        for (const tool of manifest.tools) {
+            const schemaPath = path.join(__dirname, '..', tool.schemaPath);
+            const schema = require(schemaPath);
+            
+            // Extract command names from inputSchema enum
+            const commands = schema.inputSchema?.properties?.command?.enum || [];
+            
+            registry.push({
+                name: schema.name,
+                displayName: schema.displayName,
+                commands: commands
+            });
+        }
+        
+        return registry;
+    } catch (error) {
+        console.error('Failed to load tool registry:', error);
+        return [];
     }
-];
+}
+
+const TOOL_REGISTRY: ToolDefinition[] = loadToolRegistry();
 
 export class ServiceAccessView {
     public static Current: ServiceAccessView | undefined;
