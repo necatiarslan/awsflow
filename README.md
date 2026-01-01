@@ -87,7 +87,7 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
 
 - AWS credentials configured locally (via AWS CLI config, SSO, environment variables, or other supported methods).
 
-## 📋 Quick Start
+## 🏁 Quick Start
 
 1. **Aws Credentials**: Ensure you have AWS credentials configured locally. You can use AWS CLI to set up profiles or SSO. 
 2. **Test connectivity**: Click "🔌Aws" in the status bar and Run "Awsflow: Test AWS Connection" to verify AWS access. You can set default profile, region and endpoint (for Localstack) if you need.
@@ -105,7 +105,7 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
 - **Privacy**: No credentials are persisted outside VS Code global state. You can refresh or clear cached credentials from the Command Palette.
 - **Permissions**: The assistant invokes AWS APIs using your account permissions. Use least-privilege IAM policies and verify the active profile before running mutating actions.
 
-##  TODO
+## 📋 TODO
 - Add more AWS services and actions.
    - ECS, EKS, ELB, Route 53, ElastiCache, KMS, Secrets Manager
    - EventBridge, AppSync, CodeDeploy, ECR, Simple Systems Manager, Config Service
