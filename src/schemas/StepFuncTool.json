@@ -22,13 +22,22 @@
       "command": {
         "type": "string",
         "enum": [
+          "DescribeActivity",
           "DescribeExecution",
+          "DescribeMapRun",
           "DescribeStateMachine",
-          "ListExecutions",
-          "ListStateMachines",
-          "StartExecution",
+          "DescribeStateMachineAlias",
+          "DescribeStateMachineForExecution",
           "GetExecutionHistory",
-          "UpdateStateMachine"
+          "ListActivities",
+          "ListExecutions",
+          "ListMapRuns",
+          "ListStateMachineAliases",
+          "ListStateMachines",
+          "ListStateMachineVersions",
+          "StartExecution",
+          "UpdateStateMachine",
+          "ValidateStateMachineDefinition"
         ],
         "description": "The Step Functions command to execute"
       },

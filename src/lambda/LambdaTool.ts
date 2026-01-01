@@ -10,6 +10,18 @@ import {
   TagResourceCommand,
   UntagResourceCommand,
   InvokeCommand,
+  ListEventSourceMappingsCommand,
+  GetEventSourceMappingCommand,
+  GetFunctionConcurrencyCommand,
+  GetFunctionUrlConfigCommand,
+  ListVersionsByFunctionCommand,
+  ListAliasesCommand,
+  GetAliasCommand,
+  GetAccountSettingsCommand,
+  GetFunctionCodeSigningConfigCommand,
+  GetPolicyCommand,
+  ListLayerVersionsCommand,
+  ListFunctionsByCodeSigningConfigCommand,
 } from '@aws-sdk/client-lambda';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -22,7 +34,19 @@ type LambdaCommand =
   | 'ListTags'
   | 'TagResource'
   | 'UntagResource'
-  | 'Invoke';
+  | 'Invoke'
+  | 'ListEventSourceMappings'
+  | 'GetEventSourceMapping'
+  | 'GetFunctionConcurrency'
+  | 'GetFunctionUrlConfig'
+  | 'ListVersionsByFunction'
+  | 'ListAliases'
+  | 'GetAlias'
+  | 'GetAccountSettings'
+  | 'GetFunctionCodeSigningConfig'
+  | 'GetPolicy'
+  | 'ListLayerVersions'
+  | 'ListFunctionsByCodeSigningConfig';
 
 // Input interface - command + params object
 interface LambdaToolInput extends BaseToolInput {
@@ -130,6 +154,42 @@ export class LambdaTool extends BaseTool<LambdaToolInput> {
       
       case 'Invoke':
         return await this.executeInvoke(params as InvokeParams);
+      
+      case 'ListEventSourceMappings':
+        return await client.send(new ListEventSourceMappingsCommand(params as any));
+      
+      case 'GetEventSourceMapping':
+        return await client.send(new GetEventSourceMappingCommand(params as any));
+      
+      case 'GetFunctionConcurrency':
+        return await client.send(new GetFunctionConcurrencyCommand(params as any));
+      
+      case 'GetFunctionUrlConfig':
+        return await client.send(new GetFunctionUrlConfigCommand(params as any));
+      
+      case 'ListVersionsByFunction':
+        return await client.send(new ListVersionsByFunctionCommand(params as any));
+      
+      case 'ListAliases':
+        return await client.send(new ListAliasesCommand(params as any));
+      
+      case 'GetAlias':
+        return await client.send(new GetAliasCommand(params as any));
+      
+      case 'GetAccountSettings':
+        return await client.send(new GetAccountSettingsCommand(params as any));
+      
+      case 'GetFunctionCodeSigningConfig':
+        return await client.send(new GetFunctionCodeSigningConfigCommand(params as any));
+      
+      case 'GetPolicy':
+        return await client.send(new GetPolicyCommand(params as any));
+      
+      case 'ListLayerVersions':
+        return await client.send(new ListLayerVersionsCommand(params as any));
+      
+      case 'ListFunctionsByCodeSigningConfig':
+        return await client.send(new ListFunctionsByCodeSigningConfigCommand(params as any));
       
       default:
         throw new Error(`Unsupported command: ${command}`);

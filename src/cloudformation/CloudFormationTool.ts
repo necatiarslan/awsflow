@@ -25,6 +25,8 @@ import {
   GetStackPolicyCommand,
   GetTemplateCommand,
   GetTemplateSummaryCommand,
+  ValidateTemplateCommand,
+  EstimateTemplateCostCommand,
   ListChangeSetsCommand,
   ListExportsCommand,
   ListImportsCommand,
@@ -70,6 +72,8 @@ type CFNCommand =
   | 'GetStackPolicy'
   | 'GetTemplate'
   | 'GetTemplateSummary'
+  | 'ValidateTemplate'
+  | 'EstimateTemplateCost'
   | 'ListChangeSets'
   | 'ListExports'
   | 'ListGeneratedTemplates'
@@ -156,6 +160,8 @@ export class CloudFormationTool extends BaseTool<CloudFormationToolInput> {
       case 'GetStackPolicy': return await this.send(GetStackPolicyCommand, params);
       case 'GetTemplate': return await this.send(GetTemplateCommand, params);
       case 'GetTemplateSummary': return await this.send(GetTemplateSummaryCommand, params);
+      case 'ValidateTemplate': return await this.send(ValidateTemplateCommand, params);
+      case 'EstimateTemplateCost': return await this.send(EstimateTemplateCostCommand, params);
       case 'ListChangeSets': return await this.send(ListChangeSetsCommand, params);
       case 'ListExports': return await this.send(ListExportsCommand, params);
       case 'ListGeneratedTemplates': return this.unsupported(command);

@@ -14,6 +14,11 @@ import {
   ListTagsForResourceCommand,
   ListTopicsCommand,
   PublishCommand,
+  GetDataProtectionPolicyCommand,
+  GetSMSSandboxAccountStatusCommand,
+  ListPlatformApplicationsCommand,
+  ListEndpointsByPlatformApplicationCommand,
+  ListOriginationNumbersCommand,
 } from '@aws-sdk/client-sns';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -29,7 +34,12 @@ type SNSCommand =
   | 'ListSubscriptions'
   | 'ListTagsForResource'
   | 'ListTopics'
-  | 'Publish';
+  | 'Publish'
+  | 'GetDataProtectionPolicy'
+  | 'GetSMSSandboxAccountStatus'
+  | 'ListPlatformApplications'
+  | 'ListEndpointsByPlatformApplication'
+  | 'ListOriginationNumbers';
 
 interface SNSToolInput extends BaseToolInput {
   command: SNSCommand;
@@ -87,6 +97,16 @@ export class SNSTool extends BaseTool<SNSToolInput> {
         return await client.send(new ListTopicsCommand(params as any));
       case 'Publish':
         return await client.send(new PublishCommand(params as any));
+      case 'GetDataProtectionPolicy':
+        return await client.send(new GetDataProtectionPolicyCommand(params as any));
+      case 'GetSMSSandboxAccountStatus':
+        return await client.send(new GetSMSSandboxAccountStatusCommand(params as any));
+      case 'ListPlatformApplications':
+        return await client.send(new ListPlatformApplicationsCommand(params as any));
+      case 'ListEndpointsByPlatformApplication':
+        return await client.send(new ListEndpointsByPlatformApplicationCommand(params as any));
+      case 'ListOriginationNumbers':
+        return await client.send(new ListOriginationNumbersCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

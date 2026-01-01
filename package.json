@@ -52,8 +52,8 @@
         "name": "APIGatewayTool",
         "toolReferenceName": "APIGatewayTool",
         "displayName": "API Gateway Tool",
-        "modelDescription": "Execute AWS API Gateway REST API commands. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}.",
-        "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, and more",
+        "modelDescription": "Execute AWS API Gateway REST API commands including testing. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}. TestInvokeMethod {command:'TestInvokeMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET', pathWithQueryString:'/test?param=value'}}. TestInvokeAuthorizer {command:'TestInvokeAuthorizer', params:{restApiId:'abc', authorizerId:'xyz', headers:{'Authorization':'Bearer token'}}}.",
+        "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, test invoke methods and authorizers",
         "tags": [
           "aws",
           "api-gateway",
@@ -96,6 +96,7 @@
                 "GetIntegration",
                 "GetIntegrationResponse",
                 "GetMethod",
+                "GetMethodResponse",
                 "GetModel",
                 "GetModels",
                 "GetRequestValidator",
@@ -116,7 +117,9 @@
                 "GetUsagePlanKeys",
                 "GetUsagePlans",
                 "GetVpcLink",
-                "GetVpcLinks"
+                "GetVpcLinks",
+                "TestInvokeAuthorizer",
+                "TestInvokeMethod"
               ],
               "description": "The API Gateway command to execute"
             },
@@ -167,6 +170,38 @@
                 "includeCredentials": {
                   "type": "boolean",
                   "description": "Whether to include credentials (Used by: GetExport)"
+                },
+                "authorizerId": {
+                  "type": "string",
+                  "description": "Authorizer ID (Used by: GetAuthorizer (Required), TestInvokeAuthorizer (Required))"
+                },
+                "headers": {
+                  "type": "object",
+                  "description": "Request headers for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+                },
+                "multiValueHeaders": {
+                  "type": "object",
+                  "description": "Multi-value headers for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+                },
+                "pathWithQueryString": {
+                  "type": "string",
+                  "description": "Path with query string for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+                },
+                "body": {
+                  "type": "string",
+                  "description": "Request body for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+                },
+                "stageVariables": {
+                  "type": "object",
+                  "description": "Stage variables for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+                },
+                "additionalContext": {
+                  "type": "object",
+                  "description": "Additional context for authorizer test (Used by: TestInvokeAuthorizer)"
+                },
+                "statusCode": {
+                  "type": "string",
+                  "description": "Status code for GetMethodResponse (Used by: GetMethodResponse (Required))"
                 }
               }
             }
@@ -220,6 +255,7 @@
                 "DetectStackDrift",
                 "DetectStackResourceDrift",
                 "DetectStackSetDrift",
+                "EstimateTemplateCost",
                 "GetGeneratedTemplate",
                 "GetHookResult",
                 "GetStackPolicy",
@@ -245,7 +281,8 @@
                 "ListStackSets",
                 "ListTypeRegistrations",
                 "ListTypes",
-                "ListTypeVersions"
+                "ListTypeVersions",
+                "ValidateTemplate"
               ],
               "description": "The CloudFormation command to execute"
             },
@@ -290,8 +327,8 @@
         "name": "CloudWatchLogTool",
         "toolReferenceName": "CloudWatchLogTool",
         "displayName": "CloudWatch Logs Tool",
-        "modelDescription": "Execute CloudWatch Logs commands. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. DescribeLogStreams {command:'DescribeLogStreams', params:{logGroupName:'my-group'}}. GetLogEvents {command:'GetLogEvents', params:{logGroupName:'my-group', logStreamName:'stream', limit:50}}. FilterLogEvents {command:'FilterLogEvents', params:{logGroupName:'my-group', filterPattern:'ERROR'}}. OpenCloudWatchLogView {command:'OpenCloudWatchLogView', params:{logGroupName:'my-group', logStreamName:'optional-stream'}}.",
-        "userDescription": "Query CloudWatch log groups, streams, events, and open log viewer",
+        "modelDescription": "Execute CloudWatch Logs commands including Insights queries. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. StartQuery {command:'StartQuery', params:{logGroupName:'my-group', queryString:'fields @timestamp, @message | filter @message like /ERROR/ | limit 20', startTime:1609459200000, endTime:1609545600000}}. GetQueryResults {command:'GetQueryResults', params:{queryId:'12345678-1234-1234-1234-123456789012'}}. FilterLogEvents {command:'FilterLogEvents', params:{logGroupName:'my-group', filterPattern:'ERROR'}}. DescribeMetricFilters {command:'DescribeMetricFilters', params:{logGroupName:'my-group'}}.",
+        "userDescription": "Query CloudWatch log groups, streams, events, run Insights queries, inspect metric filters and subscriptions, and open log viewer",
         "tags": [
           "aws",
           "cloudwatch",
@@ -312,9 +349,16 @@
               "enum": [
                 "DescribeLogGroups",
                 "DescribeLogStreams",
-                "GetLogEvents",
+                "DescribeMetricFilters",
+                "DescribeQueryDefinitions",
+                "DescribeSubscriptionFilters",
+                "DescribeDestinations",
                 "FilterLogEvents",
-                "OpenCloudWatchLogView"
+                "GetLogEvents",
+                "GetLogGroupFields",
+                "GetQueryResults",
+                "OpenCloudWatchLogView",
+                "StartQuery"
               ],
               "description": "The CloudWatch Logs command to execute"
             },
@@ -377,6 +421,52 @@
                 "interleaved": {
                   "type": "boolean",
                   "description": "Return interleaved results from multiple log streams (Used by: FilterLogEvents)"
+                },
+                "queryString": {
+                  "type": "string",
+                  "description": "CloudWatch Insights query string (Used by: StartQuery (Required))"
+                },
+                "queryId": {
+                  "type": "string",
+                  "description": "Query ID from StartQuery (Used by: GetQueryResults (Required))"
+                },
+                "logGroupNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of log group names to query (Used by: StartQuery)"
+                },
+                "logGroupIdentifiers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of log group identifiers (Used by: StartQuery)"
+                },
+                "maxQueryResults": {
+                  "type": "number",
+                  "description": "Maximum number of query results (Used by: DescribeQueryDefinitions)"
+                },
+                "filterNamePrefix": {
+                  "type": "string",
+                  "description": "Metric filter name prefix (Used by: DescribeMetricFilters)"
+                },
+                "metricName": {
+                  "type": "string",
+                  "description": "Metric name (Used by: DescribeMetricFilters)"
+                },
+                "metricNamespace": {
+                  "type": "string",
+                  "description": "Metric namespace (Used by: DescribeMetricFilters)"
+                },
+                "time": {
+                  "type": "number",
+                  "description": "Time in epoch milliseconds for GetLogGroupFields (Used by: GetLogGroupFields)"
+                },
+                "destinationNamePrefix": {
+                  "type": "string",
+                  "description": "Destination name prefix (Used by: DescribeDestinations)"
                 }
               }
             }
@@ -523,19 +613,24 @@
             "command": {
               "type": "string",
               "enum": [
-                "ListTables",
-                "DescribeTable",
                 "CreateTable",
+                "DeleteItem",
                 "DeleteTable",
+                "DescribeContinuousBackups",
+                "DescribeTable",
+                "DescribeTableReplicaAutoScaling",
+                "DescribeTimeToLive",
+                "GetItem",
+                "ListBackups",
+                "ListGlobalTables",
+                "ListTables",
+                "ListTagsOfResource",
+                "PutItem",
                 "Query",
                 "Scan",
-                "PutItem",
                 "UpdateItem",
-                "DeleteItem",
-                "GetItem",
                 "UpdateTable",
-                "UpdateTimeToLive",
-                "ListTagsOfResource"
+                "UpdateTimeToLive"
               ],
               "description": "The DynamoDB command to execute"
             },
@@ -645,8 +740,8 @@
         "name": "EC2Tool",
         "toolReferenceName": "EC2Tool",
         "displayName": "EC2 Tool",
-        "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeImages {command:'DescribeImages', params:{Owners:['self']}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
-        "userDescription": "Query EC2 instances, images, networking, and console data",
+        "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeInstanceTypes {command:'DescribeInstanceTypes', params:{InstanceTypes:['t3.micro']}}. DescribeNetworkInterfaces {command:'DescribeNetworkInterfaces', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. DescribeRouteTables {command:'DescribeRouteTables', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
+        "userDescription": "Query EC2 instances, instance types, images, networking (VPCs, subnets, route tables, internet/NAT gateways, network interfaces, security groups), and console data",
         "tags": [
           "aws",
           "ec2",
@@ -669,16 +764,29 @@
                 "DescribeAccountAttributes",
                 "DescribeAddresses",
                 "DescribeAvailabilityZones",
+                "DescribeFlowLogs",
                 "DescribeImages",
                 "DescribeInstances",
                 "DescribeInstanceStatus",
+                "DescribeInstanceTypeOfferings",
+                "DescribeInstanceTypes",
+                "DescribeInternetGateways",
                 "DescribeKeyPairs",
+                "DescribeLaunchTemplates",
+                "DescribeNatGateways",
+                "DescribeNetworkInterfaces",
                 "DescribeRegions",
+                "DescribeRouteTables",
+                "DescribeSecurityGroupRules",
                 "DescribeSecurityGroups",
                 "DescribeSnapshots",
+                "DescribeSpotPriceHistory",
                 "DescribeSubnets",
                 "DescribeTags",
+                "DescribeTransitGateways",
                 "DescribeVolumes",
+                "DescribeVpcEndpoints",
+                "DescribeVpcPeeringConnections",
                 "DescribeVpcs",
                 "GetConsoleOutput",
                 "GetHostReservationPurchasePreview",
@@ -707,7 +815,7 @@
                   "items": {
                     "type": "object"
                   },
-                  "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
+                  "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeFlowLogs, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeInstanceTypeOfferings, DescribeInstanceTypes, DescribeInternetGateways, DescribeKeyPairs, DescribeLaunchTemplates, DescribeNatGateways, DescribeNetworkInterfaces, DescribeRouteTables, DescribeSecurityGroupRules, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeTransitGateways, DescribeVpcEndpoints, DescribeVpcPeeringConnections, DescribeVpcs)"
                 },
                 "Owners": {
                   "type": "array",
@@ -734,6 +842,114 @@
                     "type": "string"
                   },
                   "description": "Specific region names (Used by: DescribeRegions)"
+                },
+                "InstanceTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Instance type names (Used by: DescribeInstanceTypes)"
+                },
+                "LocationType": {
+                  "type": "string",
+                  "enum": [
+                    "region",
+                    "availability-zone",
+                    "availability-zone-id"
+                  ],
+                  "description": "Location type for instance type offerings (Used by: DescribeInstanceTypeOfferings)"
+                },
+                "LaunchTemplateIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Launch template IDs (Used by: DescribeLaunchTemplates)"
+                },
+                "LaunchTemplateNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Launch template names (Used by: DescribeLaunchTemplates)"
+                },
+                "NetworkInterfaceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Network interface IDs (Used by: DescribeNetworkInterfaces)"
+                },
+                "RouteTableIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Route table IDs (Used by: DescribeRouteTables)"
+                },
+                "InternetGatewayIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Internet gateway IDs (Used by: DescribeInternetGateways)"
+                },
+                "NatGatewayIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "NAT gateway IDs (Used by: DescribeNatGateways)"
+                },
+                "GroupIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Security group IDs (Used by: DescribeSecurityGroupRules, DescribeSecurityGroups)"
+                },
+                "FlowLogIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Flow log IDs (Used by: DescribeFlowLogs)"
+                },
+                "TransitGatewayIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Transit gateway IDs (Used by: DescribeTransitGateways)"
+                },
+                "VpcEndpointIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "VPC endpoint IDs (Used by: DescribeVpcEndpoints)"
+                },
+                "VpcPeeringConnectionIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "VPC peering connection IDs (Used by: DescribeVpcPeeringConnections)"
+                },
+                "StartTime": {
+                  "type": "string",
+                  "description": "Start time for spot price history (Used by: DescribeSpotPriceHistory)"
+                },
+                "EndTime": {
+                  "type": "string",
+                  "description": "End time for spot price history (Used by: DescribeSpotPriceHistory)"
+                },
+                "ProductDescriptions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Product descriptions for spot price history (Used by: DescribeSpotPriceHistory)"
                 }
               }
             }
@@ -912,8 +1128,8 @@
         "name": "GlueTool",
         "toolReferenceName": "GlueTool",
         "displayName": "Glue Tool",
-        "modelDescription": "Execute AWS Glue commands. ALWAYS provide params object. Examples: ListJobs {command:'ListJobs', params:{MaxResults:10}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
-        "userDescription": "Manage and run AWS Glue ETL jobs and triggers",
+        "modelDescription": "Execute AWS Glue commands including Data Catalog queries. ALWAYS provide params object. Examples: GetDatabases {command:'GetDatabases', params:{}}. GetDatabase {command:'GetDatabase', params:{Name:'my-database'}}. GetTables {command:'GetTables', params:{DatabaseName:'my-database'}}. GetTable {command:'GetTable', params:{DatabaseName:'my-database', Name:'my-table'}}. GetPartitions {command:'GetPartitions', params:{DatabaseName:'my-database', TableName:'my-table'}}. ListCrawlers {command:'ListCrawlers', params:{}}. GetCrawler {command:'GetCrawler', params:{Name:'my-crawler'}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
+        "userDescription": "Manage Glue ETL jobs, triggers, crawlers, and query Data Catalog (databases, tables, partitions, connections)",
         "tags": [
           "aws",
           "glue",
@@ -934,12 +1150,23 @@
               "type": "string",
               "enum": [
                 "CreateJob",
+                "GetCrawler",
+                "GetCrawlers",
+                "GetConnections",
+                "GetDatabase",
+                "GetDatabases",
                 "GetJob",
+                "GetJobBookmark",
                 "GetJobRun",
                 "GetJobRuns",
+                "GetPartitions",
+                "GetTable",
+                "GetTables",
                 "GetTags",
                 "GetTrigger",
                 "GetTriggers",
+                "ListCrawls",
+                "ListCrawlers",
                 "ListJobs",
                 "ListTriggers",
                 "StartJobRun"
@@ -1047,6 +1274,38 @@
                 "DependentJobName": {
                   "type": "string",
                   "description": "Filter by dependent job name (Used by: ListTriggers)"
+                },
+                "CrawlerName": {
+                  "type": "string",
+                  "description": "Crawler name (Used by: GetCrawler (Required), ListCrawls (Required))"
+                },
+                "CatalogId": {
+                  "type": "string",
+                  "description": "Catalog ID (Used by: GetDatabase, GetDatabases, GetTable, GetTables, GetPartitions)"
+                },
+                "DatabaseName": {
+                  "type": "string",
+                  "description": "Database name (Used by: GetDatabase (Required), GetTable (Required), GetTables (Required), GetPartitions (Required))"
+                },
+                "TableName": {
+                  "type": "string",
+                  "description": "Table name (Used by: GetTable (Required), GetPartitions (Required))"
+                },
+                "Expression": {
+                  "type": "string",
+                  "description": "Partition filter expression (Used by: GetPartitions)"
+                },
+                "Segment": {
+                  "type": "object",
+                  "description": "Segment configuration for parallel scanning (Used by: GetPartitions)"
+                },
+                "ConnectionName": {
+                  "type": "string",
+                  "description": "Connection name (Used by: GetConnections)"
+                },
+                "HidePassword": {
+                  "type": "boolean",
+                  "description": "Hide connection password (Used by: GetConnections)"
                 }
               }
             }
@@ -1057,8 +1316,8 @@
         "name": "IAMTool",
         "toolReferenceName": "IAMTool",
         "displayName": "IAM Tool",
-        "modelDescription": "Execute AWS IAM commands. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}. GetPolicyVersion {command:'GetPolicyVersion', params:{PolicyArn:'arn:aws:iam::123:policy/p', VersionId:'v1'}}.",
-        "userDescription": "Inspect IAM roles and policies",
+        "modelDescription": "Execute AWS IAM commands including permission simulation. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. GetUser {command:'GetUser', params:{UserName:'john'}}. ListUsers {command:'ListUsers', params:{}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}. GetAccountSummary {command:'GetAccountSummary', params:{}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}.",
+        "userDescription": "Inspect IAM roles, policies, users, groups, simulate permissions, and get account summary",
         "tags": [
           "aws",
           "iam",
@@ -1077,16 +1336,27 @@
             "command": {
               "type": "string",
               "enum": [
+                "GenerateCredentialReport",
+                "GetAccountPasswordPolicy",
+                "GetAccountSummary",
+                "GetCredentialReport",
+                "GetPolicy",
+                "GetPolicyVersion",
                 "GetRole",
                 "GetRolePolicy",
+                "GetServiceLastAccessedDetails",
+                "GetUser",
+                "ListAccessKeys",
                 "ListAttachedRolePolicies",
+                "ListGroups",
+                "ListMFADevices",
+                "ListPolicies",
+                "ListPolicyVersions",
                 "ListRolePolicies",
                 "ListRoles",
                 "ListRoleTags",
-                "GetPolicy",
-                "GetPolicyVersion",
-                "ListPolicies",
-                "ListPolicyVersions"
+                "ListUsers",
+                "SimulatePrincipalPolicy"
               ],
               "description": "The IAM command to execute"
             },
@@ -1142,6 +1412,59 @@
                     "PermissionsBoundary"
                   ],
                   "description": "Filter policies by usage (Used by: ListPolicies)"
+                },
+                "UserName": {
+                  "type": "string",
+                  "description": "IAM user name (Used by: GetUser, ListAccessKeys, ListMFADevices)"
+                },
+                "GroupName": {
+                  "type": "string",
+                  "description": "IAM group name (Used by: ListGroups)"
+                },
+                "PolicySourceArn": {
+                  "type": "string",
+                  "description": "ARN of IAM entity (user, group, role) whose policy to simulate (Used by: SimulatePrincipalPolicy (Required))"
+                },
+                "ActionNames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of API action names to simulate (Used by: SimulatePrincipalPolicy (Required))"
+                },
+                "ResourceArns": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of resource ARNs to simulate policy against (Used by: SimulatePrincipalPolicy)"
+                },
+                "ResourcePolicy": {
+                  "type": "string",
+                  "description": "Resource-based policy JSON string (Used by: SimulatePrincipalPolicy)"
+                },
+                "ResourceOwner": {
+                  "type": "string",
+                  "description": "AWS account ID owning the resource (Used by: SimulatePrincipalPolicy)"
+                },
+                "CallerArn": {
+                  "type": "string",
+                  "description": "ARN of user making the request (Used by: SimulatePrincipalPolicy)"
+                },
+                "ContextEntries": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Context keys and values for policy evaluation (Used by: SimulatePrincipalPolicy)"
+                },
+                "ResourceHandlingOption": {
+                  "type": "string",
+                  "description": "How to handle resource-based policies (Used by: SimulatePrincipalPolicy)"
+                },
+                "JobId": {
+                  "type": "string",
+                  "description": "Job ID from GenerateServiceLastAccessedDetails (Used by: GetServiceLastAccessedDetails (Required))"
                 }
               }
             }
@@ -1152,8 +1475,8 @@
         "name": "LambdaTool",
         "toolReferenceName": "LambdaTool",
         "displayName": "Lambda Tool",
-        "modelDescription": "Execute AWS Lambda commands. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
-        "userDescription": "Manage and invoke AWS Lambda functions",
+        "modelDescription": "Execute AWS Lambda commands including event source mappings. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. ListEventSourceMappings {command:'ListEventSourceMappings', params:{FunctionName:'my-function'}}. GetEventSourceMapping {command:'GetEventSourceMapping', params:{UUID:'12345678-1234-1234-1234-123456789012'}}. GetFunctionConcurrency {command:'GetFunctionConcurrency', params:{FunctionName:'my-function'}}. ListAliases {command:'ListAliases', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
+        "userDescription": "Manage Lambda functions, event source mappings, aliases, versions, layers, concurrency, function URLs, and invoke functions",
         "tags": [
           "aws",
           "lambda",
@@ -1173,14 +1496,26 @@
             "command": {
               "type": "string",
               "enum": [
-                "ListFunctions",
+                "GetAccountSettings",
+                "GetAlias",
+                "GetEventSourceMapping",
                 "GetFunction",
+                "GetFunctionCodeSigningConfig",
+                "GetFunctionConcurrency",
                 "GetFunctionConfiguration",
-                "UpdateFunctionCode",
+                "GetFunctionUrlConfig",
+                "GetPolicy",
+                "Invoke",
+                "ListAliases",
+                "ListEventSourceMappings",
+                "ListFunctions",
+                "ListFunctionsByCodeSigningConfig",
+                "ListLayerVersions",
                 "ListTags",
+                "ListVersionsByFunction",
                 "TagResource",
                 "UntagResource",
-                "Invoke"
+                "UpdateFunctionCode"
               ],
               "description": "The Lambda command to execute"
             },
@@ -1290,6 +1625,34 @@
                 "Payload": {
                   "type": "string",
                   "description": "JSON string payload to pass to function (Used by: Invoke)"
+                },
+                "Name": {
+                  "type": "string",
+                  "description": "Alias name (Used by: GetAlias (Required))"
+                },
+                "UUID": {
+                  "type": "string",
+                  "description": "Event source mapping UUID (Used by: GetEventSourceMapping (Required))"
+                },
+                "EventSourceArn": {
+                  "type": "string",
+                  "description": "ARN of event source (Used by: ListEventSourceMappings)"
+                },
+                "LayerName": {
+                  "type": "string",
+                  "description": "Layer name (Used by: ListLayerVersions (Required))"
+                },
+                "CompatibleRuntime": {
+                  "type": "string",
+                  "description": "Compatible runtime for layer versions (Used by: ListLayerVersions)"
+                },
+                "CompatibleArchitecture": {
+                  "type": "string",
+                  "description": "Compatible architecture for layer versions (Used by: ListLayerVersions)"
+                },
+                "CodeSigningConfigArn": {
+                  "type": "string",
+                  "description": "Code signing configuration ARN (Used by: ListFunctionsByCodeSigningConfig (Required))"
                 }
               }
             }
@@ -1628,8 +1991,8 @@
         "name": "S3Tool",
         "toolReferenceName": "S3Tool",
         "displayName": "S3 Tool",
-        "modelDescription": "Execute S3 commands. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}. CopyObject {command:'CopyObject', params:{Bucket:'name', CopySource:'/bucket/key', Key:'new-path'}}. OpenS3Explorer {command:'OpenS3Explorer', params:{Bucket:'bucket-name', Key:'optional/path/'}}.",
-        "userDescription": "Execute S3 commands including read, write, delete operations, and open S3 Explorer view",
+        "modelDescription": "Execute S3 commands including bucket configuration. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. GetBucketLocation {command:'GetBucketLocation', params:{Bucket:'bucket-name'}}. GetBucketEncryption {command:'GetBucketEncryption', params:{Bucket:'bucket-name'}}. GetBucketVersioning {command:'GetBucketVersioning', params:{Bucket:'bucket-name'}}. GetBucketLifecycleConfiguration {command:'GetBucketLifecycleConfiguration', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}.",
+        "userDescription": "Execute S3 commands including bucket configuration (location, encryption, versioning, lifecycle, replication, logging, tags, CORS, website), object operations, and open S3 Explorer view",
         "tags": [
           "aws",
           "s3",
@@ -1653,19 +2016,33 @@
             "command": {
               "type": "string",
               "enum": [
+                "CopyObject",
+                "DeleteObject",
+                "GetBucketAccelerateConfiguration",
+                "GetBucketCors",
+                "GetBucketEncryption",
+                "GetBucketLifecycleConfiguration",
+                "GetBucketLocation",
+                "GetBucketLogging",
+                "GetBucketNotificationConfiguration",
+                "GetBucketPolicy",
+                "GetBucketReplication",
+                "GetBucketRequestPayment",
+                "GetBucketTagging",
+                "GetBucketVersioning",
+                "GetBucketWebsite",
+                "GetObject",
+                "GetObjectAttributes",
+                "GetObjectLegalHold",
+                "GetObjectRetention",
                 "HeadBucket",
                 "HeadObject",
                 "ListBuckets",
                 "ListObjectsV2",
                 "ListObjectVersions",
-                "GetBucketPolicy",
-                "GetBucketNotificationConfiguration",
-                "GetObject",
+                "OpenS3Explorer",
                 "PutObject",
-                "DeleteObject",
-                "CopyObject",
-                "SelectObjectContent",
-                "OpenS3Explorer"
+                "SelectObjectContent"
               ],
               "description": "The S3 command to execute"
             },
@@ -1675,11 +2052,11 @@
               "properties": {
                 "Bucket": {
                   "type": "string",
-                  "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+                  "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetBucketLocation (Required), GetBucketVersioning (Required), GetBucketEncryption (Required), GetBucketLifecycleConfiguration (Required), GetBucketReplication (Required), GetBucketLogging (Required), GetBucketTagging (Required), GetBucketCors (Required), GetBucketWebsite (Required), GetBucketAccelerateConfiguration (Required), GetBucketRequestPayment (Required), GetObject (Required), GetObjectAttributes (Required), GetObjectLegalHold (Required), GetObjectRetention (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
                 },
                 "Key": {
                   "type": "string",
-                  "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+                  "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), GetObjectAttributes (Required), GetObjectLegalHold (Required), GetObjectRetention (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer)"
                 },
                 "CopySource": {
                   "type": "string",
@@ -1756,6 +2133,24 @@
                 "OutputSerialization": {
                   "type": "object",
                   "description": "Format for output data (Used by: SelectObjectContent (Required))"
+                },
+                "ObjectAttributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "ETag",
+                      "Checksum",
+                      "ObjectParts",
+                      "StorageClass",
+                      "ObjectSize"
+                    ]
+                  },
+                  "description": "Object attributes to retrieve (Used by: GetObjectAttributes (Required))"
+                },
+                "ExpectedBucketOwner": {
+                  "type": "string",
+                  "description": "Expected bucket owner account ID (Used by: GetBucketLocation, GetBucketVersioning, GetBucketEncryption, GetBucketLifecycleConfiguration, GetBucketReplication, GetBucketLogging, GetBucketTagging, GetBucketCors, GetBucketWebsite, GetBucketAccelerateConfiguration, GetBucketRequestPayment, GetObjectAttributes, GetObjectLegalHold, GetObjectRetention)"
                 }
               }
             }
@@ -1789,12 +2184,17 @@
               "type": "string",
               "enum": [
                 "CheckIfPhoneNumberIsOptedOut",
+                "GetDataProtectionPolicy",
                 "GetEndpointAttributes",
                 "GetPlatformApplicationAttributes",
                 "GetSMSAttributes",
+                "GetSMSSandboxAccountStatus",
                 "GetSubscriptionAttributes",
                 "GetTopicAttributes",
+                "ListEndpointsByPlatformApplication",
+                "ListOriginationNumbers",
                 "ListPhoneNumbersOptedOut",
+                "ListPlatformApplications",
                 "ListSubscriptionsByTopic",
                 "ListSubscriptions",
                 "ListTagsForResource",
@@ -1892,14 +2292,19 @@
             "command": {
               "type": "string",
               "enum": [
-                "ListQueues",
-                "ListDeadLetterSourceQueues",
-                "ListQueueTags",
+                "ChangeMessageVisibility",
+                "ChangeMessageVisibilityBatch",
+                "DeleteMessage",
+                "DeleteMessageBatch",
                 "GetQueueAttributes",
                 "GetQueueUrl",
-                "SendMessage",
+                "ListDeadLetterSourceQueues",
+                "ListQueues",
+                "ListQueueTags",
+                "PurgeQueue",
                 "ReceiveMessage",
-                "DeleteMessage"
+                "SendMessage",
+                "SendMessageBatch"
               ],
               "description": "The SQS command to execute"
             },
@@ -2010,13 +2415,22 @@
             "command": {
               "type": "string",
               "enum": [
+                "DescribeActivity",
                 "DescribeExecution",
+                "DescribeMapRun",
                 "DescribeStateMachine",
-                "ListExecutions",
-                "ListStateMachines",
-                "StartExecution",
+                "DescribeStateMachineAlias",
+                "DescribeStateMachineForExecution",
                 "GetExecutionHistory",
-                "UpdateStateMachine"
+                "ListActivities",
+                "ListExecutions",
+                "ListMapRuns",
+                "ListStateMachineAliases",
+                "ListStateMachines",
+                "ListStateMachineVersions",
+                "StartExecution",
+                "UpdateStateMachine",
+                "ValidateStateMachineDefinition"
               ],
               "description": "The Step Functions command to execute"
             },
@@ -2100,8 +2514,8 @@
         "name": "STSTool",
         "toolReferenceName": "STSTool",
         "displayName": "STS Tool",
-        "modelDescription": "Execute AWS STS (Security Token Service) commands. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. GetAccessKeyInfo {command:'GetAccessKeyInfo', params:{AccessKeyId:'AKIA...'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. GetFederationToken {command:'GetFederationToken', params:{Name:'session-name'}}. GetWebIdentityToken {command:'GetWebIdentityToken', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
-        "userDescription": "Get temporary security credentials and caller identity information from AWS STS",
+        "modelDescription": "Execute AWS STS (Security Token Service) commands including role assumption and permission debugging. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. AssumeRole {command:'AssumeRole', params:{RoleArn:'arn:aws:iam::123456789012:role/MyRole', RoleSessionName:'my-session', DurationSeconds:3600}}. DecodeAuthorizationMessage {command:'DecodeAuthorizationMessage', params:{EncodedMessage:'encoded-message-string'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. AssumeRoleWithWebIdentity {command:'AssumeRoleWithWebIdentity', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
+        "userDescription": "Get temporary security credentials, assume roles, decode authorization messages, and get caller identity from AWS STS",
         "tags": [
           "aws",
           "sts",
@@ -2122,8 +2536,12 @@
             "command": {
               "type": "string",
               "enum": [
-                "GetCallerIdentity",
+                "AssumeRole",
+                "AssumeRoleWithSAML",
+                "AssumeRoleWithWebIdentity",
+                "DecodeAuthorizationMessage",
                 "GetAccessKeyInfo",
+                "GetCallerIdentity",
                 "GetDelegatedAccessToken",
                 "GetFederationToken",
                 "GetSessionToken",
@@ -2192,7 +2610,46 @@
                 },
                 "ProviderId": {
                   "type": "string",
-                  "description": "Identity provider ID (Used by: GetWebIdentityToken)"
+                  "description": "Identity provider ID (Used by: AssumeRoleWithWebIdentity, GetWebIdentityToken)"
+                },
+                "ExternalId": {
+                  "type": "string",
+                  "description": "External ID for role assumption (Used by: AssumeRole)"
+                },
+                "PolicyArns": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "arn": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "Managed policy ARNs for session policies (Used by: AssumeRole, AssumeRoleWithWebIdentity, AssumeRoleWithSAML)"
+                },
+                "TransitiveTagKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Session tag keys to set as transitive (Used by: AssumeRole)"
+                },
+                "SourceIdentity": {
+                  "type": "string",
+                  "description": "Source identity for role chaining (Used by: AssumeRole)"
+                },
+                "SAMLAssertion": {
+                  "type": "string",
+                  "description": "Base64-encoded SAML authentication response (Used by: AssumeRoleWithSAML (Required))"
+                },
+                "PrincipalArn": {
+                  "type": "string",
+                  "description": "ARN of SAML provider (Used by: AssumeRoleWithSAML (Required))"
+                },
+                "EncodedMessage": {
+                  "type": "string",
+                  "description": "Encoded authorization failure message to decode (Used by: DecodeAuthorizationMessage (Required))"
                 }
               }
             }

@@ -15,6 +15,11 @@ import {
   UpdateTableCommand,
   UpdateTimeToLiveCommand,
   ListTagsOfResourceCommand,
+  DescribeContinuousBackupsCommand,
+  DescribeTimeToLiveCommand,
+  ListBackupsCommand,
+  ListGlobalTablesCommand,
+  DescribeTableReplicaAutoScalingCommand,
 } from '@aws-sdk/client-dynamodb';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -32,7 +37,12 @@ type DynamoDBCommand =
   | 'GetItem'
   | 'UpdateTable'
   | 'UpdateTimeToLive'
-  | 'ListTagsOfResource';
+  | 'ListTagsOfResource'
+  | 'DescribeContinuousBackups'
+  | 'DescribeTimeToLive'
+  | 'ListBackups'
+  | 'ListGlobalTables'
+  | 'DescribeTableReplicaAutoScaling';
 
 // Input interface - command + params object
 interface DynamoDBToolInput extends BaseToolInput {
@@ -101,6 +111,21 @@ export class DynamoDBTool extends BaseTool<DynamoDBToolInput> {
 
       case 'ListTagsOfResource':
         return await client.send(new ListTagsOfResourceCommand(params as any));
+
+      case 'DescribeContinuousBackups':
+        return await client.send(new DescribeContinuousBackupsCommand(params as any));
+
+      case 'DescribeTimeToLive':
+        return await client.send(new DescribeTimeToLiveCommand(params as any));
+
+      case 'ListBackups':
+        return await client.send(new ListBackupsCommand(params as any));
+
+      case 'ListGlobalTables':
+        return await client.send(new ListGlobalTablesCommand(params as any));
+
+      case 'DescribeTableReplicaAutoScaling':
+        return await client.send(new DescribeTableReplicaAutoScalingCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);

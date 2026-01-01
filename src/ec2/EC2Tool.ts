@@ -21,6 +21,19 @@ import {
   GetHostReservationPurchasePreviewCommand,
   GetLaunchTemplateDataCommand,
   GetPasswordDataCommand,
+  DescribeInstanceTypesCommand,
+  DescribeNetworkInterfacesCommand,
+  DescribeRouteTablesCommand,
+  DescribeInternetGatewaysCommand,
+  DescribeNatGatewaysCommand,
+  DescribeSecurityGroupRulesCommand,
+  DescribeLaunchTemplatesCommand,
+  DescribeInstanceTypeOfferingsCommand,
+  DescribeFlowLogsCommand,
+  DescribeTransitGatewaysCommand,
+  DescribeVpcPeeringConnectionsCommand,
+  DescribeVpcEndpointsCommand,
+  DescribeSpotPriceHistoryCommand,
 } from '@aws-sdk/client-ec2';
 
 type EC2Command =
@@ -41,7 +54,20 @@ type EC2Command =
   | 'GetConsoleOutput'
   | 'GetHostReservationPurchasePreview'
   | 'GetLaunchTemplateData'
-  | 'GetPasswordData';
+  | 'GetPasswordData'
+  | 'DescribeInstanceTypes'
+  | 'DescribeNetworkInterfaces'
+  | 'DescribeRouteTables'
+  | 'DescribeInternetGateways'
+  | 'DescribeNatGateways'
+  | 'DescribeSecurityGroupRules'
+  | 'DescribeLaunchTemplates'
+  | 'DescribeInstanceTypeOfferings'
+  | 'DescribeFlowLogs'
+  | 'DescribeTransitGateways'
+  | 'DescribeVpcPeeringConnections'
+  | 'DescribeVpcEndpoints'
+  | 'DescribeSpotPriceHistory';
 
 interface EC2ToolInput extends BaseToolInput {
   command: EC2Command;
@@ -108,6 +134,32 @@ export class EC2Tool extends BaseTool<EC2ToolInput> {
         return await client.send(new GetLaunchTemplateDataCommand(params as any));
       case 'GetPasswordData':
         return await client.send(new GetPasswordDataCommand(params as any));
+      case 'DescribeInstanceTypes':
+        return await client.send(new DescribeInstanceTypesCommand(params as any));
+      case 'DescribeNetworkInterfaces':
+        return await client.send(new DescribeNetworkInterfacesCommand(params as any));
+      case 'DescribeRouteTables':
+        return await client.send(new DescribeRouteTablesCommand(params as any));
+      case 'DescribeInternetGateways':
+        return await client.send(new DescribeInternetGatewaysCommand(params as any));
+      case 'DescribeNatGateways':
+        return await client.send(new DescribeNatGatewaysCommand(params as any));
+      case 'DescribeSecurityGroupRules':
+        return await client.send(new DescribeSecurityGroupRulesCommand(params as any));
+      case 'DescribeLaunchTemplates':
+        return await client.send(new DescribeLaunchTemplatesCommand(params as any));
+      case 'DescribeInstanceTypeOfferings':
+        return await client.send(new DescribeInstanceTypeOfferingsCommand(params as any));
+      case 'DescribeFlowLogs':
+        return await client.send(new DescribeFlowLogsCommand(params as any));
+      case 'DescribeTransitGateways':
+        return await client.send(new DescribeTransitGatewaysCommand(params as any));
+      case 'DescribeVpcPeeringConnections':
+        return await client.send(new DescribeVpcPeeringConnectionsCommand(params as any));
+      case 'DescribeVpcEndpoints':
+        return await client.send(new DescribeVpcEndpointsCommand(params as any));
+      case 'DescribeSpotPriceHistory':
+        return await client.send(new DescribeSpotPriceHistoryCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

@@ -12,6 +12,17 @@ import {
   ListJobsCommand,
   ListTriggersCommand,
   StartJobRunCommand,
+  GetDatabasesCommand,
+  GetDatabaseCommand,
+  GetTablesCommand,
+  GetTableCommand,
+  GetPartitionsCommand,
+  GetCrawlerCommand,
+  GetCrawlersCommand,
+  ListCrawlersCommand,
+  ListCrawlsCommand,
+  GetConnectionsCommand,
+  GetJobBookmarkCommand,
 } from '@aws-sdk/client-glue';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -26,7 +37,18 @@ type GlueCommand =
   | 'GetTriggers'
   | 'ListJobs'
   | 'ListTriggers'
-  | 'StartJobRun';
+  | 'StartJobRun'
+  | 'GetDatabases'
+  | 'GetDatabase'
+  | 'GetTables'
+  | 'GetTable'
+  | 'GetPartitions'
+  | 'GetCrawler'
+  | 'GetCrawlers'
+  | 'ListCrawlers'
+  | 'ListCrawls'
+  | 'GetConnections'
+  | 'GetJobBookmark';
 
 // Input interface - command + params object
 interface GlueToolInput extends BaseToolInput {
@@ -143,6 +165,39 @@ export class GlueTool extends BaseTool<GlueToolInput> {
         return await client.send(new GetTriggerCommand(params as GetTriggerParams));
 
       case 'GetTriggers':
+      case 'GetDatabases':
+        return await client.send(new GetDatabasesCommand(params as any));
+
+      case 'GetDatabase':
+        return await client.send(new GetDatabaseCommand(params as any));
+
+      case 'GetTables':
+        return await client.send(new GetTablesCommand(params as any));
+
+      case 'GetTable':
+        return await client.send(new GetTableCommand(params as any));
+
+      case 'GetPartitions':
+        return await client.send(new GetPartitionsCommand(params as any));
+
+      case 'GetCrawler':
+        return await client.send(new GetCrawlerCommand(params as any));
+
+      case 'GetCrawlers':
+        return await client.send(new GetCrawlersCommand(params as any));
+
+      case 'ListCrawlers':
+        return await client.send(new ListCrawlersCommand(params as any));
+
+      case 'ListCrawls':
+        return await client.send(new ListCrawlsCommand(params as any));
+
+      case 'GetConnections':
+        return await client.send(new GetConnectionsCommand(params as any));
+
+      case 'GetJobBookmark':
+        return await client.send(new GetJobBookmarkCommand(params as any));
+
         return await client.send(new GetTriggersCommand(params as GetTriggersParams));
 
       case 'ListJobs':

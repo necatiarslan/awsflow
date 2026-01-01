@@ -2,8 +2,8 @@
   "name": "GlueTool",
   "toolReferenceName": "GlueTool",
   "displayName": "Glue Tool",
-  "modelDescription": "Execute AWS Glue commands. ALWAYS provide params object. Examples: ListJobs {command:'ListJobs', params:{MaxResults:10}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
-  "userDescription": "Manage and run AWS Glue ETL jobs and triggers",
+  "modelDescription": "Execute AWS Glue commands including Data Catalog queries. ALWAYS provide params object. Examples: GetDatabases {command:'GetDatabases', params:{}}. GetDatabase {command:'GetDatabase', params:{Name:'my-database'}}. GetTables {command:'GetTables', params:{DatabaseName:'my-database'}}. GetTable {command:'GetTable', params:{DatabaseName:'my-database', Name:'my-table'}}. GetPartitions {command:'GetPartitions', params:{DatabaseName:'my-database', TableName:'my-table'}}. ListCrawlers {command:'ListCrawlers', params:{}}. GetCrawler {command:'GetCrawler', params:{Name:'my-crawler'}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
+  "userDescription": "Manage Glue ETL jobs, triggers, crawlers, and query Data Catalog (databases, tables, partitions, connections)",
   "tags": [
     "aws",
     "glue",
@@ -24,12 +24,23 @@
         "type": "string",
         "enum": [
           "CreateJob",
+          "GetCrawler",
+          "GetCrawlers",
+          "GetConnections",
+          "GetDatabase",
+          "GetDatabases",
           "GetJob",
+          "GetJobBookmark",
           "GetJobRun",
           "GetJobRuns",
+          "GetPartitions",
+          "GetTable",
+          "GetTables",
           "GetTags",
           "GetTrigger",
           "GetTriggers",
+          "ListCrawls",
+          "ListCrawlers",
           "ListJobs",
           "ListTriggers",
           "StartJobRun"
@@ -137,6 +148,38 @@
           "DependentJobName": {
             "type": "string",
             "description": "Filter by dependent job name (Used by: ListTriggers)"
+          },
+          "CrawlerName": {
+            "type": "string",
+            "description": "Crawler name (Used by: GetCrawler (Required), ListCrawls (Required))"
+          },
+          "CatalogId": {
+            "type": "string",
+            "description": "Catalog ID (Used by: GetDatabase, GetDatabases, GetTable, GetTables, GetPartitions)"
+          },
+          "DatabaseName": {
+            "type": "string",
+            "description": "Database name (Used by: GetDatabase (Required), GetTable (Required), GetTables (Required), GetPartitions (Required))"
+          },
+          "TableName": {
+            "type": "string",
+            "description": "Table name (Used by: GetTable (Required), GetPartitions (Required))"
+          },
+          "Expression": {
+            "type": "string",
+            "description": "Partition filter expression (Used by: GetPartitions)"
+          },
+          "Segment": {
+            "type": "object",
+            "description": "Segment configuration for parallel scanning (Used by: GetPartitions)"
+          },
+          "ConnectionName": {
+            "type": "string",
+            "description": "Connection name (Used by: GetConnections)"
+          },
+          "HidePassword": {
+            "type": "boolean",
+            "description": "Hide connection password (Used by: GetConnections)"
           }
         }
       }

@@ -46,6 +46,9 @@ import {
   GetUsagePlansCommand,
   GetVpcLinkCommand,
   GetVpcLinksCommand,
+  TestInvokeMethodCommand,
+  TestInvokeAuthorizerCommand,
+  GetMethodResponseCommand,
 } from '@aws-sdk/client-api-gateway';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -93,7 +96,10 @@ type APIGatewayCommand =
   | 'GetUsagePlanKeys'
   | 'GetUsagePlans'
   | 'GetVpcLink'
-  | 'GetVpcLinks';
+  | 'GetVpcLinks'
+  | 'TestInvokeMethod'
+  | 'TestInvokeAuthorizer'
+  | 'GetMethodResponse';
 
 interface APIGatewayToolInput extends BaseToolInput {
   command: APIGatewayCommand;
@@ -167,6 +173,9 @@ export class APIGatewayTool extends BaseTool<APIGatewayToolInput> {
       case 'GetUsagePlans': return await client.send(new GetUsagePlansCommand(params as any));
       case 'GetVpcLink': return await client.send(new GetVpcLinkCommand(params as any));
       case 'GetVpcLinks': return await client.send(new GetVpcLinksCommand(params as any));
+      case 'TestInvokeMethod': return await client.send(new TestInvokeMethodCommand(params as any));
+      case 'TestInvokeAuthorizer': return await client.send(new TestInvokeAuthorizerCommand(params as any));
+      case 'GetMethodResponse': return await client.send(new GetMethodResponseCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

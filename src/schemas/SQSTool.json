@@ -23,14 +23,19 @@
       "command": {
         "type": "string",
         "enum": [
-          "ListQueues",
-          "ListDeadLetterSourceQueues",
-          "ListQueueTags",
+          "ChangeMessageVisibility",
+          "ChangeMessageVisibilityBatch",
+          "DeleteMessage",
+          "DeleteMessageBatch",
           "GetQueueAttributes",
           "GetQueueUrl",
-          "SendMessage",
+          "ListDeadLetterSourceQueues",
+          "ListQueues",
+          "ListQueueTags",
+          "PurgeQueue",
           "ReceiveMessage",
-          "DeleteMessage"
+          "SendMessage",
+          "SendMessageBatch"
         ],
         "description": "The SQS command to execute"
       },

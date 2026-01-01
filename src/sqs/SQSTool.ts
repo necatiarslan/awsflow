@@ -10,6 +10,11 @@ import {
   SendMessageCommand,
   ReceiveMessageCommand,
   DeleteMessageCommand,
+  PurgeQueueCommand,
+  ChangeMessageVisibilityCommand,
+  SendMessageBatchCommand,
+  DeleteMessageBatchCommand,
+  ChangeMessageVisibilityBatchCommand,
   QueueAttributeName,
 } from '@aws-sdk/client-sqs';
 import { AIHandler } from '../chat/AIHandler';
@@ -23,7 +28,12 @@ type SQSCommand =
   | 'GetQueueUrl'
   | 'SendMessage'
   | 'ReceiveMessage'
-  | 'DeleteMessage';
+  | 'DeleteMessage'
+  | 'PurgeQueue'
+  | 'ChangeMessageVisibility'
+  | 'SendMessageBatch'
+  | 'DeleteMessageBatch'
+  | 'ChangeMessageVisibilityBatch';
 
 // Input interface - command + params object
 interface SQSToolInput extends BaseToolInput {
@@ -79,6 +89,21 @@ export class SQSTool extends BaseTool<SQSToolInput> {
       
       case 'DeleteMessage':
         return await client.send(new DeleteMessageCommand(params as any));
+      
+      case 'PurgeQueue':
+        return await client.send(new PurgeQueueCommand(params as any));
+      
+      case 'ChangeMessageVisibility':
+        return await client.send(new ChangeMessageVisibilityCommand(params as any));
+      
+      case 'SendMessageBatch':
+        return await client.send(new SendMessageBatchCommand(params as any));
+      
+      case 'DeleteMessageBatch':
+        return await client.send(new DeleteMessageBatchCommand(params as any));
+      
+      case 'ChangeMessageVisibilityBatch':
+        return await client.send(new ChangeMessageVisibilityBatchCommand(params as any));
       
       default:
         throw new Error(`Unsupported command: ${command}`);

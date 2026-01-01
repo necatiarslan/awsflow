@@ -18,6 +18,7 @@ export function needsConfirmation(command: string): boolean {
     c.startsWith('publish') ||
     c.startsWith('invoke') ||
     c.startsWith('start') ||
+    c.startsWith('stop') ||
     c.startsWith('execute') ||
     c.startsWith('receive')
   );

@@ -7,6 +7,13 @@ import {
   DescribeLogStreamsCommand,
   GetLogEventsCommand,
   FilterLogEventsCommand,
+  StartQueryCommand,
+  GetQueryResultsCommand,
+  DescribeQueryDefinitionsCommand,
+  DescribeMetricFiltersCommand,
+  DescribeSubscriptionFiltersCommand,
+  GetLogGroupFieldsCommand,
+  DescribeDestinationsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { AIHandler } from '../chat/AIHandler';
 import { CloudWatchLogView } from './CloudWatchLogView';
@@ -17,6 +24,13 @@ type CloudWatchCommand =
   | 'DescribeLogStreams'
   | 'GetLogEvents'
   | 'FilterLogEvents'
+  | 'StartQuery'
+  | 'GetQueryResults'
+  | 'DescribeQueryDefinitions'
+  | 'DescribeMetricFilters'
+  | 'DescribeSubscriptionFilters'
+  | 'GetLogGroupFields'
+  | 'DescribeDestinations'
   | 'OpenCloudWatchLogView';
 
 // Input interface - command + params object
@@ -75,6 +89,20 @@ export class CloudWatchLogTool extends BaseTool<CloudWatchToolInput> {
         return await client.send(new GetLogEventsCommand(params as any));
       case 'FilterLogEvents':
         return await client.send(new FilterLogEventsCommand(params as any));
+      case 'StartQuery':
+        return await client.send(new StartQueryCommand(params as any));
+      case 'GetQueryResults':
+        return await client.send(new GetQueryResultsCommand(params as any));
+      case 'DescribeQueryDefinitions':
+        return await client.send(new DescribeQueryDefinitionsCommand(params as any));
+      case 'DescribeMetricFilters':
+        return await client.send(new DescribeMetricFiltersCommand(params as any));
+      case 'DescribeSubscriptionFilters':
+        return await client.send(new DescribeSubscriptionFiltersCommand(params as any));
+      case 'GetLogGroupFields':
+        return await client.send(new GetLogGroupFieldsCommand(params as any));
+      case 'DescribeDestinations':
+        return await client.send(new DescribeDestinationsCommand(params as any));
       case 'OpenCloudWatchLogView':
         return await this.executeOpenCloudWatchLogView(params);
       default:

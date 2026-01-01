@@ -45,6 +45,7 @@
           "DetectStackDrift",
           "DetectStackResourceDrift",
           "DetectStackSetDrift",
+          "EstimateTemplateCost",
           "GetGeneratedTemplate",
           "GetHookResult",
           "GetStackPolicy",
@@ -70,7 +71,8 @@
           "ListStackSets",
           "ListTypeRegistrations",
           "ListTypes",
-          "ListTypeVersions"
+          "ListTypeVersions",
+          "ValidateTemplate"
         ],
         "description": "The CloudFormation command to execute"
       },

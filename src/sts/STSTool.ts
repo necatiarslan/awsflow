@@ -8,6 +8,10 @@ import {
   GetFederationTokenCommand,
   GetSessionTokenCommand,
   GetWebIdentityTokenCommand,
+  AssumeRoleCommand,
+  DecodeAuthorizationMessageCommand,
+  AssumeRoleWithWebIdentityCommand,
+  AssumeRoleWithSAMLCommand,
 } from '@aws-sdk/client-sts';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -18,7 +22,11 @@ type STSCommand =
   | 'GetDelegatedAccessToken'
   | 'GetFederationToken'
   | 'GetSessionToken'
-  | 'GetWebIdentityToken';
+  | 'GetWebIdentityToken'
+  | 'AssumeRole'
+  | 'DecodeAuthorizationMessage'
+  | 'AssumeRoleWithWebIdentity'
+  | 'AssumeRoleWithSAML';
 
 // Input interface - command + params object
 interface STSToolInput extends BaseToolInput {
@@ -63,6 +71,18 @@ export class STSTool extends BaseTool<STSToolInput> {
       
       case 'GetSessionToken':
         return await client.send(new GetSessionTokenCommand(params as any));
+      case 'AssumeRole':
+        return await client.send(new AssumeRoleCommand(params as any));
+      
+      case 'DecodeAuthorizationMessage':
+        return await client.send(new DecodeAuthorizationMessageCommand(params as any));
+      
+      case 'AssumeRoleWithWebIdentity':
+        return await client.send(new AssumeRoleWithWebIdentityCommand(params as any));
+      
+      case 'AssumeRoleWithSAML':
+        return await client.send(new AssumeRoleWithSAMLCommand(params as any));
+      
       
       case 'GetWebIdentityToken':
         return await client.send(new GetWebIdentityTokenCommand(params as any));

@@ -2,8 +2,8 @@
   "name": "LambdaTool",
   "toolReferenceName": "LambdaTool",
   "displayName": "Lambda Tool",
-  "modelDescription": "Execute AWS Lambda commands. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
-  "userDescription": "Manage and invoke AWS Lambda functions",
+  "modelDescription": "Execute AWS Lambda commands including event source mappings. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. ListEventSourceMappings {command:'ListEventSourceMappings', params:{FunctionName:'my-function'}}. GetEventSourceMapping {command:'GetEventSourceMapping', params:{UUID:'12345678-1234-1234-1234-123456789012'}}. GetFunctionConcurrency {command:'GetFunctionConcurrency', params:{FunctionName:'my-function'}}. ListAliases {command:'ListAliases', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
+  "userDescription": "Manage Lambda functions, event source mappings, aliases, versions, layers, concurrency, function URLs, and invoke functions",
   "tags": [
     "aws",
     "lambda",
@@ -23,14 +23,26 @@
       "command": {
         "type": "string",
         "enum": [
-          "ListFunctions",
+          "GetAccountSettings",
+          "GetAlias",
+          "GetEventSourceMapping",
           "GetFunction",
+          "GetFunctionCodeSigningConfig",
+          "GetFunctionConcurrency",
           "GetFunctionConfiguration",
-          "UpdateFunctionCode",
+          "GetFunctionUrlConfig",
+          "GetPolicy",
+          "Invoke",
+          "ListAliases",
+          "ListEventSourceMappings",
+          "ListFunctions",
+          "ListFunctionsByCodeSigningConfig",
+          "ListLayerVersions",
           "ListTags",
+          "ListVersionsByFunction",
           "TagResource",
           "UntagResource",
-          "Invoke"
+          "UpdateFunctionCode"
         ],
         "description": "The Lambda command to execute"
       },
@@ -140,6 +152,34 @@
           "Payload": {
             "type": "string",
             "description": "JSON string payload to pass to function (Used by: Invoke)"
+          },
+          "Name": {
+            "type": "string",
+            "description": "Alias name (Used by: GetAlias (Required))"
+          },
+          "UUID": {
+            "type": "string",
+            "description": "Event source mapping UUID (Used by: GetEventSourceMapping (Required))"
+          },
+          "EventSourceArn": {
+            "type": "string",
+            "description": "ARN of event source (Used by: ListEventSourceMappings)"
+          },
+          "LayerName": {
+            "type": "string",
+            "description": "Layer name (Used by: ListLayerVersions (Required))"
+          },
+          "CompatibleRuntime": {
+            "type": "string",
+            "description": "Compatible runtime for layer versions (Used by: ListLayerVersions)"
+          },
+          "CompatibleArchitecture": {
+            "type": "string",
+            "description": "Compatible architecture for layer versions (Used by: ListLayerVersions)"
+          },
+          "CodeSigningConfigArn": {
+            "type": "string",
+            "description": "Code signing configuration ARN (Used by: ListFunctionsByCodeSigningConfig (Required))"
           }
         }
       }

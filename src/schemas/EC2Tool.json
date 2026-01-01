@@ -2,8 +2,8 @@
   "name": "EC2Tool",
   "toolReferenceName": "EC2Tool",
   "displayName": "EC2 Tool",
-  "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeImages {command:'DescribeImages', params:{Owners:['self']}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
-  "userDescription": "Query EC2 instances, images, networking, and console data",
+  "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeInstanceTypes {command:'DescribeInstanceTypes', params:{InstanceTypes:['t3.micro']}}. DescribeNetworkInterfaces {command:'DescribeNetworkInterfaces', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. DescribeRouteTables {command:'DescribeRouteTables', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
+  "userDescription": "Query EC2 instances, instance types, images, networking (VPCs, subnets, route tables, internet/NAT gateways, network interfaces, security groups), and console data",
   "tags": [
     "aws",
     "ec2",
@@ -26,16 +26,29 @@
           "DescribeAccountAttributes",
           "DescribeAddresses",
           "DescribeAvailabilityZones",
+          "DescribeFlowLogs",
           "DescribeImages",
           "DescribeInstances",
           "DescribeInstanceStatus",
+          "DescribeInstanceTypeOfferings",
+          "DescribeInstanceTypes",
+          "DescribeInternetGateways",
           "DescribeKeyPairs",
+          "DescribeLaunchTemplates",
+          "DescribeNatGateways",
+          "DescribeNetworkInterfaces",
           "DescribeRegions",
+          "DescribeRouteTables",
+          "DescribeSecurityGroupRules",
           "DescribeSecurityGroups",
           "DescribeSnapshots",
+          "DescribeSpotPriceHistory",
           "DescribeSubnets",
           "DescribeTags",
+          "DescribeTransitGateways",
           "DescribeVolumes",
+          "DescribeVpcEndpoints",
+          "DescribeVpcPeeringConnections",
           "DescribeVpcs",
           "GetConsoleOutput",
           "GetHostReservationPurchasePreview",
@@ -64,7 +77,7 @@
             "items": {
               "type": "object"
             },
-            "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeKeyPairs, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeVolumes, DescribeVpcs)"
+            "description": "EC2 filter array with Name and Values[] (Used by: DescribeAddresses, DescribeAvailabilityZones, DescribeFlowLogs, DescribeImages, DescribeInstances, DescribeInstanceStatus, DescribeInstanceTypeOfferings, DescribeInstanceTypes, DescribeInternetGateways, DescribeKeyPairs, DescribeLaunchTemplates, DescribeNatGateways, DescribeNetworkInterfaces, DescribeRouteTables, DescribeSecurityGroupRules, DescribeSecurityGroups, DescribeSnapshots, DescribeSubnets, DescribeTags, DescribeTransitGateways, DescribeVpcEndpoints, DescribeVpcPeeringConnections, DescribeVpcs)"
           },
           "Owners": {
             "type": "array",
@@ -91,6 +104,110 @@
               "type": "string"
             },
             "description": "Specific region names (Used by: DescribeRegions)"
+          },
+          "InstanceTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Instance type names (Used by: DescribeInstanceTypes)"
+          },
+          "LocationType": {
+            "type": "string",
+            "enum": ["region", "availability-zone", "availability-zone-id"],
+            "description": "Location type for instance type offerings (Used by: DescribeInstanceTypeOfferings)"
+          },
+          "LaunchTemplateIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Launch template IDs (Used by: DescribeLaunchTemplates)"
+          },
+          "LaunchTemplateNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Launch template names (Used by: DescribeLaunchTemplates)"
+          },
+          "NetworkInterfaceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Network interface IDs (Used by: DescribeNetworkInterfaces)"
+          },
+          "RouteTableIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Route table IDs (Used by: DescribeRouteTables)"
+          },
+          "InternetGatewayIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Internet gateway IDs (Used by: DescribeInternetGateways)"
+          },
+          "NatGatewayIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "NAT gateway IDs (Used by: DescribeNatGateways)"
+          },
+          "GroupIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Security group IDs (Used by: DescribeSecurityGroupRules, DescribeSecurityGroups)"
+          },
+          "FlowLogIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Flow log IDs (Used by: DescribeFlowLogs)"
+          },
+          "TransitGatewayIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Transit gateway IDs (Used by: DescribeTransitGateways)"
+          },
+          "VpcEndpointIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "VPC endpoint IDs (Used by: DescribeVpcEndpoints)"
+          },
+          "VpcPeeringConnectionIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "VPC peering connection IDs (Used by: DescribeVpcPeeringConnections)"
+          },
+          "StartTime": {
+            "type": "string",
+            "description": "Start time for spot price history (Used by: DescribeSpotPriceHistory)"
+          },
+          "EndTime": {
+            "type": "string",
+            "description": "End time for spot price history (Used by: DescribeSpotPriceHistory)"
+          },
+          "ProductDescriptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Product descriptions for spot price history (Used by: DescribeSpotPriceHistory)"
           }
         }
       }

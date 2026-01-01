@@ -2,8 +2,8 @@
   "name": "S3Tool",
   "toolReferenceName": "S3Tool",
   "displayName": "S3 Tool",
-  "modelDescription": "Execute S3 commands. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}. CopyObject {command:'CopyObject', params:{Bucket:'name', CopySource:'/bucket/key', Key:'new-path'}}. OpenS3Explorer {command:'OpenS3Explorer', params:{Bucket:'bucket-name', Key:'optional/path/'}}.",
-  "userDescription": "Execute S3 commands including read, write, delete operations, and open S3 Explorer view",
+  "modelDescription": "Execute S3 commands including bucket configuration. ALWAYS provide params object. Examples: ListObjectsV2 {command:'ListObjectsV2', params:{Bucket:'bucket-name'}}. GetBucketLocation {command:'GetBucketLocation', params:{Bucket:'bucket-name'}}. GetBucketEncryption {command:'GetBucketEncryption', params:{Bucket:'bucket-name'}}. GetBucketVersioning {command:'GetBucketVersioning', params:{Bucket:'bucket-name'}}. GetBucketLifecycleConfiguration {command:'GetBucketLifecycleConfiguration', params:{Bucket:'bucket-name'}}. PutObject {command:'PutObject', params:{Bucket:'name', Key:'path', Body:'content'}}. DeleteObject {command:'DeleteObject', params:{Bucket:'name', Key:'path'}}.",
+  "userDescription": "Execute S3 commands including bucket configuration (location, encryption, versioning, lifecycle, replication, logging, tags, CORS, website), object operations, and open S3 Explorer view",
   "tags": [
     "aws",
     "s3",
@@ -27,19 +27,33 @@
       "command": {
         "type": "string",
         "enum": [
+          "CopyObject",
+          "DeleteObject",
+          "GetBucketAccelerateConfiguration",
+          "GetBucketCors",
+          "GetBucketEncryption",
+          "GetBucketLifecycleConfiguration",
+          "GetBucketLocation",
+          "GetBucketLogging",
+          "GetBucketNotificationConfiguration",
+          "GetBucketPolicy",
+          "GetBucketReplication",
+          "GetBucketRequestPayment",
+          "GetBucketTagging",
+          "GetBucketVersioning",
+          "GetBucketWebsite",
+          "GetObject",
+          "GetObjectAttributes",
+          "GetObjectLegalHold",
+          "GetObjectRetention",
           "HeadBucket",
           "HeadObject",
           "ListBuckets",
           "ListObjectsV2",
           "ListObjectVersions",
-          "GetBucketPolicy",
-          "GetBucketNotificationConfiguration",
-          "GetObject",
+          "OpenS3Explorer",
           "PutObject",
-          "DeleteObject",
-          "CopyObject",
-          "SelectObjectContent",
-          "OpenS3Explorer"
+          "SelectObjectContent"
         ],
         "description": "The S3 command to execute"
       },
@@ -49,11 +63,11 @@
         "properties": {
           "Bucket": {
             "type": "string",
-            "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+            "description": "Bucket name (Used by: HeadBucket (Required), HeadObject (Required), ListObjectsV2 (Required), ListObjectVersions (Required), GetBucketPolicy (Required), GetBucketNotificationConfiguration (Required), GetBucketLocation (Required), GetBucketVersioning (Required), GetBucketEncryption (Required), GetBucketLifecycleConfiguration (Required), GetBucketReplication (Required), GetBucketLogging (Required), GetBucketTagging (Required), GetBucketCors (Required), GetBucketWebsite (Required), GetBucketAccelerateConfiguration (Required), GetBucketRequestPayment (Required), GetObject (Required), GetObjectAttributes (Required), GetObjectLegalHold (Required), GetObjectRetention (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
           },
           "Key": {
             "type": "string",
-            "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer (Required))"
+            "description": "Object key path (Used by: HeadObject (Required), GetObject (Required), GetObjectAttributes (Required), GetObjectLegalHold (Required), GetObjectRetention (Required), PutObject (Required), DeleteObject (Required), CopyObject (Required), SelectObjectContent (Required), OpenS3Explorer)"
           },
           "CopySource": {
             "type": "string",
@@ -130,6 +144,18 @@
           "OutputSerialization": {
             "type": "object",
             "description": "Format for output data (Used by: SelectObjectContent (Required))"
+          },
+          "ObjectAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["ETag", "Checksum", "ObjectParts", "StorageClass", "ObjectSize"]
+            },
+            "description": "Object attributes to retrieve (Used by: GetObjectAttributes (Required))"
+          },
+          "ExpectedBucketOwner": {
+            "type": "string",
+            "description": "Expected bucket owner account ID (Used by: GetBucketLocation, GetBucketVersioning, GetBucketEncryption, GetBucketLifecycleConfiguration, GetBucketReplication, GetBucketLogging, GetBucketTagging, GetBucketCors, GetBucketWebsite, GetBucketAccelerateConfiguration, GetBucketRequestPayment, GetObjectAttributes, GetObjectLegalHold, GetObjectRetention)"
           }
         }
       }

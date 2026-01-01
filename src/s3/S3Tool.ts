@@ -21,6 +21,20 @@ import {
   DeleteObjectCommand,
   CopyObjectCommand,
   SelectObjectContentCommand,
+  GetBucketLocationCommand,
+  GetBucketVersioningCommand,
+  GetBucketEncryptionCommand,
+  GetBucketLifecycleConfigurationCommand,
+  GetBucketReplicationCommand,
+  GetBucketLoggingCommand,
+  GetBucketTaggingCommand,
+  GetBucketCorsCommand,
+  GetBucketWebsiteCommand,
+  GetBucketAccelerateConfigurationCommand,
+  GetBucketRequestPaymentCommand,
+  GetObjectAttributesCommand,
+  GetObjectLegalHoldCommand,
+  GetObjectRetentionCommand,
   MetadataDirective
 } from '@aws-sdk/client-s3';
 
@@ -38,6 +52,20 @@ type S3Command =
   | 'GetBucketPolicy'
   | 'GetBucketNotificationConfiguration'
   | 'SelectObjectContent'
+  | 'GetBucketLocation'
+  | 'GetBucketVersioning'
+  | 'GetBucketEncryption'
+  | 'GetBucketLifecycleConfiguration'
+  | 'GetBucketReplication'
+  | 'GetBucketLogging'
+  | 'GetBucketTagging'
+  | 'GetBucketCors'
+  | 'GetBucketWebsite'
+  | 'GetBucketAccelerateConfiguration'
+  | 'GetBucketRequestPayment'
+  | 'GetObjectAttributes'
+  | 'GetObjectLegalHold'
+  | 'GetObjectRetention'
   | 'OpenS3Explorer';
 
 // Input interface
@@ -120,6 +148,48 @@ export class S3Tool extends BaseTool<S3ToolInput> {
 
       case 'SelectObjectContent':
         return await this.handleSelectObjectContent(client, params as SelectObjectContentParams);
+
+      case 'GetBucketLocation':
+        return await client.send(new GetBucketLocationCommand(params as any));
+
+      case 'GetBucketVersioning':
+        return await client.send(new GetBucketVersioningCommand(params as any));
+
+      case 'GetBucketEncryption':
+        return await client.send(new GetBucketEncryptionCommand(params as any));
+
+      case 'GetBucketLifecycleConfiguration':
+        return await client.send(new GetBucketLifecycleConfigurationCommand(params as any));
+
+      case 'GetBucketReplication':
+        return await client.send(new GetBucketReplicationCommand(params as any));
+
+      case 'GetBucketLogging':
+        return await client.send(new GetBucketLoggingCommand(params as any));
+
+      case 'GetBucketTagging':
+        return await client.send(new GetBucketTaggingCommand(params as any));
+
+      case 'GetBucketCors':
+        return await client.send(new GetBucketCorsCommand(params as any));
+
+      case 'GetBucketWebsite':
+        return await client.send(new GetBucketWebsiteCommand(params as any));
+
+      case 'GetBucketAccelerateConfiguration':
+        return await client.send(new GetBucketAccelerateConfigurationCommand(params as any));
+
+      case 'GetBucketRequestPayment':
+        return await client.send(new GetBucketRequestPaymentCommand(params as any));
+
+      case 'GetObjectAttributes':
+        return await client.send(new GetObjectAttributesCommand(params as any));
+
+      case 'GetObjectLegalHold':
+        return await client.send(new GetObjectLegalHoldCommand(params as any));
+
+      case 'GetObjectRetention':
+        return await client.send(new GetObjectRetentionCommand(params as any));
 
       case 'OpenS3Explorer':
         return await this.handleOpenS3Explorer(params as OpenS3ExplorerParams);

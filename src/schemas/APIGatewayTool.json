@@ -2,8 +2,8 @@
   "name": "APIGatewayTool",
   "toolReferenceName": "APIGatewayTool",
   "displayName": "API Gateway Tool",
-  "modelDescription": "Execute AWS API Gateway REST API commands. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}.",
-  "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, and more",
+  "modelDescription": "Execute AWS API Gateway REST API commands including testing. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}. TestInvokeMethod {command:'TestInvokeMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET', pathWithQueryString:'/test?param=value'}}. TestInvokeAuthorizer {command:'TestInvokeAuthorizer', params:{restApiId:'abc', authorizerId:'xyz', headers:{'Authorization':'Bearer token'}}}.",
+  "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, test invoke methods and authorizers",
   "tags": [
     "aws",
     "api-gateway",
@@ -46,6 +46,7 @@
           "GetIntegration",
           "GetIntegrationResponse",
           "GetMethod",
+          "GetMethodResponse",
           "GetModel",
           "GetModels",
           "GetRequestValidator",
@@ -66,7 +67,9 @@
           "GetUsagePlanKeys",
           "GetUsagePlans",
           "GetVpcLink",
-          "GetVpcLinks"
+          "GetVpcLinks",
+          "TestInvokeAuthorizer",
+          "TestInvokeMethod"
         ],
         "description": "The API Gateway command to execute"
       },
@@ -117,6 +120,38 @@
           "includeCredentials": {
             "type": "boolean",
             "description": "Whether to include credentials (Used by: GetExport)"
+          },
+          "authorizerId": {
+            "type": "string",
+            "description": "Authorizer ID (Used by: GetAuthorizer (Required), TestInvokeAuthorizer (Required))"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Request headers for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+          },
+          "multiValueHeaders": {
+            "type": "object",
+            "description": "Multi-value headers for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+          },
+          "pathWithQueryString": {
+            "type": "string",
+            "description": "Path with query string for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+          },
+          "body": {
+            "type": "string",
+            "description": "Request body for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+          },
+          "stageVariables": {
+            "type": "object",
+            "description": "Stage variables for test invocation (Used by: TestInvokeMethod, TestInvokeAuthorizer)"
+          },
+          "additionalContext": {
+            "type": "object",
+            "description": "Additional context for authorizer test (Used by: TestInvokeAuthorizer)"
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "Status code for GetMethodResponse (Used by: GetMethodResponse (Required))"
           }
         }
       }

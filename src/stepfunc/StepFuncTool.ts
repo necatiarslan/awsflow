@@ -9,6 +9,15 @@ import {
   StartExecutionCommand,
   GetExecutionHistoryCommand,
   UpdateStateMachineCommand,
+  ValidateStateMachineDefinitionCommand,
+  DescribeActivityCommand,
+  ListActivitiesCommand,
+  DescribeMapRunCommand,
+  ListMapRunsCommand,
+  DescribeStateMachineForExecutionCommand,
+  DescribeStateMachineAliasCommand,
+  ListStateMachineAliasesCommand,
+  ListStateMachineVersionsCommand,
 } from '@aws-sdk/client-sfn';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -20,7 +29,16 @@ type StepFuncCommand =
   | 'ListStateMachines'
   | 'StartExecution'
   | 'GetExecutionHistory'
-  | 'UpdateStateMachine';
+  | 'UpdateStateMachine'
+  | 'ValidateStateMachineDefinition'
+  | 'DescribeActivity'
+  | 'ListActivities'
+  | 'DescribeMapRun'
+  | 'ListMapRuns'
+  | 'DescribeStateMachineForExecution'
+  | 'DescribeStateMachineAlias'
+  | 'ListStateMachineAliases'
+  | 'ListStateMachineVersions';
 
 // Input interface - command + params object
 interface StepFuncToolInput extends BaseToolInput {
@@ -119,6 +137,33 @@ export class StepFuncTool extends BaseTool<StepFuncToolInput> {
 
       case 'UpdateStateMachine':
         return await client.send(new UpdateStateMachineCommand(params as UpdateStateMachineParams));
+
+      case 'ValidateStateMachineDefinition':
+        return await client.send(new ValidateStateMachineDefinitionCommand(params as any));
+
+      case 'DescribeActivity':
+        return await client.send(new DescribeActivityCommand(params as any));
+
+      case 'ListActivities':
+        return await client.send(new ListActivitiesCommand(params as any));
+
+      case 'DescribeMapRun':
+        return await client.send(new DescribeMapRunCommand(params as any));
+
+      case 'ListMapRuns':
+        return await client.send(new ListMapRunsCommand(params as any));
+
+      case 'DescribeStateMachineForExecution':
+        return await client.send(new DescribeStateMachineForExecutionCommand(params as any));
+
+      case 'DescribeStateMachineAlias':
+        return await client.send(new DescribeStateMachineAliasCommand(params as any));
+
+      case 'ListStateMachineAliases':
+        return await client.send(new ListStateMachineAliasesCommand(params as any));
+
+      case 'ListStateMachineVersions':
+        return await client.send(new ListStateMachineVersionsCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);

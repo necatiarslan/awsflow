@@ -22,19 +22,24 @@
       "command": {
         "type": "string",
         "enum": [
-          "ListTables",
-          "DescribeTable",
           "CreateTable",
+          "DeleteItem",
           "DeleteTable",
+          "DescribeContinuousBackups",
+          "DescribeTable",
+          "DescribeTableReplicaAutoScaling",
+          "DescribeTimeToLive",
+          "GetItem",
+          "ListBackups",
+          "ListGlobalTables",
+          "ListTables",
+          "ListTagsOfResource",
+          "PutItem",
           "Query",
           "Scan",
-          "PutItem",
           "UpdateItem",
-          "DeleteItem",
-          "GetItem",
           "UpdateTable",
-          "UpdateTimeToLive",
-          "ListTagsOfResource"
+          "UpdateTimeToLive"
         ],
         "description": "The DynamoDB command to execute"
       },

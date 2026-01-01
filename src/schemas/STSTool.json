@@ -2,8 +2,8 @@
   "name": "STSTool",
   "toolReferenceName": "STSTool",
   "displayName": "STS Tool",
-  "modelDescription": "Execute AWS STS (Security Token Service) commands. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. GetAccessKeyInfo {command:'GetAccessKeyInfo', params:{AccessKeyId:'AKIA...'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. GetFederationToken {command:'GetFederationToken', params:{Name:'session-name'}}. GetWebIdentityToken {command:'GetWebIdentityToken', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
-  "userDescription": "Get temporary security credentials and caller identity information from AWS STS",
+  "modelDescription": "Execute AWS STS (Security Token Service) commands including role assumption and permission debugging. ALWAYS provide params object. Examples: GetCallerIdentity {command:'GetCallerIdentity', params:{}}. AssumeRole {command:'AssumeRole', params:{RoleArn:'arn:aws:iam::123456789012:role/MyRole', RoleSessionName:'my-session', DurationSeconds:3600}}. DecodeAuthorizationMessage {command:'DecodeAuthorizationMessage', params:{EncodedMessage:'encoded-message-string'}}. GetSessionToken {command:'GetSessionToken', params:{DurationSeconds:3600}}. AssumeRoleWithWebIdentity {command:'AssumeRoleWithWebIdentity', params:{RoleArn:'arn:aws:iam::...', RoleSessionName:'session', WebIdentityToken:'token'}}.",
+  "userDescription": "Get temporary security credentials, assume roles, decode authorization messages, and get caller identity from AWS STS",
   "tags": [
     "aws",
     "sts",
@@ -24,8 +24,12 @@
       "command": {
         "type": "string",
         "enum": [
-          "GetCallerIdentity",
+          "AssumeRole",
+          "AssumeRoleWithSAML",
+          "AssumeRoleWithWebIdentity",
+          "DecodeAuthorizationMessage",
           "GetAccessKeyInfo",
+          "GetCallerIdentity",
           "GetDelegatedAccessToken",
           "GetFederationToken",
           "GetSessionToken",
@@ -94,7 +98,46 @@
           },
           "ProviderId": {
             "type": "string",
-            "description": "Identity provider ID (Used by: GetWebIdentityToken)"
+            "description": "Identity provider ID (Used by: AssumeRoleWithWebIdentity, GetWebIdentityToken)"
+          },
+          "ExternalId": {
+            "type": "string",
+            "description": "External ID for role assumption (Used by: AssumeRole)"
+          },
+          "PolicyArns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "arn": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Managed policy ARNs for session policies (Used by: AssumeRole, AssumeRoleWithWebIdentity, AssumeRoleWithSAML)"
+          },
+          "TransitiveTagKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Session tag keys to set as transitive (Used by: AssumeRole)"
+          },
+          "SourceIdentity": {
+            "type": "string",
+            "description": "Source identity for role chaining (Used by: AssumeRole)"
+          },
+          "SAMLAssertion": {
+            "type": "string",
+            "description": "Base64-encoded SAML authentication response (Used by: AssumeRoleWithSAML (Required))"
+          },
+          "PrincipalArn": {
+            "type": "string",
+            "description": "ARN of SAML provider (Used by: AssumeRoleWithSAML (Required))"
+          },
+          "EncodedMessage": {
+            "type": "string",
+            "description": "Encoded authorization failure message to decode (Used by: DecodeAuthorizationMessage (Required))"
           }
         }
       }

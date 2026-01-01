@@ -12,6 +12,17 @@ import {
   GetPolicyVersionCommand,
   ListPoliciesCommand,
   ListPolicyVersionsCommand,
+  SimulatePrincipalPolicyCommand,
+  GetUserCommand,
+  ListUsersCommand,
+  GetAccountSummaryCommand,
+  GetAccountPasswordPolicyCommand,
+  ListGroupsCommand,
+  GenerateCredentialReportCommand,
+  GetCredentialReportCommand,
+  ListAccessKeysCommand,
+  ListMFADevicesCommand,
+  GetServiceLastAccessedDetailsCommand,
 } from '@aws-sdk/client-iam';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -26,7 +37,18 @@ type IAMCommand =
   | 'GetPolicy'
   | 'GetPolicyVersion'
   | 'ListPolicies'
-  | 'ListPolicyVersions';
+  | 'ListPolicyVersions'
+  | 'SimulatePrincipalPolicy'
+  | 'GetUser'
+  | 'ListUsers'
+  | 'GetAccountSummary'
+  | 'GetAccountPasswordPolicy'
+  | 'ListGroups'
+  | 'GenerateCredentialReport'
+  | 'GetCredentialReport'
+  | 'ListAccessKeys'
+  | 'ListMFADevices'
+  | 'GetServiceLastAccessedDetails';
 
 // Input interface - command + params object
 interface IAMToolInput extends BaseToolInput {
@@ -77,6 +99,28 @@ export class IAMTool extends BaseTool<IAMToolInput> {
         return await client.send(new ListPoliciesCommand(params as any));
       case 'ListPolicyVersions':
         return await client.send(new ListPolicyVersionsCommand(params as any));
+      case 'SimulatePrincipalPolicy':
+        return await client.send(new SimulatePrincipalPolicyCommand(params as any));
+      case 'GetUser':
+        return await client.send(new GetUserCommand(params as any));
+      case 'ListUsers':
+        return await client.send(new ListUsersCommand(params as any));
+      case 'GetAccountSummary':
+        return await client.send(new GetAccountSummaryCommand(params as any));
+      case 'GetAccountPasswordPolicy':
+        return await client.send(new GetAccountPasswordPolicyCommand(params as any));
+      case 'ListGroups':
+        return await client.send(new ListGroupsCommand(params as any));
+      case 'GenerateCredentialReport':
+        return await client.send(new GenerateCredentialReportCommand(params as any));
+      case 'GetCredentialReport':
+        return await client.send(new GetCredentialReportCommand(params as any));
+      case 'ListAccessKeys':
+        return await client.send(new ListAccessKeysCommand(params as any));
+      case 'ListMFADevices':
+        return await client.send(new ListMFADevicesCommand(params as any));
+      case 'GetServiceLastAccessedDetails':
+        return await client.send(new GetServiceLastAccessedDetailsCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

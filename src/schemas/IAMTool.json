@@ -2,8 +2,8 @@
   "name": "IAMTool",
   "toolReferenceName": "IAMTool",
   "displayName": "IAM Tool",
-  "modelDescription": "Execute AWS IAM commands. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}. GetPolicyVersion {command:'GetPolicyVersion', params:{PolicyArn:'arn:aws:iam::123:policy/p', VersionId:'v1'}}.",
-  "userDescription": "Inspect IAM roles and policies",
+  "modelDescription": "Execute AWS IAM commands including permission simulation. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. GetUser {command:'GetUser', params:{UserName:'john'}}. ListUsers {command:'ListUsers', params:{}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}. GetAccountSummary {command:'GetAccountSummary', params:{}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}.",
+  "userDescription": "Inspect IAM roles, policies, users, groups, simulate permissions, and get account summary",
   "tags": [
     "aws",
     "iam",
@@ -22,16 +22,27 @@
       "command": {
         "type": "string",
         "enum": [
+          "GenerateCredentialReport",
+          "GetAccountPasswordPolicy",
+          "GetAccountSummary",
+          "GetCredentialReport",
+          "GetPolicy",
+          "GetPolicyVersion",
           "GetRole",
           "GetRolePolicy",
+          "GetServiceLastAccessedDetails",
+          "GetUser",
+          "ListAccessKeys",
           "ListAttachedRolePolicies",
+          "ListGroups",
+          "ListMFADevices",
+          "ListPolicies",
+          "ListPolicyVersions",
           "ListRolePolicies",
           "ListRoles",
           "ListRoleTags",
-          "GetPolicy",
-          "GetPolicyVersion",
-          "ListPolicies",
-          "ListPolicyVersions"
+          "ListUsers",
+          "SimulatePrincipalPolicy"
         ],
         "description": "The IAM command to execute"
       },
@@ -87,6 +98,59 @@
               "PermissionsBoundary"
             ],
             "description": "Filter policies by usage (Used by: ListPolicies)"
+          },
+          "UserName": {
+            "type": "string",
+            "description": "IAM user name (Used by: GetUser, ListAccessKeys, ListMFADevices)"
+          },
+          "GroupName": {
+            "type": "string",
+            "description": "IAM group name (Used by: ListGroups)"
+          },
+          "PolicySourceArn": {
+            "type": "string",
+            "description": "ARN of IAM entity (user, group, role) whose policy to simulate (Used by: SimulatePrincipalPolicy (Required))"
+          },
+          "ActionNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of API action names to simulate (Used by: SimulatePrincipalPolicy (Required))"
+          },
+          "ResourceArns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of resource ARNs to simulate policy against (Used by: SimulatePrincipalPolicy)"
+          },
+          "ResourcePolicy": {
+            "type": "string",
+            "description": "Resource-based policy JSON string (Used by: SimulatePrincipalPolicy)"
+          },
+          "ResourceOwner": {
+            "type": "string",
+            "description": "AWS account ID owning the resource (Used by: SimulatePrincipalPolicy)"
+          },
+          "CallerArn": {
+            "type": "string",
+            "description": "ARN of user making the request (Used by: SimulatePrincipalPolicy)"
+          },
+          "ContextEntries": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Context keys and values for policy evaluation (Used by: SimulatePrincipalPolicy)"
+          },
+          "ResourceHandlingOption": {
+            "type": "string",
+            "description": "How to handle resource-based policies (Used by: SimulatePrincipalPolicy)"
+          },
+          "JobId": {
+            "type": "string",
+            "description": "Job ID from GenerateServiceLastAccessedDetails (Used by: GetServiceLastAccessedDetails (Required))"
           }
         }
       }
