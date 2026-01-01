@@ -107,10 +107,9 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
 
 ## 📋 TODO
 - Add more AWS services and actions.
-   - ECS, EKS, ELB, Route 53, ElastiCache, KMS, Secrets Manager
-   - EventBridge, AppSync, CodeDeploy, ECR, Simple Systems Manager, Config Service
-   - Athena, Kinesis, Redshift, Open Search, Bedrock, SageMaker
-   - WAF, Shield, Cost Explorer
+   - Tier1 : ECS, EKS, Secrets Manager, Systems Manager, ECR, CloudWatch Metrics & Alarms
+   - Tier2 : ElastiCache, EventBridge, Kinesis, Route53, EFS, Cloud Trail, KMS, ELB
+   - Tier3 : X-Ray, Athena, Redshift
 
 - Improve natural language understanding for AWS-specific queries.
 

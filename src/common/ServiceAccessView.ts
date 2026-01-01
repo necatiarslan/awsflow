@@ -14,23 +14,35 @@ interface ToolDefinition {
  * Load tool registry dynamically from generated schemas
  * Falls back to empty array if generation hasn't run yet
  */
-function loadToolRegistry(): ToolDefinition[] {
+function loadToolRegistry(extensionUri: vscode.Uri): ToolDefinition[] {
     try {
         const path = require('path');
         const fs = require('fs');
-        const manifestPath = path.join(__dirname, '../tool_registry/ToolManifest.json');
+        
+        // Use extension path instead of __dirname to find source files
+        const extensionPath = extensionUri.fsPath;
+        const manifestPath = path.join(extensionPath, 'src', 'tool_registry', 'ToolManifest.json');
         
         if (!fs.existsSync(manifestPath)) {
-            console.warn('Tool manifest not found, run npm run generate-tools');
+            console.warn('Tool manifest not found at:', manifestPath);
+            console.warn('Run npm run generate-tools');
             return [];
         }
         
-        const manifest = require('../tool_registry/ToolManifest.json');
+        const manifestContent = fs.readFileSync(manifestPath, 'utf8');
+        const manifest = JSON.parse(manifestContent);
         const registry: ToolDefinition[] = [];
         
         for (const tool of manifest.tools) {
-            const schemaPath = path.join(__dirname, '..', tool.schemaPath);
-            const schema = require(schemaPath);
+            const schemaPath = path.join(extensionPath, 'src', 'schemas', tool.schemaPath);
+            
+            if (!fs.existsSync(schemaPath)) {
+                console.warn('Schema not found for tool:', tool.name, 'at', schemaPath);
+                continue;
+            }
+            
+            const schemaContent = fs.readFileSync(schemaPath, 'utf8');
+            const schema = JSON.parse(schemaContent);
             
             // Extract command names from inputSchema enum
             const commands = schema.inputSchema?.properties?.command?.enum || [];
@@ -42,14 +54,13 @@ function loadToolRegistry(): ToolDefinition[] {
             });
         }
         
+        console.log('Loaded tool registry with', registry.length, 'tools');
         return registry;
     } catch (error) {
         console.error('Failed to load tool registry:', error);
         return [];
     }
 }
-
-const TOOL_REGISTRY: ToolDefinition[] = loadToolRegistry();
 
 export class ServiceAccessView {
     public static Current: ServiceAccessView | undefined;
@@ -94,9 +105,16 @@ export class ServiceAccessView {
         const disabledTools = Session.Current?.DisabledTools || new Set<string>();
         const disabledCommands = Session.Current?.DisabledCommands || new Map<string, Set<string>>();
 
+        // Load tool registry at runtime using extension URI
+        const toolRegistry = loadToolRegistry(extensionUri);
+        
+        if (toolRegistry.length === 0) {
+            console.error('Tool registry is empty! Check if tool manifest was generated.');
+        }
+
         // Generate tool sections with checkboxes
         let toolSections = "";
-        for (const tool of TOOL_REGISTRY) {
+        for (const tool of toolRegistry) {
             const toolDisabled = disabledTools.has(tool.name);
             const toolChecked = !toolDisabled ? "checked" : "";
             
