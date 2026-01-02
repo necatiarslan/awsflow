@@ -20,7 +20,10 @@ export function needsConfirmation(command: string): boolean {
     c.startsWith('start') ||
     c.startsWith('stop') ||
     c.startsWith('execute') ||
-    c.startsWith('receive')
+    c.startsWith('receive') ||
+    c.startsWith('remove') ||
+    c.startsWith('write') ||
+    c.startsWith('append')
   );
 }
 

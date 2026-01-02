@@ -12,7 +12,7 @@ import { BaseTool, BaseToolInput } from './BaseTool';
 type FileEncoding = 'utf8' | 'ascii' | 'base64' | 'hex' | 'utf16le' | 'ucs2';
 
 // Command type definition
-type FileCommand = 'ReadFile' | 'ReadFileStream' | 'ReadFileAsBase64' | 'GetFileInfo' | 'ListFiles' | 'ZipTextFile';
+type FileCommand = 'ReadFile' | 'ReadFileStream' | 'ReadFileAsBase64' | 'GetFileInfo' | 'ListFiles' | 'ZipTextFile' | 'WriteFile' | 'AppendFile';
 
 // Input interface
 interface FileOperationsToolInput extends BaseToolInput {
@@ -31,6 +31,21 @@ interface ReadFileStreamParams {
 
 interface ReadFileAsBase64Params {
   filePath: string;
+}
+
+interface WriteFileParams {
+  filePath: string;
+  content: string;
+  encoding?: FileEncoding;
+  overwrite?: boolean; // If false, fail when file exists
+  ensureDir?: boolean; // Create parent directories when missing
+}
+
+interface AppendFileParams {
+  filePath: string;
+  content: string;
+  encoding?: FileEncoding;
+  ensureDir?: boolean; // Create parent directories when missing
 }
 
 interface GetFileInfoParams {
@@ -130,6 +145,39 @@ export class FileOperationsTool extends BaseTool<FileOperationsToolInput> {
   }
 
   /**
+   * Write file content
+   */
+  private async executeWriteFile(params: WriteFileParams): Promise<any> {
+    const { content, encoding = 'utf8' as FileEncoding, overwrite = true, ensureDir = true } = params;
+    const filePath = this.resolveFilePath(params.filePath);
+
+    try {
+      ui.logToOutput(`FileOperationsTool: Writing file: ${filePath}`);
+
+      const parentDir = dirname(filePath);
+      if (ensureDir && !fs.existsSync(parentDir)) {
+        fs.mkdirSync(parentDir, { recursive: true });
+      }
+
+      const flag = overwrite ? 'w' : 'wx';
+      fs.writeFileSync(filePath, content, { encoding: encoding as BufferEncoding, flag });
+
+      const stats = fs.statSync(filePath);
+      return {
+        filePath,
+        encoding,
+        size: stats.size,
+        created: stats.birthtime,
+        modified: stats.mtime,
+        overwrite,
+        message: `Successfully wrote ${Buffer.byteLength(content, encoding as BufferEncoding)} bytes to ${filePath}`,
+      };
+    } catch (error: any) {
+      throw new Error(`Failed to write file ${filePath}: ${error.message}`);
+    }
+  }
+
+  /**
    * Read file as stream and return chunks
    */
   private async executeReadFileStream(params: ReadFileStreamParams): Promise<any> {
@@ -151,6 +199,37 @@ export class FileOperationsTool extends BaseTool<FileOperationsToolInput> {
       };
     } catch (error: any) {
       throw new Error(`Failed to read file stream ${filePath}: ${error.message}`);
+    }
+  }
+
+  /**
+   * Append content to a file
+   */
+  private async executeAppendFile(params: AppendFileParams): Promise<any> {
+    const { content, encoding = 'utf8' as FileEncoding, ensureDir = true } = params;
+    const filePath = this.resolveFilePath(params.filePath);
+
+    try {
+      ui.logToOutput(`FileOperationsTool: Appending to file: ${filePath}`);
+
+      const parentDir = dirname(filePath);
+      if (ensureDir && !fs.existsSync(parentDir)) {
+        fs.mkdirSync(parentDir, { recursive: true });
+      }
+
+      fs.appendFileSync(filePath, content, { encoding: encoding as BufferEncoding });
+
+      const stats = fs.statSync(filePath);
+      return {
+        filePath,
+        encoding,
+        size: stats.size,
+        modified: stats.mtime,
+        appendedBytes: Buffer.byteLength(content, encoding as BufferEncoding),
+        message: `Successfully appended ${Buffer.byteLength(content, encoding as BufferEncoding)} bytes to ${filePath}`,
+      };
+    } catch (error: any) {
+      throw new Error(`Failed to append file ${filePath}: ${error.message}`);
     }
   }
 
@@ -338,6 +417,12 @@ export class FileOperationsTool extends BaseTool<FileOperationsToolInput> {
       
       case 'ReadFileStream':
         return await this.executeReadFileStream(params as ReadFileStreamParams);
+
+      case 'WriteFile':
+        return await this.executeWriteFile(params as WriteFileParams);
+
+      case 'AppendFile':
+        return await this.executeAppendFile(params as AppendFileParams);
       
       case 'ReadFileAsBase64':
         return await this.executeReadFileAsBase64(params as ReadFileAsBase64Params);

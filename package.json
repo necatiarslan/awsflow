@@ -477,7 +477,7 @@
         "name": "FileOperationsTool",
         "toolReferenceName": "FileOperationsTool",
         "displayName": "File Operations Tool",
-        "modelDescription": "Perform file operations: ReadFile to read file content, ReadFileStream to get file metadata, ReadFileAsBase64 to read as Base64, GetFileInfo to get file statistics, ListFiles to list directory contents, ZipTextFile to create a zip archive of a file or directory.",
+        "modelDescription": "Perform file operations: ReadFile to read file content, WriteFile to create or overwrite files, AppendFile to add content, ReadFileStream to get file metadata, ReadFileAsBase64 to read as Base64, GetFileInfo to get file statistics, ListFiles to list directory contents, ZipTextFile to create a zip archive of a file or directory.",
         "userDescription": "Read and manage files with various encoding and format options",
         "tags": [
           "file",
@@ -501,6 +501,8 @@
               "enum": [
                 "ReadFile",
                 "ReadFileStream",
+                "WriteFile",
+                "AppendFile",
                 "ReadFileAsBase64",
                 "GetFileInfo",
                 "ListFiles",
@@ -510,11 +512,11 @@
             },
             "params": {
               "type": "object",
-              "description": "Command parameters. ReadFile: {filePath, encoding?}. ReadFileStream: {filePath}. ReadFileAsBase64: {filePath}. GetFileInfo: {filePath}. ListFiles: {dirPath, recursive?}. ZipTextFile: {filePath, outputPath?}",
+              "description": "Command parameters. ReadFile: {filePath, encoding?}. ReadFileStream: {filePath}. WriteFile: {filePath, content, encoding?, overwrite?, ensureDir?}. AppendFile: {filePath, content, encoding?, ensureDir?}. ReadFileAsBase64: {filePath}. GetFileInfo: {filePath}. ListFiles: {dirPath, recursive?}. ZipTextFile: {filePath, outputPath?}",
               "properties": {
                 "filePath": {
                   "type": "string",
-                  "description": "File path (Used by: ReadFile (Required), ReadFileStream (Required), ReadFileAsBase64 (Required), GetFileInfo (Required), ZipTextFile (Required))"
+                  "description": "File path (Used by: ReadFile (Required), ReadFileStream (Required), WriteFile (Required), AppendFile (Required), ReadFileAsBase64 (Required), GetFileInfo (Required), ZipTextFile (Required))"
                 },
                 "dirPath": {
                   "type": "string",
@@ -522,7 +524,19 @@
                 },
                 "encoding": {
                   "type": "string",
-                  "description": "File encoding for ReadFile (Used by: ReadFile)"
+                  "description": "File encoding (Used by: ReadFile, WriteFile, AppendFile)"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "Content to write or append (Used by: WriteFile (Required), AppendFile (Required))"
+                },
+                "overwrite": {
+                  "type": "boolean",
+                  "description": "Allow overwriting existing files (Used by: WriteFile)"
+                },
+                "ensureDir": {
+                  "type": "boolean",
+                  "description": "Create parent directories when missing (Used by: WriteFile, AppendFile)"
                 },
                 "recursive": {
                   "type": "boolean",
@@ -2810,8 +2824,8 @@
     "watch": "npm-run-all -p watch:*",
     "watch:build": "node esbuild.js --watch",
     "watch:types": "tsc --watch --incremental",
-    "test": "npm run build && npm run lint && node ./out/test/runTest.js",
-    "vscode:prepublish": "npm run typecheck && npm run build:prod"
+    "test": "npm run prebuild && npm run build && npm run lint && node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run prebuild && npm run typecheck && npm run build:prod"
   },
   "devDependencies": {
     "@types/glob": "^9.0.0",
