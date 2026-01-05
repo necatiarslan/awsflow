@@ -1,0 +1,118 @@
+{
+  "name": "CloudFormationTool",
+  "toolReferenceName": "CloudFormationTool",
+  "displayName": "CloudFormation Tool",
+  "modelDescription": "Execute AWS CloudFormation describe, list, get, and drift detection commands. ALWAYS provide params object.",
+  "userDescription": "Inspect stacks, resources, changesets, types, and drift",
+  "tags": [
+    "aws",
+    "cloudformation",
+    "stacks",
+    "infrastructure"
+  ],
+  "icon": "$(tools)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "BatchDescribeTypeConfigurations",
+          "DescribeAccountLimits",
+          "DescribeChangeSet",
+          "DescribeChangeSetHooks",
+          "DescribeGeneratedTemplate",
+          "DescribeOrganizationsAccess",
+          "DescribePublisher",
+          "DescribeResourceScan",
+          "DescribeStackDriftDetectionStatus",
+          "DescribeStackEvents",
+          "DescribeStackInstance",
+          "DescribeStackRefactor",
+          "DescribeStackResource",
+          "DescribeStackResourceDrifts",
+          "DescribeStackResources",
+          "DescribeStacks",
+          "DescribeStackSet",
+          "DescribeStackSetOperation",
+          "DescribeType",
+          "DescribeTypeRegistration",
+          "DetectStackDrift",
+          "DetectStackResourceDrift",
+          "DetectStackSetDrift",
+          "EstimateTemplateCost",
+          "GetGeneratedTemplate",
+          "GetHookResult",
+          "GetStackPolicy",
+          "GetTemplate",
+          "GetTemplateSummary",
+          "ListChangeSets",
+          "ListExports",
+          "ListGeneratedTemplates",
+          "ListHookResults",
+          "ListImports",
+          "ListResourceScanRelatedResources",
+          "ListResourceScanResources",
+          "ListResourceScans",
+          "ListStackInstanceResourceDrifts",
+          "ListStackInstances",
+          "ListStackRefactorActions",
+          "ListStackRefactors",
+          "ListStackResources",
+          "ListStacks",
+          "ListStackSetAutoDeploymentTargets",
+          "ListStackSetOperationResults",
+          "ListStackSetOperations",
+          "ListStackSets",
+          "ListTypeRegistrations",
+          "ListTypes",
+          "ListTypeVersions",
+          "ValidateTemplate"
+        ],
+        "description": "The CloudFormation command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Use CloudFormation field names (e.g., StackName, StackSetName, ChangeSetName, TypeName, NextToken, MaxResults).",
+        "properties": {
+          "StackName": {
+            "type": "string",
+            "description": "Stack name or ID (Used by: DescribeStacks (Required), DescribeStackResources (Required), DescribeStackEvents (Required), DescribeStackDriftDetectionStatus (Required), GetStackPolicy (Required), GetTemplate (Required), GetTemplateSummary (Required), ListStackResources (Required), DetectStackDrift (Required))"
+          },
+          "StackSetName": {
+            "type": "string",
+            "description": "Stack set name or ID (Used by: DescribeStackSet (Required), DescribeStackSetOperation (Required), ListStackSetAutoDeploymentTargets (Required), ListStackSetOperationResults (Required), ListStackSetOperations (Required), DetectStackSetDrift (Required), ListStackInstances (Required))"
+          },
+          "ChangeSetName": {
+            "type": "string",
+            "description": "Change set name or ID (Used by: DescribeChangeSet (Required), ListChangeSets (Required))"
+          },
+          "TypeName": {
+            "type": "string",
+            "description": "Resource type name (Used by: DescribeType (Required), ListTypeVersions (Required), DescribeTypeRegistration (Required))"
+          },
+          "TypeArn": {
+            "type": "string",
+            "description": "Resource type ARN (Used by: DescribeType (Required))"
+          },
+          "NextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: most List commands)"
+          },
+          "MaxResults": {
+            "type": "number",
+            "description": "Maximum records to return (Used by: most List commands)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

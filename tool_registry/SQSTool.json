@@ -1,0 +1,127 @@
+{
+  "name": "SQSTool",
+  "toolReferenceName": "SQSTool",
+  "displayName": "SQS Tool",
+  "modelDescription": "Execute AWS SQS (Simple Queue Service) commands. ALWAYS provide params object. Examples: ListQueues {command:'ListQueues', params:{}}. GetQueueUrl {command:'GetQueueUrl', params:{QueueName:'my-queue'}}. SendMessage {command:'SendMessage', params:{QueueUrl:'https://...', MessageBody:'text'}}. ReceiveMessage {command:'ReceiveMessage', params:{QueueUrl:'https://...', MaxNumberOfMessages:10}}. DeleteMessage {command:'DeleteMessage', params:{QueueUrl:'https://...', ReceiptHandle:'handle'}}.",
+  "userDescription": "Manage SQS queues and send/receive messages",
+  "tags": [
+    "aws",
+    "sqs",
+    "queue",
+    "messaging",
+    "messages"
+  ],
+  "icon": "$(inbox)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "ChangeMessageVisibility",
+          "ChangeMessageVisibilityBatch",
+          "DeleteMessage",
+          "DeleteMessageBatch",
+          "GetQueueAttributes",
+          "GetQueueUrl",
+          "ListDeadLetterSourceQueues",
+          "ListQueues",
+          "ListQueueTags",
+          "PurgeQueue",
+          "ReceiveMessage",
+          "SendMessage",
+          "SendMessageBatch"
+        ],
+        "description": "The SQS command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty.",
+        "properties": {
+          "QueueUrl": {
+            "type": "string",
+            "description": "Queue URL (Used by: ListDeadLetterSourceQueues (Required), ListQueueTags (Required), GetQueueAttributes (Required), SendMessage (Required), ReceiveMessage (Required), DeleteMessage (Required))"
+          },
+          "QueueName": {
+            "type": "string",
+            "description": "Queue name (Used by: GetQueueUrl (Required))"
+          },
+          "QueueNamePrefix": {
+            "type": "string",
+            "description": "Queue name prefix filter (Used by: ListQueues)"
+          },
+          "QueueOwnerAWSAccountId": {
+            "type": "string",
+            "description": "Queue owner AWS account ID (Used by: GetQueueUrl)"
+          },
+          "AttributeNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of attribute names to retrieve. Use ['All'] for all attributes. (Used by: GetQueueAttributes, ReceiveMessage)"
+          },
+          "MessageBody": {
+            "type": "string",
+            "description": "Message body text (Used by: SendMessage (Required))"
+          },
+          "DelaySeconds": {
+            "type": "number",
+            "description": "Delay in seconds before message becomes available (Used by: SendMessage)"
+          },
+          "MessageAttributes": {
+            "type": "object",
+            "description": "Custom message attributes (Used by: SendMessage)"
+          },
+          "MessageDeduplicationId": {
+            "type": "string",
+            "description": "Deduplication ID for FIFO queues (Used by: SendMessage)"
+          },
+          "MessageGroupId": {
+            "type": "string",
+            "description": "Message group ID for FIFO queues (Used by: SendMessage)"
+          },
+          "MaxNumberOfMessages": {
+            "type": "number",
+            "description": "Maximum number of messages to receive (Used by: ReceiveMessage)"
+          },
+          "VisibilityTimeout": {
+            "type": "number",
+            "description": "Visibility timeout in seconds (Used by: ReceiveMessage)"
+          },
+          "WaitTimeSeconds": {
+            "type": "number",
+            "description": "Long polling wait time in seconds (Used by: ReceiveMessage)"
+          },
+          "MessageAttributeNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Message attribute names to retrieve (Used by: ReceiveMessage)"
+          },
+          "ReceiptHandle": {
+            "type": "string",
+            "description": "Message receipt handle (Used by: DeleteMessage (Required))"
+          },
+          "MaxResults": {
+            "type": "number",
+            "description": "Maximum number of results (Used by: ListQueues, ListDeadLetterSourceQueues)"
+          },
+          "NextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: ListQueues, ListDeadLetterSourceQueues)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

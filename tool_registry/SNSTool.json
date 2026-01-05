@@ -1,0 +1,113 @@
+{
+  "name": "SNSTool",
+  "toolReferenceName": "SNSTool",
+  "displayName": "SNS Tool",
+  "modelDescription": "Execute AWS SNS (Simple Notification Service) commands. ALWAYS provide params object. Examples: ListTopics {command:'ListTopics', params:{}}. GetTopicAttributes {command:'GetTopicAttributes', params:{TopicArn:'arn:...'}}. Publish {command:'Publish', params:{TopicArn:'arn:...', Message:'hello'}}.",
+  "userDescription": "Manage SNS topics, subscriptions, endpoints and publishing",
+  "tags": [
+    "aws",
+    "sns",
+    "notifications",
+    "topics",
+    "subscriptions",
+    "sms"
+  ],
+  "icon": "$(megaphone)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "CheckIfPhoneNumberIsOptedOut",
+          "GetDataProtectionPolicy",
+          "GetEndpointAttributes",
+          "GetPlatformApplicationAttributes",
+          "GetSMSAttributes",
+          "GetSMSSandboxAccountStatus",
+          "GetSubscriptionAttributes",
+          "GetTopicAttributes",
+          "ListEndpointsByPlatformApplication",
+          "ListOriginationNumbers",
+          "ListPhoneNumbersOptedOut",
+          "ListPlatformApplications",
+          "ListSubscriptionsByTopic",
+          "ListSubscriptions",
+          "ListTagsForResource",
+          "ListTopics",
+          "Publish"
+        ],
+        "description": "The SNS command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty.",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "description": "E.164 phone number (Used by: CheckIfPhoneNumberIsOptedOut (Required), Publish)"
+          },
+          "EndpointArn": {
+            "type": "string",
+            "description": "Endpoint ARN (Used by: GetEndpointAttributes (Required))"
+          },
+          "PlatformApplicationArn": {
+            "type": "string",
+            "description": "Platform application ARN (Used by: GetPlatformApplicationAttributes (Required))"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "SMS attribute names (Used by: GetSMSAttributes)"
+          },
+          "SubscriptionArn": {
+            "type": "string",
+            "description": "Subscription ARN (Used by: GetSubscriptionAttributes (Required))"
+          },
+          "TopicArn": {
+            "type": "string",
+            "description": "Topic ARN (Used by: GetTopicAttributes (Required), ListSubscriptionsByTopic (Required), Publish (Required))"
+          },
+          "ResourceArn": {
+            "type": "string",
+            "description": "Resource ARN (Used by: ListTagsForResource (Required))"
+          },
+          "NextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: list operations)"
+          },
+          "Message": {
+            "type": "string",
+            "description": "Message body (Used by: Publish (Required))"
+          },
+          "TargetArn": {
+            "type": "string",
+            "description": "Target ARN (Used by: Publish)"
+          },
+          "Subject": {
+            "type": "string",
+            "description": "Message subject (Used by: Publish)"
+          },
+          "MessageStructure": {
+            "type": "string",
+            "description": "Message structure (Used by: Publish)"
+          },
+          "MessageAttributes": {
+            "type": "object",
+            "description": "Message attributes (Used by: Publish)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

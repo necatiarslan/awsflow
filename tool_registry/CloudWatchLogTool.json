@@ -1,0 +1,153 @@
+{
+  "name": "CloudWatchLogTool",
+  "toolReferenceName": "CloudWatchLogTool",
+  "displayName": "CloudWatch Logs Tool",
+  "modelDescription": "Execute CloudWatch Logs commands including Insights queries. ALWAYS provide params object. Examples: DescribeLogGroups {command:'DescribeLogGroups', params:{logGroupNamePrefix:'app'}}. StartQuery {command:'StartQuery', params:{logGroupName:'my-group', queryString:'fields @timestamp, @message | filter @message like /ERROR/ | limit 20', startTime:1609459200000, endTime:1609545600000}}. GetQueryResults {command:'GetQueryResults', params:{queryId:'12345678-1234-1234-1234-123456789012'}}. FilterLogEvents {command:'FilterLogEvents', params:{logGroupName:'my-group', filterPattern:'ERROR'}}. DescribeMetricFilters {command:'DescribeMetricFilters', params:{logGroupName:'my-group'}}.",
+  "userDescription": "Query CloudWatch log groups, streams, events, run Insights queries, inspect metric filters and subscriptions, and open log viewer",
+  "tags": [
+    "aws",
+    "cloudwatch",
+    "logs",
+    "monitoring"
+  ],
+  "icon": "$(list-selection)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "DescribeLogGroups",
+          "DescribeLogStreams",
+          "DescribeMetricFilters",
+          "DescribeQueryDefinitions",
+          "DescribeSubscriptionFilters",
+          "DescribeDestinations",
+          "FilterLogEvents",
+          "GetLogEvents",
+          "GetLogGroupFields",
+          "GetQueryResults",
+          "OpenCloudWatchLogView",
+          "StartQuery"
+        ],
+        "description": "The CloudWatch Logs command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Provide logGroupName/logStreamName where needed.",
+        "properties": {
+          "logGroupNamePrefix": {
+            "type": "string",
+            "description": "Prefix filter for log group names (Used by: DescribeLogGroups)"
+          },
+          "logGroupName": {
+            "type": "string",
+            "description": "Target log group name (Used by: DescribeLogStreams (Required), GetLogEvents (Required), FilterLogEvents (Required), OpenCloudWatchLogView (Required))"
+          },
+          "logStreamNamePrefix": {
+            "type": "string",
+            "description": "Prefix filter for log stream names (Used by: DescribeLogStreams)"
+          },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "LogStreamName",
+              "LastEventTime"
+            ],
+            "description": "Ordering for DescribeLogStreams (Used by: DescribeLogStreams)"
+          },
+          "descending": {
+            "type": "boolean",
+            "description": "Whether to sort descending for DescribeLogStreams (Used by: DescribeLogStreams)"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Maximum items to return where supported (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
+          },
+          "nextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: DescribeLogGroups, DescribeLogStreams, GetLogEvents)"
+          },
+          "logStreamName": {
+            "type": "string",
+            "description": "Target log stream name (Used by: GetLogEvents (Required), OpenCloudWatchLogView)"
+          },
+          "startTime": {
+            "type": "number",
+            "description": "Start time in epoch milliseconds (Used by: GetLogEvents)"
+          },
+          "endTime": {
+            "type": "number",
+            "description": "End time in epoch milliseconds (Used by: GetLogEvents)"
+          },
+          "startFromHead": {
+            "type": "boolean",
+            "description": "Return events starting from the beginning of the stream (Used by: GetLogEvents)"
+          },
+          "filterPattern": {
+            "type": "string",
+            "description": "Search pattern to filter log events (Used by: FilterLogEvents)"
+          },
+          "interleaved": {
+            "type": "boolean",
+            "description": "Return interleaved results from multiple log streams (Used by: FilterLogEvents)"
+          },
+          "queryString": {
+            "type": "string",
+            "description": "CloudWatch Insights query string (Used by: StartQuery (Required))"
+          },
+          "queryId": {
+            "type": "string",
+            "description": "Query ID from StartQuery (Used by: GetQueryResults (Required))"
+          },
+          "logGroupNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of log group names to query (Used by: StartQuery)"
+          },
+          "logGroupIdentifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of log group identifiers (Used by: StartQuery)"
+          },
+          "maxQueryResults": {
+            "type": "number",
+            "description": "Maximum number of query results (Used by: DescribeQueryDefinitions)"
+          },
+          "filterNamePrefix": {
+            "type": "string",
+            "description": "Metric filter name prefix (Used by: DescribeMetricFilters)"
+          },
+          "metricName": {
+            "type": "string",
+            "description": "Metric name (Used by: DescribeMetricFilters)"
+          },
+          "metricNamespace": {
+            "type": "string",
+            "description": "Metric namespace (Used by: DescribeMetricFilters)"
+          },
+          "time": {
+            "type": "number",
+            "description": "Time in epoch milliseconds for GetLogGroupFields (Used by: GetLogGroupFields)"
+          },
+          "destinationNamePrefix": {
+            "type": "string",
+            "description": "Destination name prefix (Used by: DescribeDestinations)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

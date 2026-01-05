@@ -21,7 +21,7 @@ function loadToolRegistry(extensionUri: vscode.Uri): ToolDefinition[] {
         
         // Use extension path instead of __dirname to find source files
         const extensionPath = extensionUri.fsPath;
-        const manifestPath = path.join(extensionPath, 'src', 'tool_registry', 'ToolManifest.json');
+        const manifestPath = path.join(extensionPath, 'tool_registry', 'ToolManifest.json');
         
         if (!fs.existsSync(manifestPath)) {
             console.warn('Tool manifest not found at:', manifestPath);
@@ -34,7 +34,7 @@ function loadToolRegistry(extensionUri: vscode.Uri): ToolDefinition[] {
         const registry: ToolDefinition[] = [];
         
         for (const tool of manifest.tools) {
-            const schemaPath = path.join(extensionPath, 'src', 'schemas', tool.schemaPath);
+            const schemaPath = path.join(extensionPath, 'tool_registry', tool.schemaPath);
             
             if (!fs.existsSync(schemaPath)) {
                 console.warn('Schema not found for tool:', tool.name, 'at', schemaPath);

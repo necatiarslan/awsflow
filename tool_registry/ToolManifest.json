@@ -1,0 +1,125 @@
+{
+  "toolCount": 20,
+  "tools": [
+    {
+      "name": "APIGatewayTool",
+      "className": "APIGatewayTool",
+      "importPath": "apigateway/APIGatewayTool",
+      "schemaPath": "../tool_registry/APIGatewayTool.json"
+    },
+    {
+      "name": "CloudFormationTool",
+      "className": "CloudFormationTool",
+      "importPath": "cloudformation/CloudFormationTool",
+      "schemaPath": "../tool_registry/CloudFormationTool.json"
+    },
+    {
+      "name": "CloudWatchLogTool",
+      "className": "CloudWatchLogTool",
+      "importPath": "cloudwatch/CloudWatchLogTool",
+      "schemaPath": "../tool_registry/CloudWatchLogTool.json"
+    },
+    {
+      "name": "FileOperationsTool",
+      "className": "FileOperationsTool",
+      "importPath": "common/FileOperationsTool",
+      "schemaPath": "../tool_registry/FileOperationsTool.json"
+    },
+    {
+      "name": "SessionTool",
+      "className": "SessionTool",
+      "importPath": "common/SessionTool",
+      "schemaPath": "../tool_registry/SessionTool.json"
+    },
+    {
+      "name": "DynamoDBTool",
+      "className": "DynamoDBTool",
+      "importPath": "dynamodb/DynamoDBTool",
+      "schemaPath": "../tool_registry/DynamoDBTool.json"
+    },
+    {
+      "name": "EC2Tool",
+      "className": "EC2Tool",
+      "importPath": "ec2/EC2Tool",
+      "schemaPath": "../tool_registry/EC2Tool.json"
+    },
+    {
+      "name": "EMRTool",
+      "className": "EMRTool",
+      "importPath": "emr/EMRTool",
+      "schemaPath": "../tool_registry/EMRTool.json"
+    },
+    {
+      "name": "GlueTool",
+      "className": "GlueTool",
+      "importPath": "glue/GlueTool",
+      "schemaPath": "../tool_registry/GlueTool.json"
+    },
+    {
+      "name": "IAMTool",
+      "className": "IAMTool",
+      "importPath": "iam/IAMTool",
+      "schemaPath": "../tool_registry/IAMTool.json"
+    },
+    {
+      "name": "LambdaTool",
+      "className": "LambdaTool",
+      "importPath": "lambda/LambdaTool",
+      "schemaPath": "../tool_registry/LambdaTool.json"
+    },
+    {
+      "name": "RDSTool",
+      "className": "RDSTool",
+      "importPath": "rds/RDSTool",
+      "schemaPath": "../tool_registry/RDSTool.json"
+    },
+    {
+      "name": "RDSDataTool",
+      "className": "RDSDataTool",
+      "importPath": "rdsdata/RDSDataTool",
+      "schemaPath": "../tool_registry/RDSDataTool.json"
+    },
+    {
+      "name": "S3FileOperationsTool",
+      "className": "S3FileOperationsTool",
+      "importPath": "s3/S3FileOperationsTool",
+      "schemaPath": "../tool_registry/S3FileOperationsTool.json"
+    },
+    {
+      "name": "S3Tool",
+      "className": "S3Tool",
+      "importPath": "s3/S3Tool",
+      "schemaPath": "../tool_registry/S3Tool.json"
+    },
+    {
+      "name": "SNSTool",
+      "className": "SNSTool",
+      "importPath": "sns/SNSTool",
+      "schemaPath": "../tool_registry/SNSTool.json"
+    },
+    {
+      "name": "SQSTool",
+      "className": "SQSTool",
+      "importPath": "sqs/SQSTool",
+      "schemaPath": "../tool_registry/SQSTool.json"
+    },
+    {
+      "name": "StepFuncTool",
+      "className": "StepFuncTool",
+      "importPath": "stepfunc/StepFuncTool",
+      "schemaPath": "../tool_registry/StepFuncTool.json"
+    },
+    {
+      "name": "STSTool",
+      "className": "STSTool",
+      "importPath": "sts/STSTool",
+      "schemaPath": "../tool_registry/STSTool.json"
+    },
+    {
+      "name": "TestAwsConnectionTool",
+      "className": "TestAwsConnectionTool",
+      "importPath": "sts/TestAwsConnectionTool",
+      "schemaPath": "../tool_registry/TestAwsConnectionTool.json"
+    }
+  ]
+}

@@ -43,7 +43,7 @@ export class McpDispatcher {
         }
         
         // Load tools dynamically from generated registry
-        const { TOOLS } = require('../tool_registry/ToolRegistry');
+        const { TOOLS } = require('../common/ToolRegistry');
         const allTools: ToolRecord[] = TOOLS.map((t: any) => ({
             name: t.name,
             instance: t.instance as BaseTool<any>

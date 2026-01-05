@@ -1,0 +1,55 @@
+{
+  "name": "SessionTool",
+  "toolReferenceName": "SessionTool",
+  "displayName": "Session Tool",
+  "modelDescription": "Get or set AWS session values (AwsProfile, AwsEndPoint, AwsRegion), list available profiles, or refresh cached credentials. Use GetSession to read current values. Use SetSession with params to update any of AwsProfile, AwsEndPoint, AwsRegion. Use ListProfiles to return profile names detected from AWS config/credentials files. Use RefreshCredentials to clear and reload cached credentials.",
+  "userDescription": "Manage session (profile/region/endpoint), list profiles, refresh credentials",
+  "tags": [
+    "aws",
+    "session",
+    "profile",
+    "region",
+    "endpoint"
+  ],
+  "icon": "$(gear)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "GetSession",
+          "SetSession",
+          "ListProfiles",
+          "RefreshCredentials"
+        ],
+        "description": "Use GetSession to read current values. Use SetSession to update session values. Use ListProfiles to retrieve available profile names. Use RefreshCredentials to clear and reload cached credentials."
+      },
+      "params": {
+        "type": "object",
+        "description": "Parameters for SetSession. Omit to leave unchanged.",
+        "properties": {
+          "AwsProfile": {
+            "type": "string",
+            "description": "AWS profile name to set (Used by: SetSession)"
+          },
+          "AwsEndPoint": {
+            "type": "string",
+            "description": "Custom AWS/S3-compatible endpoint to set (Used by: SetSession)"
+          },
+          "AwsRegion": {
+            "type": "string",
+            "description": "AWS region to set (Used by: SetSession)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

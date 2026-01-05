@@ -1,0 +1,81 @@
+{
+  "name": "FileOperationsTool",
+  "toolReferenceName": "FileOperationsTool",
+  "displayName": "File Operations Tool",
+  "modelDescription": "Perform file operations: ReadFile to read file content, WriteFile to create or overwrite files, AppendFile to add content, ReadFileStream to get file metadata, ReadFileAsBase64 to read as Base64, GetFileInfo to get file statistics, ListFiles to list directory contents, ZipTextFile to create a zip archive of a file or directory.",
+  "userDescription": "Read and manage files with various encoding and format options",
+  "tags": [
+    "file",
+    "read",
+    "write",
+    "operations",
+    "filesystem",
+    "base64"
+  ],
+  "icon": "$(file)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "ReadFile",
+          "ReadFileStream",
+          "WriteFile",
+          "AppendFile",
+          "ReadFileAsBase64",
+          "GetFileInfo",
+          "ListFiles",
+          "ZipTextFile"
+        ],
+        "description": "The file operation command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "Command parameters. ReadFile: {filePath, encoding?}. ReadFileStream: {filePath}. WriteFile: {filePath, content, encoding?, overwrite?, ensureDir?}. AppendFile: {filePath, content, encoding?, ensureDir?}. ReadFileAsBase64: {filePath}. GetFileInfo: {filePath}. ListFiles: {dirPath, recursive?}. ZipTextFile: {filePath, outputPath?}",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "File path (Used by: ReadFile (Required), ReadFileStream (Required), WriteFile (Required), AppendFile (Required), ReadFileAsBase64 (Required), GetFileInfo (Required), ZipTextFile (Required))"
+          },
+          "dirPath": {
+            "type": "string",
+            "description": "Directory path (Used by: ListFiles (Required))"
+          },
+          "encoding": {
+            "type": "string",
+            "description": "File encoding (Used by: ReadFile, WriteFile, AppendFile)"
+          },
+          "content": {
+            "type": "string",
+            "description": "Content to write or append (Used by: WriteFile (Required), AppendFile (Required))"
+          },
+          "overwrite": {
+            "type": "boolean",
+            "description": "Allow overwriting existing files (Used by: WriteFile)"
+          },
+          "ensureDir": {
+            "type": "boolean",
+            "description": "Create parent directories when missing (Used by: WriteFile, AppendFile)"
+          },
+          "recursive": {
+            "type": "boolean",
+            "description": "Recursively list files in subdirectories (Used by: ListFiles)"
+          },
+          "outputPath": {
+            "type": "string",
+            "description": "Custom output path for zip file (Used by: ZipTextFile)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

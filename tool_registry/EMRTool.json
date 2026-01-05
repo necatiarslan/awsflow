@@ -1,0 +1,171 @@
+{
+  "name": "EMRTool",
+  "toolReferenceName": "EMRTool",
+  "displayName": "EMR Tool",
+  "modelDescription": "Describe and list EMR clusters, steps, studios, notebook executions, release labels, and security settings. Commands are read-only: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
+  "userDescription": "Inspect EMR clusters, notebooks, steps, studios, and related configurations",
+  "tags": [
+    "aws",
+    "emr",
+    "hadoop",
+    "spark",
+    "cluster"
+  ],
+  "icon": "$(server-process)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "DescribeCluster",
+          "DescribeJobFlows",
+          "DescribeNotebookExecution",
+          "DescribePersistentAppUI",
+          "DescribeReleaseLabel",
+          "DescribeSecurityConfiguration",
+          "DescribeStep",
+          "DescribeStudio",
+          "GetAutoTerminationPolicy",
+          "GetBlockPublicAccessConfiguration",
+          "GetClusterSessionCredentials",
+          "GetManagedScalingPolicy",
+          "GetOnClusterAppUIPresignedURL",
+          "GetPersistentAppUIPresignedURL",
+          "GetStudioSessionMapping",
+          "ListBootstrapActions",
+          "ListClusters",
+          "ListInstanceFleets",
+          "ListInstanceGroups",
+          "ListInstances",
+          "ListNotebookExecutions",
+          "ListReleaseLabels",
+          "ListSecurityConfigurations",
+          "ListSteps",
+          "ListStudios",
+          "ListStudioSessionMappings",
+          "ListSupportedInstanceTypes"
+        ],
+        "description": "The EMR command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Provide ClusterId, StudioId, ReleaseLabel, or other identifiers as needed.",
+        "properties": {
+          "ClusterId": {
+            "type": "string",
+            "description": "EMR cluster ID (Used by: DescribeCluster (Required), GetAutoTerminationPolicy (Required), GetManagedScalingPolicy (Required), ListBootstrapActions (Required), ListInstanceFleets (Required), ListInstanceGroups (Required), ListInstances (Required), ListSteps (Required), GetClusterSessionCredentials (Required))"
+          },
+          "StepId": {
+            "type": "string",
+            "description": "Step ID (Used by: DescribeStep (Required))"
+          },
+          "JobFlowIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Job flow IDs filter (Used by: DescribeJobFlows)"
+          },
+          "NotebookExecutionId": {
+            "type": "string",
+            "description": "Notebook execution ID (Used by: DescribeNotebookExecution (Required))"
+          },
+          "StudioId": {
+            "type": "string",
+            "description": "Studio ID (Used by: DescribeStudio (Required), GetStudioSessionMapping (Required), ListStudioSessionMappings (Required))"
+          },
+          "ReleaseLabel": {
+            "type": "string",
+            "description": "Release label (Used by: DescribeReleaseLabel (Required), ListSupportedInstanceTypes)"
+          },
+          "SecurityConfigurationName": {
+            "type": "string",
+            "description": "Security configuration name (Used by: DescribeSecurityConfiguration (Required))"
+          },
+          "ApplicationId": {
+            "type": "string",
+            "description": "Application ID for UI presigned URL commands (Used by: GetOnClusterAppUIPresignedURL (Required), GetPersistentAppUIPresignedURL (Required))"
+          },
+          "IdentityType": {
+            "type": "string",
+            "description": "Identity type (USER or GROUP) (Used by: GetStudioSessionMapping (Required), ListStudioSessionMappings (Required))"
+          },
+          "IdentityId": {
+            "type": "string",
+            "description": "Identity ID (Used by: GetStudioSessionMapping (Required))"
+          },
+          "InstanceFleetId": {
+            "type": "string",
+            "description": "Instance fleet ID (Used by: ListInstances)"
+          },
+          "InstanceGroupId": {
+            "type": "string",
+            "description": "Instance group ID (Used by: ListInstances)"
+          },
+          "InstanceStates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Instance states filter (Used by: ListInstances)"
+          },
+          "StepStates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Step states filter (Used by: ListSteps)"
+          },
+          "ClusterStates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Cluster state filters (Used by: ListClusters)"
+          },
+          "CreatedAfter": {
+            "type": "string",
+            "description": "ISO date string filter (Used by: ListClusters, DescribeJobFlows, ListNotebookExecutions)"
+          },
+          "CreatedBefore": {
+            "type": "string",
+            "description": "ISO date string filter (Used by: ListClusters, DescribeJobFlows, ListNotebookExecutions)"
+          },
+          "MaxResults": {
+            "type": "number",
+            "description": "Maximum items to return where supported (Used by: list operations)"
+          },
+          "NextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: list operations)"
+          },
+          "Marker": {
+            "type": "string",
+            "description": "Pagination marker (Used by: list operations)"
+          },
+          "CredentialType": {
+            "type": "string",
+            "description": "Credential type (Used by: GetClusterSessionCredentials (Required))"
+          },
+          "ExecutionRoleArn": {
+            "type": "string",
+            "description": "Execution role ARN (Used by: GetClusterSessionCredentials)"
+          },
+          "DurationSeconds": {
+            "type": "number",
+            "description": "Lifetime in seconds (Used by: GetClusterSessionCredentials)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

@@ -1,0 +1,140 @@
+{
+  "name": "RDSTool",
+  "toolReferenceName": "RDSTool",
+  "displayName": "RDS Tool",
+  "modelDescription": "Execute AWS RDS describe and log commands. ALWAYS provide params object. Examples: DescribeDBInstances {command:'DescribeDBInstances', params:{DBInstanceIdentifier:'my-db'}}. DescribeDBClusters {command:'DescribeDBClusters', params:{}}.",
+  "userDescription": "Inspect Amazon RDS: instances, clusters, snapshots, parameters, logs",
+  "tags": [
+    "aws",
+    "rds",
+    "database",
+    "aurora"
+  ],
+  "icon": "$(database)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "DescribeAccountAttributes",
+          "DescribeBlueGreenDeployments",
+          "DescribeCertificates",
+          "DescribeDBClusterAutomatedBackups",
+          "DescribeDBClusterParameterGroups",
+          "DescribeDBClusters",
+          "DescribeDBClusterSnapshots",
+          "DescribeDBEngineVersions",
+          "DescribeDBInstanceAutomatedBackups",
+          "DescribeDBInstances",
+          "DescribeDBLogFiles",
+          "DescribeDBParameterGroups",
+          "DescribeDBProxies",
+          "DescribeDBProxyEndpoints",
+          "DescribeDBRecommendations",
+          "DescribeDBSecurityGroups",
+          "DescribeDBSnapshotAttributes",
+          "DescribeDBSnapshots",
+          "DescribeDBSubnetGroups",
+          "DescribeEngineDefaultParameters",
+          "DescribeEvents",
+          "DescribeEventSubscriptions",
+          "DescribeExportTasks",
+          "DescribeGlobalClusters",
+          "DescribeIntegrations",
+          "DescribeOptionGroups",
+          "DescribeOrderableDBInstanceOptions",
+          "DescribePendingMaintenanceActions",
+          "DescribeReservedDBInstances",
+          "DescribeReservedDBInstancesOfferings",
+          "DescribeSourceRegions",
+          "DescribeTenantDatabases",
+          "DescribeValidDBInstanceModifications",
+          "DownloadDBLogFilePortion",
+          "ListTagsForResource"
+        ],
+        "description": "The RDS command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Use RDS field names (e.g., DBInstanceIdentifier, DBClusterIdentifier, Marker, MaxRecords).",
+        "properties": {
+          "DBInstanceIdentifier": {
+            "type": "string",
+            "description": "DB instance identifier (Used by: DescribeDBInstances, DescribeDBLogFiles (Required), DescribePendingMaintenanceActions, DownloadDBLogFilePortion (Required), DescribeValidDBInstanceModifications (Required))"
+          },
+          "DBClusterIdentifier": {
+            "type": "string",
+            "description": "DB cluster identifier (Used by: DescribeDBClusters, DescribeDBClusterSnapshots, DescribeDBClusterAutomatedBackups)"
+          },
+          "DBParameterGroupName": {
+            "type": "string",
+            "description": "DB parameter group name (Used by: DescribeDBParameterGroups)"
+          },
+          "Engine": {
+            "type": "string",
+            "description": "Database engine (Used by: DescribeDBEngineVersions, DescribeOrderableDBInstanceOptions)"
+          },
+          "EngineVersion": {
+            "type": "string",
+            "description": "Database engine version (Used by: DescribeDBEngineVersions, DescribeOrderableDBInstanceOptions)"
+          },
+          "Marker": {
+            "type": "string",
+            "description": "Pagination marker (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
+          },
+          "MaxRecords": {
+            "type": "number",
+            "description": "Maximum records (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
+          },
+          "Filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Name": {
+                  "type": "string"
+                },
+                "Values": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "description": "Filters for the request (Used by: DescribeDBInstances, DescribeDBClusters, DescribeDBSnapshots, etc)"
+          },
+          "StartTime": {
+            "type": "string",
+            "description": "Start time (Used by: DescribeEvents)"
+          },
+          "EndTime": {
+            "type": "string",
+            "description": "End time (Used by: DescribeEvents)"
+          },
+          "Duration": {
+            "type": "number",
+            "description": "Duration (Used by: DescribeEvents)"
+          },
+          "ResourceName": {
+            "type": "string",
+            "description": "Resource ARN/Name (Used by: ListTagsForResource (Required))"
+          },
+          "LogFileName": {
+            "type": "string",
+            "description": "Log file name (Used by: DownloadDBLogFilePortion (Required))"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	if (Session.Current?.IsHostSupportLanguageTools()) {
 		// Register language model tools dynamically from generated registry
-		const { TOOLS } = require('./tool_registry/ToolRegistry');
+		const { TOOLS } = require('./common/ToolRegistry');
 		for (const tool of TOOLS) {
 			context.subscriptions.push(
 				vscode.lm.registerTool(tool.name, tool.instance)

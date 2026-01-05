@@ -1,0 +1,111 @@
+{
+  "name": "RDSDataTool",
+  "toolReferenceName": "RDSDataTool",
+  "displayName": "RDS Data Tool",
+  "modelDescription": "Execute Amazon RDS Data API commands for Aurora Serverless and RDS with Data API enabled. ALWAYS provide params object. Examples: ExecuteStatement {command:'ExecuteStatement', params:{resourceArn:'arn:aws:rds:...', secretArn:'arn:aws:secretsmanager:...', database:'db', sql:'SELECT 1'}}.",
+  "userDescription": "Run SQL and manage transactions via the RDS Data API",
+  "tags": [
+    "aws",
+    "rds",
+    "data",
+    "aurora",
+    "sql"
+  ],
+  "icon": "$(server-process)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "BatchExecuteStatement",
+          "BeginTransaction",
+          "CommitTransaction",
+          "ExecuteStatement",
+          "RollbackTransaction"
+        ],
+        "description": "The RDS Data API command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Use Data API field names (e.g., resourceArn, secretArn, database, sql, transactionId, parameters).",
+        "properties": {
+          "resourceArn": {
+            "type": "string",
+            "description": "ARN of the Aurora/RDS cluster (Used by: BatchExecuteStatement (Required), BeginTransaction (Required), CommitTransaction (Required), ExecuteStatement (Required), RollbackTransaction (Required))"
+          },
+          "secretArn": {
+            "type": "string",
+            "description": "ARN of the Secrets Manager secret with credentials (Used by: BatchExecuteStatement (Required), BeginTransaction (Required), CommitTransaction (Required), ExecuteStatement (Required), RollbackTransaction (Required))"
+          },
+          "database": {
+            "type": "string",
+            "description": "Database name (Used by: BatchExecuteStatement, BeginTransaction, CommitTransaction, ExecuteStatement, RollbackTransaction)"
+          },
+          "schema": {
+            "type": "string",
+            "description": "Database schema (Used by: BatchExecuteStatement, ExecuteStatement)"
+          },
+          "sql": {
+            "type": "string",
+            "description": "SQL statement (Used by: BatchExecuteStatement (Required), ExecuteStatement (Required))"
+          },
+          "transactionId": {
+            "type": "string",
+            "description": "Transaction ID (Used by: BatchExecuteStatement, CommitTransaction (Required), ExecuteStatement, RollbackTransaction (Required))"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "object",
+                  "properties": {
+                    "isNull": {
+                      "type": "boolean"
+                    },
+                    "booleanValue": {
+                      "type": "boolean"
+                    },
+                    "longValue": {
+                      "type": "number"
+                    },
+                    "doubleValue": {
+                      "type": "number"
+                    },
+                    "stringValue": {
+                      "type": "string"
+                    },
+                    "blobValue": {
+                      "type": "string"
+                    },
+                    "arrayValue": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "SQL parameters (Used by: BatchExecuteStatement, ExecuteStatement)"
+          },
+          "includeResultMetadata": {
+            "type": "boolean",
+            "description": "Include result metadata (Used by: ExecuteStatement)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

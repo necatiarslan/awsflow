@@ -1,0 +1,191 @@
+{
+  "name": "GlueTool",
+  "toolReferenceName": "GlueTool",
+  "displayName": "Glue Tool",
+  "modelDescription": "Execute AWS Glue commands including Data Catalog queries. ALWAYS provide params object. Examples: GetDatabases {command:'GetDatabases', params:{}}. GetDatabase {command:'GetDatabase', params:{Name:'my-database'}}. GetTables {command:'GetTables', params:{DatabaseName:'my-database'}}. GetTable {command:'GetTable', params:{DatabaseName:'my-database', Name:'my-table'}}. GetPartitions {command:'GetPartitions', params:{DatabaseName:'my-database', TableName:'my-table'}}. ListCrawlers {command:'ListCrawlers', params:{}}. GetCrawler {command:'GetCrawler', params:{Name:'my-crawler'}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
+  "userDescription": "Manage Glue ETL jobs, triggers, crawlers, and query Data Catalog (databases, tables, partitions, connections)",
+  "tags": [
+    "aws",
+    "glue",
+    "etl",
+    "jobs",
+    "triggers"
+  ],
+  "icon": "$(database)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "CreateJob",
+          "GetCrawler",
+          "GetCrawlers",
+          "GetConnections",
+          "GetDatabase",
+          "GetDatabases",
+          "GetJob",
+          "GetJobBookmark",
+          "GetJobRun",
+          "GetJobRuns",
+          "GetPartitions",
+          "GetTable",
+          "GetTables",
+          "GetTags",
+          "GetTrigger",
+          "GetTriggers",
+          "ListCrawls",
+          "ListCrawlers",
+          "ListJobs",
+          "ListTriggers",
+          "StartJobRun"
+        ],
+        "description": "The Glue command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty. Provide Name/JobName/ResourceArn as needed.",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "description": "Job or trigger name (Used by: CreateJob (Required), GetTrigger (Required), StartJobRun (Required))"
+          },
+          "JobName": {
+            "type": "string",
+            "description": "Job name (Used by: GetJob (Required), GetJobRun (Required), GetJobRuns (Required), StartJobRun (Required))"
+          },
+          "RunId": {
+            "type": "string",
+            "description": "Job run ID (Used by: GetJobRun (Required))"
+          },
+          "ResourceArn": {
+            "type": "string",
+            "description": "Resource ARN (Used by: GetTags (Required))"
+          },
+          "Role": {
+            "type": "string",
+            "description": "IAM role ARN (Used by: CreateJob (Required))"
+          },
+          "Command": {
+            "type": "object",
+            "description": "Command configuration object (Used by: CreateJob (Required))"
+          },
+          "Description": {
+            "type": "string",
+            "description": "Job description (Used by: CreateJob)"
+          },
+          "LogUri": {
+            "type": "string",
+            "description": "S3 URI for job logs (Used by: CreateJob)"
+          },
+          "DefaultArguments": {
+            "type": "object",
+            "description": "Default job arguments (Used by: CreateJob)"
+          },
+          "MaxRetries": {
+            "type": "number",
+            "description": "Maximum retries (Used by: CreateJob)"
+          },
+          "Timeout": {
+            "type": "number",
+            "description": "Job timeout in minutes (Used by: CreateJob, StartJobRun)"
+          },
+          "MaxCapacity": {
+            "type": "number",
+            "description": "Maximum capacity for DPU units (Used by: CreateJob, StartJobRun)"
+          },
+          "WorkerType": {
+            "type": "string",
+            "enum": [
+              "Standard",
+              "G.1X",
+              "G.2X",
+              "G.025X"
+            ],
+            "description": "Worker type (Used by: CreateJob, StartJobRun)"
+          },
+          "NumberOfWorkers": {
+            "type": "number",
+            "description": "Number of workers (Used by: CreateJob, StartJobRun)"
+          },
+          "Tags": {
+            "type": "object",
+            "description": "Key-value tags (Used by: CreateJob)"
+          },
+          "JobRunId": {
+            "type": "string",
+            "description": "Job run ID (Used by: StartJobRun)"
+          },
+          "Arguments": {
+            "type": "object",
+            "description": "Job run arguments (Used by: StartJobRun)"
+          },
+          "AllocatedCapacity": {
+            "type": "number",
+            "description": "Allocated capacity (Used by: StartJobRun)"
+          },
+          "SecurityConfiguration": {
+            "type": "string",
+            "description": "Security configuration name (Used by: CreateJob, StartJobRun)"
+          },
+          "nextToken": {
+            "type": "string",
+            "description": "Pagination token (Used by: GetJobRuns, GetTriggers, ListJobs, ListTriggers)"
+          },
+          "MaxResults": {
+            "type": "number",
+            "description": "Maximum items to return (Used by: GetJobRuns, GetTriggers, ListJobs, ListTriggers)"
+          },
+          "DependencyJobName": {
+            "type": "string",
+            "description": "Filter by dependency job name (Used by: GetTriggers)"
+          },
+          "DependentJobName": {
+            "type": "string",
+            "description": "Filter by dependent job name (Used by: ListTriggers)"
+          },
+          "CrawlerName": {
+            "type": "string",
+            "description": "Crawler name (Used by: GetCrawler (Required), ListCrawls (Required))"
+          },
+          "CatalogId": {
+            "type": "string",
+            "description": "Catalog ID (Used by: GetDatabase, GetDatabases, GetTable, GetTables, GetPartitions)"
+          },
+          "DatabaseName": {
+            "type": "string",
+            "description": "Database name (Used by: GetDatabase (Required), GetTable (Required), GetTables (Required), GetPartitions (Required))"
+          },
+          "TableName": {
+            "type": "string",
+            "description": "Table name (Used by: GetTable (Required), GetPartitions (Required))"
+          },
+          "Expression": {
+            "type": "string",
+            "description": "Partition filter expression (Used by: GetPartitions)"
+          },
+          "Segment": {
+            "type": "object",
+            "description": "Segment configuration for parallel scanning (Used by: GetPartitions)"
+          },
+          "ConnectionName": {
+            "type": "string",
+            "description": "Connection name (Used by: GetConnections)"
+          },
+          "HidePassword": {
+            "type": "boolean",
+            "description": "Hide connection password (Used by: GetConnections)"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}

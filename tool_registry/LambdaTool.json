@@ -1,0 +1,191 @@
+{
+  "name": "LambdaTool",
+  "toolReferenceName": "LambdaTool",
+  "displayName": "Lambda Tool",
+  "modelDescription": "Execute AWS Lambda commands including event source mappings. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. ListEventSourceMappings {command:'ListEventSourceMappings', params:{FunctionName:'my-function'}}. GetEventSourceMapping {command:'GetEventSourceMapping', params:{UUID:'12345678-1234-1234-1234-123456789012'}}. GetFunctionConcurrency {command:'GetFunctionConcurrency', params:{FunctionName:'my-function'}}. ListAliases {command:'ListAliases', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
+  "userDescription": "Manage Lambda functions, event source mappings, aliases, versions, layers, concurrency, function URLs, and invoke functions",
+  "tags": [
+    "aws",
+    "lambda",
+    "function",
+    "serverless",
+    "invoke"
+  ],
+  "icon": "$(symbol-method)",
+  "canBeReferencedInPrompt": true,
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "command",
+      "params"
+    ],
+    "properties": {
+      "command": {
+        "type": "string",
+        "enum": [
+          "GetAccountSettings",
+          "GetAlias",
+          "GetEventSourceMapping",
+          "GetFunction",
+          "GetFunctionCodeSigningConfig",
+          "GetFunctionConcurrency",
+          "GetFunctionConfiguration",
+          "GetFunctionUrlConfig",
+          "GetPolicy",
+          "Invoke",
+          "ListAliases",
+          "ListEventSourceMappings",
+          "ListFunctions",
+          "ListFunctionsByCodeSigningConfig",
+          "ListLayerVersions",
+          "ListTags",
+          "ListVersionsByFunction",
+          "TagResource",
+          "UntagResource",
+          "UpdateFunctionCode"
+        ],
+        "description": "The Lambda command to execute"
+      },
+      "params": {
+        "type": "object",
+        "description": "REQUIRED parameters object. Always include this even if empty.",
+        "properties": {
+          "FunctionName": {
+            "type": "string",
+            "description": "Lambda function name or ARN (Used by: GetFunction (Required), GetFunctionConfiguration (Required), UpdateFunctionCode (Required), Invoke (Required))"
+          },
+          "Qualifier": {
+            "type": "string",
+            "description": "Function version or alias (Used by: GetFunction, GetFunctionConfiguration, Invoke)"
+          },
+          "FunctionVersion": {
+            "type": "string",
+            "description": "Set to ALL to include all versions (Used by: ListFunctions)"
+          },
+          "Marker": {
+            "type": "string",
+            "description": "Pagination marker from previous response (Used by: ListFunctions)"
+          },
+          "MaxItems": {
+            "type": "number",
+            "description": "Maximum number of functions to return (Used by: ListFunctions)"
+          },
+          "MasterRegion": {
+            "type": "string",
+            "description": "For Lambda@Edge, the AWS Region of the master function (Used by: ListFunctions)"
+          },
+          "ZipFile": {
+            "type": "string",
+            "description": "Base64-encoded zip file containing function code (Used by: UpdateFunctionCode)"
+          },
+          "S3Bucket": {
+            "type": "string",
+            "description": "S3 bucket containing the function code (Used by: UpdateFunctionCode)"
+          },
+          "S3Key": {
+            "type": "string",
+            "description": "S3 object key for the function code (Used by: UpdateFunctionCode)"
+          },
+          "S3ObjectVersion": {
+            "type": "string",
+            "description": "S3 object version (Used by: UpdateFunctionCode)"
+          },
+          "ImageUri": {
+            "type": "string",
+            "description": "URI of a container image in Amazon ECR (Used by: UpdateFunctionCode)"
+          },
+          "Publish": {
+            "type": "boolean",
+            "description": "Publish a new version after updating code (Used by: UpdateFunctionCode)"
+          },
+          "DryRun": {
+            "type": "boolean",
+            "description": "Validate the request without updating code (Used by: UpdateFunctionCode)"
+          },
+          "RevisionId": {
+            "type": "string",
+            "description": "Update only if revision ID matches (Used by: UpdateFunctionCode)"
+          },
+          "Architectures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Instruction set architecture: x86_64 or arm64 (Used by: UpdateFunctionCode)"
+          },
+          "Resource": {
+            "type": "string",
+            "description": "Function ARN (Used by: ListTags (Required), TagResource (Required), UntagResource (Required))"
+          },
+          "Tags": {
+            "type": "object",
+            "description": "Key-value pairs for tags (Used by: TagResource (Required))"
+          },
+          "TagKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag keys to remove (Used by: UntagResource (Required))"
+          },
+          "InvocationType": {
+            "type": "string",
+            "enum": [
+              "Event",
+              "RequestResponse",
+              "DryRun"
+            ],
+            "description": "Invocation type (Used by: Invoke)"
+          },
+          "LogType": {
+            "type": "string",
+            "enum": [
+              "None",
+              "Tail"
+            ],
+            "description": "Set to Tail to include execution log in response (Used by: Invoke)"
+          },
+          "ClientContext": {
+            "type": "string",
+            "description": "Base64-encoded client context data (Used by: Invoke)"
+          },
+          "Payload": {
+            "type": "string",
+            "description": "JSON string payload to pass to function (Used by: Invoke)"
+          },
+          "Name": {
+            "type": "string",
+            "description": "Alias name (Used by: GetAlias (Required))"
+          },
+          "UUID": {
+            "type": "string",
+            "description": "Event source mapping UUID (Used by: GetEventSourceMapping (Required))"
+          },
+          "EventSourceArn": {
+            "type": "string",
+            "description": "ARN of event source (Used by: ListEventSourceMappings)"
+          },
+          "LayerName": {
+            "type": "string",
+            "description": "Layer name (Used by: ListLayerVersions (Required))"
+          },
+          "CompatibleRuntime": {
+            "type": "string",
+            "description": "Compatible runtime for layer versions (Used by: ListLayerVersions)"
+          },
+          "CompatibleArchitecture": {
+            "type": "string",
+            "description": "Compatible architecture for layer versions (Used by: ListLayerVersions)"
+          },
+          "CodeSigningConfigArn": {
+            "type": "string",
+            "description": "Code signing configuration ARN (Used by: ListFunctionsByCodeSigningConfig (Required))"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0",
+  "deprecated": false,
+  "addedInVersion": "1.0.0"
+}
