@@ -12,3 +12,5 @@ docs/**
 vsix/**
 .github/**
 justfile
+scripts/**
+unpacked_vsix/**

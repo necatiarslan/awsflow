@@ -6,6 +6,14 @@ build_newversion:
     node -e "const fs=require('fs');const p='package.json';const pkg=JSON.parse(fs.readFileSync(p,'utf8'));const [a,b,c]=pkg.version.split('.').map(Number);pkg.version=[a,b,c+1].join('.');fs.writeFileSync(p, JSON.stringify(pkg, null, 2)+'\n');"
     vsce package
     mv *.vsix ./vsix/
+    
+unzip_vsix:
+    rm -rf ./unpacked_vsix
+    mkdir -p ./unpacked_vsix
+    latest=$(ls -t ./vsix/*.vsix 2>/dev/null | head -n1) && \
+    if [ -z "$latest" ]; then echo "No .vsix files found in ./vsix"; exit 1; fi && \
+    echo "Unzipping $latest into ./unpacked_vsix/" && \
+    unzip "$latest" -d ./unpacked_vsix/
 
 publish:
     vsce publish
