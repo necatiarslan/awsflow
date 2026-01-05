@@ -2792,7 +2792,7 @@
       },
       {
         "command": "awsflow.ShowCommandHistory",
-        "title": "Awsflow:Show Command History"
+        "title": "Awsflow:Command History"
       },
       {
         "command": "awsflow.OpenServiceAccessView",
