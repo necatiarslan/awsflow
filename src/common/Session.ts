@@ -129,8 +129,12 @@ export class Session implements vscode.Disposable {
 
     public async GetCredentials(): Promise<AwsCredentialIdentity | undefined> {
         if (this.CurrentCredentials !== undefined) {
+            if(this.CurrentCredentials.expiration && (new Date() >= this.CurrentCredentials.expiration)) {
+                ui.logToOutput('Cached credentials expired, refreshing...');
+            } else {
             ui.logToOutput(`Using cached credentials (AccessKeyId=${this.CurrentCredentials.accessKeyId})`);
             return this.CurrentCredentials;
+            }
         }
 
         try {
