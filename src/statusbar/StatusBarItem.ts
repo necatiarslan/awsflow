@@ -155,6 +155,7 @@ export class StatusBarItem implements vscode.Disposable {
         this.ToolTip += "\nProfile: " + (Session.Current?.AwsProfile || "default");
         this.ToolTip += "\nRegion: " + (Session.Current?.AwsRegion || "us-east-1");
         this.ToolTip += "\nEndPoint: " + (Session.Current?.AwsEndPoint || "aws default");
+        this.ToolTip += "\nReadonly Mode: " + (Session.Current?.AwsReadonlyMode ? "Enabled" : "Disabled");
 
         this.statusBarItem.tooltip = this.ToolTip;
         this.statusBarItem.text = this.Text;

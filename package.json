@@ -2,7 +2,7 @@
   "name": "awsflow",
   "displayName": "Awsflow: AWS AI Assistant",
   "description": "Let AI access AWS services and work for you",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "NecatiARSLAN",
   "repository": {
     "type": "git",
@@ -2781,6 +2781,10 @@
       {
         "command": "awsflow.SetDefaultRegion",
         "title": "Awsflow:Set Default AWS Region"
+      },
+      {
+        "command": "awsflow.SetAwsReadonlyMode",
+        "title": "Awsflow:Set AWS Readonly Mode"
       },
       {
         "command": "awsflow.OpenCloudWatchView",

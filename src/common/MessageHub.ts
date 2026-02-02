@@ -8,7 +8,7 @@ export function EndWorking(){
     StatusBarItem.Current?.EndWorking();
 }
 
-export function CredentialsChanged(){
+export function StatusbarTooltipChanged(){
     StatusBarItem.Current?.RefreshText();
 }
 

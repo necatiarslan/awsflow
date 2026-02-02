@@ -55,6 +55,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 		vscode.commands.registerCommand('awsflow.SetDefaultRegion', async () => { Session.Current?.SetAwsRegion(); }),
 
+		vscode.commands.registerCommand('awsflow.SetAwsReadonlyMode', async () => { await Session.Current?.SetAwsReadonlyMode(); }),
+
 		vscode.commands.registerCommand('awsflow.RefreshCredentials', () => { Session.Current?.RefreshCredentials(); }),
 
 		vscode.commands.registerCommand('awsflow.ListAwsProfiles', () => { StatusBarItem.Current.ListAwsProfiles(); }),

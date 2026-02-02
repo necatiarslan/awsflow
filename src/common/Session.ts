@@ -16,6 +16,7 @@ export class Session implements vscode.Disposable {
     public DisabledTools: Set<string> = new Set<string>();
     public DisabledCommands: Map<string, Set<string>> = new Map<string, Set<string>>();
     public HostAppName: string = '';
+    public AwsReadonlyMode: boolean = false;
 
     private _onDidChangeSession = new vscode.EventEmitter<void>();
     public readonly onDidChangeSession = this._onDidChangeSession.event;
@@ -41,7 +42,7 @@ export class Session implements vscode.Disposable {
             this.Context.globalState.update('AwsProfile', Session.Current?.AwsProfile);
             this.Context.globalState.update('AwsEndPoint', Session.Current?.AwsEndPoint);
             this.Context.globalState.update('AwsRegion', Session.Current?.AwsRegion);
-            
+            this.Context.globalState.update('AwsReadonlyMode', Session.Current?.AwsReadonlyMode);
             // Save disabled tools and commands
             this.Context.globalState.update('DisabledTools', Array.from(Session.Current?.DisabledTools || []));
             const disabledCommandsObj: Record<string, string[]> = {};
@@ -63,10 +64,11 @@ export class Session implements vscode.Disposable {
             const AwsProfileTemp: string | undefined = this.Context.globalState.get('AwsProfile');
             const AwsEndPointTemp: string | undefined = this.Context.globalState.get('AwsEndPoint');
             const AwsRegionTemp: string | undefined = this.Context.globalState.get('AwsRegion');
-
+            const AwsReadonlyModeTemp: boolean | undefined = this.Context.globalState.get('AwsReadonlyMode');
             if (AwsEndPointTemp) { Session.Current!.AwsEndPoint = AwsEndPointTemp; }
             if (AwsRegionTemp) { Session.Current!.AwsRegion = AwsRegionTemp; }
             if (AwsProfileTemp) { Session.Current!.AwsProfile = AwsProfileTemp; }
+            if (AwsReadonlyModeTemp !== undefined) { Session.Current!.AwsReadonlyMode = AwsReadonlyModeTemp; }
 
             // Load disabled tools and commands
             const disabledToolsArray: string[] | undefined = this.Context.globalState.get('DisabledTools');
@@ -127,6 +129,29 @@ export class Session implements vscode.Disposable {
         }
     }
 
+    public async SetAwsReadonlyMode() {
+        if (!Session.Current) {
+            ui.showErrorMessage('Session not initialized', new Error('No session'));
+            return;
+        }
+        
+        const currentState = Session.Current.AwsReadonlyMode ? 'Enable' : 'Disable';
+        const options = ['Enable', 'Disable'];
+        
+        const selected = await vscode.window.showQuickPick(options, {
+            placeHolder: `Current: ${currentState === 'Enable' ? 'Enabled' : 'Disabled'}`,
+            canPickMany: false,
+        });
+        
+        if (selected !== undefined) {
+            Session.Current.AwsReadonlyMode = selected === 'Enable';
+            Session.Current.SaveState();
+            MessageHub.StatusbarTooltipChanged();
+            ui.showInfoMessage(`AWS Readonly Mode ${selected}`);
+            ui.logToOutput(`AWS Readonly Mode set to ${selected}`);
+        }
+    }
+
     public async GetCredentials(): Promise<AwsCredentialIdentity | undefined> {
         if (this.CurrentCredentials !== undefined) {
             if(this.CurrentCredentials.expiration && (new Date() >= this.CurrentCredentials.expiration)) {
@@ -144,12 +169,12 @@ export class Session implements vscode.Disposable {
             this.CurrentCredentials = await provider();
 
             if (!this.CurrentCredentials) {
-                MessageHub.CredentialsChanged();
+                MessageHub.StatusbarTooltipChanged();
                 throw new Error('AWS credentials not found');
             }
 
             ui.logToOutput(`Credentials loaded (AccessKeyId=${this.CurrentCredentials.accessKeyId})`);
-            MessageHub.CredentialsChanged();
+            MessageHub.StatusbarTooltipChanged();
             return this.CurrentCredentials;
         } catch (error: any) {
             ui.logToOutput('Failed to get credentials', error);
@@ -167,7 +192,7 @@ export class Session implements vscode.Disposable {
 
     public ClearCredentials() {
         this.CurrentCredentials = undefined;
-        MessageHub.CredentialsChanged();
+        MessageHub.StatusbarTooltipChanged();
         this._onDidChangeSession.fire();
         ui.logToOutput('Credentials cache cleared');
     }

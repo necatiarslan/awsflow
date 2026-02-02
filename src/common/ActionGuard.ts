@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Session } from './Session';
 
 export function needsConfirmation(command: string): boolean {
   const c = command.toLowerCase();
@@ -28,6 +29,11 @@ export function needsConfirmation(command: string): boolean {
 }
 
 export async function confirmProceed(command: string, params?: Record<string, any>): Promise<boolean> {
+  if (Session.Current?.AwsReadonlyMode) {
+    vscode.window.showWarningMessage('Action commands are disabled in AWS Readonly Mode.');
+    return false;
+  }
+  
   let message = `Confirm to execute action command: ${command}`;
   if (params && Object.keys(params).length > 0) {
     message += '\n\nParameters:\n';
