@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
-import * as ui from './UI';
 import { Session } from './Session';
 import { StatusBarItem } from '../statusbar/StatusBarItem';
 import { BaseTool, BaseToolInput } from './BaseTool';
-import { AIHandler } from '../chat/AIHandler';
 
-type SessionCommand = 'GetSession' | 'SetSession' | 'ListProfiles' | 'RefreshCredentials';
+type SessionCommand = 'GetSession' | 'SetSession' | 'ListProfiles' | 'RefreshCredentials' | 'ActivateProVersion' | 'IsProVersion';
 
 // Input interface
 interface SessionToolInput extends BaseToolInput {
@@ -36,6 +34,10 @@ export class SessionTool extends BaseTool<SessionToolInput> {
         return this.listProfiles();
       case 'RefreshCredentials':
         return this.refreshCredentials();
+      case 'ActivateProVersion':
+        return this.activateProVersion();
+      case 'IsProVersion':
+        return this.isProVersion();
       default:
         throw new Error(`Unsupported command: ${command}`);
     }
@@ -90,5 +92,14 @@ export class SessionTool extends BaseTool<SessionToolInput> {
     }
     Session.Current.RefreshCredentials();
     return { ok: true };
+  }
+
+  private async activateProVersion() {
+    await vscode.commands.executeCommand('awsflow.ActivatePro');
+    return { ok: true, message: 'Activation flow started' };
+  }
+
+  private isProVersion() {
+    return { IsProVersion: Session.Current?.IsProVersion ?? false };
   }
 }

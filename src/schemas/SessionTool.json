@@ -2,8 +2,8 @@
   "name": "SessionTool",
   "toolReferenceName": "SessionTool",
   "displayName": "Session Tool",
-  "modelDescription": "Get or set AWS session values (AwsProfile, AwsEndPoint, AwsRegion), list available profiles, or refresh cached credentials. Use GetSession to read current values. Use SetSession with params to update any of AwsProfile, AwsEndPoint, AwsRegion. Use ListProfiles to return profile names detected from AWS config/credentials files. Use RefreshCredentials to clear and reload cached credentials.",
-  "userDescription": "Manage session (profile/region/endpoint), list profiles, refresh credentials",
+  "modelDescription": "Get or set AWS session values (AwsProfile, AwsEndPoint, AwsRegion), list available profiles, refresh cached credentials, or manage Pro activation. Use GetSession to read current values. Use SetSession with params to update any of AwsProfile, AwsEndPoint, AwsRegion. Use ListProfiles to return profile names detected from AWS config/credentials files. Use RefreshCredentials to clear and reload cached credentials. Use ActivateProVersion to start Pro activation. Use IsProVersion to check license status.",
+  "userDescription": "Manage session (profile/region/endpoint), list profiles, refresh credentials, Pro activation status",
   "tags": [
     "aws",
     "session",
@@ -25,9 +25,11 @@
           "GetSession",
           "SetSession",
           "ListProfiles",
-          "RefreshCredentials"
+          "RefreshCredentials",
+          "ActivateProVersion",
+          "IsProVersion"
         ],
-        "description": "Use GetSession to read current values. Use SetSession to update session values. Use ListProfiles to retrieve available profile names. Use RefreshCredentials to clear and reload cached credentials."
+        "description": "Use GetSession to read current values. Use SetSession to update session values. Use ListProfiles to retrieve available profile names. Use RefreshCredentials to clear and reload cached credentials. Use ActivateProVersion to start Pro activation. Use IsProVersion to check license status."
       },
       "params": {
         "type": "object",

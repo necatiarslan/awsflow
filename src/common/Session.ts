@@ -152,7 +152,11 @@ export class Session implements vscode.Disposable {
             Session.Current.AwsReadonlyMode = selected === 'Enable';
             Session.Current.SaveState();
             MessageHub.StatusbarTooltipChanged();
-            ui.showInfoMessage(`AWS Readonly Mode ${selected}`);
+            if (Session.Current.AwsReadonlyMode) {
+                ui.showInfoMessage('AWS Readonly Mode enabled. All write operations will be blocked.');
+            } else {
+                ui.showInfoMessage('AWS Readonly Mode disabled. Write operations are allowed.');
+            }
             ui.logToOutput(`AWS Readonly Mode set to ${selected}`);
         }
     }
