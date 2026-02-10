@@ -17,6 +17,7 @@ export class Session implements vscode.Disposable {
     public DisabledCommands: Map<string, Set<string>> = new Map<string, Set<string>>();
     public HostAppName: string = '';
     public AwsReadonlyMode: boolean = false;
+    public IsProVersion: boolean = true;
 
     private _onDidChangeSession = new vscode.EventEmitter<void>();
     public readonly onDidChangeSession = this._onDidChangeSession.event;
@@ -33,6 +34,10 @@ export class Session implements vscode.Disposable {
     public IsHostSupportLanguageTools(): boolean {
         const supportedHosts = ['Visual Studio Code', 'Visual Studio Code - Insiders', 'VSCodium'];
         return supportedHosts.includes(this.HostAppName);
+    }
+
+    public IsDebugMode(): boolean {
+        return this.Context.extensionMode === vscode.ExtensionMode.Development;
     }
 
     public SaveState() {

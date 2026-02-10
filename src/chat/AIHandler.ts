@@ -285,13 +285,17 @@ export class AIHandler {
       ui.logToOutput(`AIHandler: Using model ${model.family} (${model.name})`);
       //ui.logToOutput(`AIHandler: Initial messages: ${JSON.stringify(messages)}`);
 
-      await this.runToolCallingLoop(
-        model,
-        messages,
-        tools,
-        wrappedStream,
-        token
-      );
+      if (Session.Current?.IsProVersion) {
+        await this.runToolCallingLoop(
+          model,
+          messages,
+          tools,
+          wrappedStream,
+          token
+        );
+      } else {
+        this.renderProVersionMessage(wrappedStream);
+      }
       
       this.renderResponseButtons(wrappedStream);
 
@@ -996,6 +1000,7 @@ export class AIHandler {
   }
 
   private renderResponseButtons(stream: vscode.ChatResponseStream): void {
+    this.renderActivateProButton(stream);
     this.renderCloudWatchButton(stream);
     this.renderS3Button(stream);
     this.renderPaginationButton(stream);
@@ -1058,6 +1063,13 @@ export class AIHandler {
     );
     stream.markdown(
       "\n🤔 [New Feature](https://github.com/necatiarslan/awsflow/issues/new) Request"
+    );
+  }
+
+  private renderProVersionMessage(stream: vscode.ChatResponseStream): void {
+    stream.markdown("\n");
+    stream.markdown(
+      "🚀 Upgrade to Pro version for advanced AI features!"
     );
   }
 
@@ -1144,5 +1156,20 @@ export class AIHandler {
       );
       return [];
     }
+  }
+
+   private renderActivateProButton(stream: vscode.ChatResponseStream): void {
+    if (Session.Current?.IsProVersion) {
+      return;
+    }
+    stream.markdown("\n\n");
+    stream.button({
+      command: "awsflow.ActivatePro",
+      title: "Activate Pro Version",
+    });
+    stream.button({
+      command: "awsflow.EnterLicenseKey",
+      title: "Enter License Key",
+    });
   }
 }

@@ -2803,6 +2803,18 @@
         "title": "Awsflow:Service Access Settings"
       },
       {
+        "command": "awsflow.ActivatePro",
+        "title": "Awsflow:Activate Pro"
+      },
+      {
+        "command": "awsflow.EnterLicenseKey",
+        "title": "Awsflow:Enter License Key"
+      },
+      {
+        "command": "awsflow.ResetLicenseKey",
+        "title": "Awsflow:Reset License Key"
+      },
+      {
         "command": "awsflow.StartMcpServer",
         "title": "Awsflow:Start MCP Server"
       },

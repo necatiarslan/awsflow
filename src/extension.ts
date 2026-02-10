@@ -11,12 +11,16 @@ import { CommandHistoryView } from './common/CommandHistoryView';
 import { ServiceAccessView } from './common/ServiceAccessView';
 import { McpManager } from './mcp/McpManager';
 import { McpManageView } from './mcp/McpManageView';
+import { initializeLicense, isLicenseValid, promptForLicense, clearLicense } from "./common/License";
 
 export function activate(context: vscode.ExtensionContext) {
 	ui.logToOutput('Awsflow is now active!');
 
 	// Initialize Core Services
+	initializeLicense(context);
 	const session = new Session(context);
+	session.IsProVersion = isLicenseValid();
+	
 	new AIHandler();
 	const statusBar = new StatusBarItem();
 	const clientManager = ClientManager.Instance;
@@ -106,6 +110,41 @@ export function activate(context: vscode.ExtensionContext) {
             }
             ServiceAccessView.Render(Session.Current.ExtensionUri);
         }),
+
+		vscode.commands.registerCommand('awsflow.ActivatePro', () => {
+			if (Session.Current?.IsProVersion) {
+				ui.showInfoMessage('You already have an active Pro license!');
+				return;
+			}
+
+			let buyUrl = 'https://necatiarslan.lemonsqueezy.com/checkout/buy/077f6804-ab37-49b1-b8e4-1c63870d728f';
+			if (Session.Current?.IsDebugMode()) {
+				buyUrl = 'https://necatiarslan.lemonsqueezy.com/checkout/buy/ec1d3673-0b2a-423d-87f7-1822815bc665';
+			}
+
+			vscode.env.openExternal(vscode.Uri.parse(buyUrl));
+			vscode.commands.executeCommand('awsflow.EnterLicenseKey');
+		}),
+
+		vscode.commands.registerCommand('awsflow.EnterLicenseKey', async () => {
+			if (Session.Current?.IsProVersion) {
+				ui.showInfoMessage('You already have an active Pro license!');
+				return;
+			}
+
+			await promptForLicense(context);
+			if (Session.Current) {
+				Session.Current.IsProVersion = isLicenseValid();
+			}
+		}),
+
+		vscode.commands.registerCommand('awsflow.ResetLicenseKey', async () => {
+			await clearLicense();
+			ui.showInfoMessage('License key has been reset. Please enter a new license key to activate Pro features.');
+			if (Session.Current) {
+				Session.Current.IsProVersion = false;
+			}
+		}),
 
 		vscode.commands.registerCommand('awsflow.StartMcpServer', async () => {
 			if (!Session.Current) {
