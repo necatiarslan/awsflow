@@ -4,6 +4,7 @@ import { needsConfirmation, confirmProceed } from './ActionGuard';
 import { CommandHistoryManager } from './CommandHistoryManager';
 import { Session } from './Session';
 import * as MessageHub from './MessageHub';
+import { consumeToolInvocation, getDailyLimit } from './ToolUsageQuota';
 
 export interface BaseToolInput {
     command: string;
@@ -81,6 +82,23 @@ export abstract class BaseTool<TInput extends BaseToolInput> implements vscode.L
                             new vscode.LanguageModelTextPart(JSON.stringify(cancelled, null, 2))
                         ]);
                     }
+                }
+
+                if (Session.Current && !Session.Current.IsProVersion) {
+                    const { allowed, status } = await consumeToolInvocation(Session.Current.Context, this.toolName);
+                    if (!allowed) {
+                        const limit = getDailyLimit();
+                        const blocked = {
+                            success: false,
+                            command,
+                            message: `Daily tool limit reached (${limit}). Upgrade to Pro to continue using tools today.`
+                        };
+                        responseData = blocked;
+                        return new vscode.LanguageModelToolResult([
+                            new vscode.LanguageModelTextPart(JSON.stringify(blocked, null, 2))
+                        ]);
+                    }
+                    ui.logToOutput(`${this.toolName}: Daily tool usage ${status.count}/${status.limit}`);
                 }
 
                 // Update chat context if needed

@@ -4,7 +4,7 @@ import { Session } from "../common/Session";
 import * as fs from "fs";
 import * as path from "path";
 import * as MessageHub from "../common/MessageHub";
-import { encodingForModel } from "js-tiktoken";
+import { getDailyUsageStatus } from "../common/ToolUsageQuota";
 
 const PARTICIPANT_ID = "awsflow.chat";
 const DEFAULT_PROMPT = "What can you do to help me with AWS tasks?";
@@ -293,6 +293,19 @@ export class AIHandler {
           wrappedStream,
           token
         );
+      } else if (Session.Current) {
+        const usage = await getDailyUsageStatus(Session.Current.Context);
+        if (usage.remaining > 0) {
+          await this.runToolCallingLoop(
+            model,
+            messages,
+            tools,
+            wrappedStream,
+            token
+          );
+        } else {
+          this.renderDailyLimitMessage(wrappedStream, usage.limit);
+        }
       } else {
         this.renderProVersionMessage(wrappedStream);
       }
@@ -312,6 +325,13 @@ export class AIHandler {
     }
   }
 
+  private renderDailyLimitMessage(stream: vscode.ChatResponseStream, limit: number): void {
+    stream.markdown("\n");
+    stream.markdown(
+      `⚠️ Daily tool limit reached (${limit}). Upgrade to Pro to continue using tools today.`
+    );
+    this.renderActivateProButton(stream);
+  }
   private buildInitialMessages(
     request: vscode.ChatRequest,
     chatContext: vscode.ChatContext
