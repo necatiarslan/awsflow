@@ -12,7 +12,7 @@ interface UsageRecord {
     count: number;
 }
 
-const DAILY_LIMIT = 10;
+const DAILY_LIMIT = 20;
 const USAGE_KEY = 'awsflow.dailyToolUsage';
 const EXEMPT_TOOLS = new Set<string>([
     'SessionTool',
