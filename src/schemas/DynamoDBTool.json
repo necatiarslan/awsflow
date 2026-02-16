@@ -39,7 +39,15 @@
           "Scan",
           "UpdateItem",
           "UpdateTable",
-          "UpdateTimeToLive"
+          "UpdateTimeToLive",
+          "CreateBackup",
+          "RestoreTableFromBackup",
+          "CreateGlobalTable",
+          "UpdateGlobalTable",
+          "TagResource",
+          "UntagResource",
+          "DescribeBackup",
+          "DeleteBackup"
         ],
         "description": "The DynamoDB command to execute"
       },

@@ -1,11 +1,11 @@
 ---
 name: awsflow-iam
-description: Inspect AWS IAM roles, policies, users, groups, access keys, MFA devices, simulate permissions, generate credential reports, and get account summary using awsflow.
+description: Manage and inspect AWS IAM roles, policies, users, groups, access keys, MFA devices, simulate permissions, generate credential reports, and get account summary using awsflow.
 ---
 
 # Awsflow IAM
 
-Inspect IAM roles, policies, users, groups, simulate permissions, and audit credentials.
+Manage and inspect IAM roles, policies, users, groups, simulate permissions, and audit credentials.
 
 ## When to Use This Skill
 
@@ -17,10 +17,12 @@ Use this skill when the user:
 - Wants to audit users, access keys, MFA devices
 - Asks about credential reports or account settings
 - Needs to check attached or inline policies
+- Wants to create, update, or delete IAM roles, users, groups, or policies
+- Needs to attach or detach policies and manage tags
 
 ## Tool: IAMTool
 
-Execute AWS IAM commands including permission simulation. ALWAYS provide params object.
+Execute AWS IAM commands including permission simulation and lifecycle management. ALWAYS provide params object.
 
 ### Commands
 
@@ -198,6 +200,56 @@ Get IAM account summary (resource counts and limits).
 { "command": "GetAccountSummary", "params": {} }
 ```
 **Parameters:** None required.
+
+### Lifecycle Commands
+
+#### CreateRole
+Create a new IAM role.
+```json
+{ "command": "CreateRole", "params": { "RoleName": "MyRole", "AssumeRolePolicyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}" } }
+```
+
+#### CreateUser
+Create a new IAM user.
+```json
+{ "command": "CreateUser", "params": { "UserName": "alice" } }
+```
+
+#### AttachRolePolicy
+Attach a managed policy to a role.
+```json
+{ "command": "AttachRolePolicy", "params": { "RoleName": "MyRole", "PolicyArn": "arn:aws:iam::aws:policy/ReadOnlyAccess" } }
+```
+
+#### PutRolePolicy
+Add or update an inline policy on a role.
+```json
+{ "command": "PutRolePolicy", "params": { "RoleName": "MyRole", "PolicyName": "InlinePolicy", "PolicyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"s3:ListBucket\"],\"Resource\":[\"*\"]}]}" } }
+```
+
+#### DeleteRole
+Delete an IAM role.
+```json
+{ "command": "DeleteRole", "params": { "RoleName": "MyRole" } }
+```
+
+#### TagRole
+Tag a role.
+```json
+{ "command": "TagRole", "params": { "RoleName": "MyRole", "Tags": [{ "Key": "env", "Value": "prod" }] } }
+```
+
+#### UntagRole
+Remove tags from a role.
+```json
+{ "command": "UntagRole", "params": { "RoleName": "MyRole", "TagKeys": ["env"] } }
+```
+
+#### UpdateAssumeRolePolicy
+Update a role trust policy.
+```json
+{ "command": "UpdateAssumeRolePolicy", "params": { "RoleName": "MyRole", "PolicyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}" } }
+```
 
 #### GetAccountPasswordPolicy
 Get the account password policy.

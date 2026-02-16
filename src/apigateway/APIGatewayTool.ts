@@ -49,6 +49,28 @@ import {
   TestInvokeMethodCommand,
   TestInvokeAuthorizerCommand,
   GetMethodResponseCommand,
+  CreateRestApiCommand,
+  CreateResourceCommand,
+  PutMethodCommand,
+  CreateDeploymentCommand,
+  CreateStageCommand,
+  CreateAuthorizerCommand,
+  CreateApiKeyCommand,
+  CreateUsagePlanCommand,
+  CreateDomainNameCommand,
+  ImportRestApiCommand,
+  DeleteRestApiCommand,
+  DeleteResourceCommand,
+  DeleteMethodCommand,
+  DeleteStageCommand,
+  DeleteAuthorizerCommand,
+  DeleteApiKeyCommand,
+  DeleteUsagePlanCommand,
+  DeleteDomainNameCommand,
+  UpdateRestApiCommand,
+  UpdateStageCommand,
+  TagResourceCommand,
+  UntagResourceCommand,
 } from '@aws-sdk/client-api-gateway';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -99,7 +121,29 @@ type APIGatewayCommand =
   | 'GetVpcLinks'
   | 'TestInvokeMethod'
   | 'TestInvokeAuthorizer'
-  | 'GetMethodResponse';
+  | 'GetMethodResponse'
+  | 'CreateRestApi'
+  | 'CreateResource'
+  | 'PutMethod'
+  | 'CreateDeployment'
+  | 'CreateStage'
+  | 'CreateAuthorizer'
+  | 'CreateApiKey'
+  | 'CreateUsagePlan'
+  | 'CreateDomainName'
+  | 'ImportRestApi'
+  | 'DeleteRestApi'
+  | 'DeleteResource'
+  | 'DeleteMethod'
+  | 'DeleteStage'
+  | 'DeleteAuthorizer'
+  | 'DeleteApiKey'
+  | 'DeleteUsagePlan'
+  | 'DeleteDomainName'
+  | 'UpdateRestApi'
+  | 'UpdateStage'
+  | 'TagResource'
+  | 'UntagResource';
 
 interface APIGatewayToolInput extends BaseToolInput {
   command: APIGatewayCommand;
@@ -176,6 +220,28 @@ export class APIGatewayTool extends BaseTool<APIGatewayToolInput> {
       case 'TestInvokeMethod': return await client.send(new TestInvokeMethodCommand(params as any));
       case 'TestInvokeAuthorizer': return await client.send(new TestInvokeAuthorizerCommand(params as any));
       case 'GetMethodResponse': return await client.send(new GetMethodResponseCommand(params as any));
+      case 'CreateRestApi': return await client.send(new CreateRestApiCommand(params as any));
+      case 'CreateResource': return await client.send(new CreateResourceCommand(params as any));
+      case 'PutMethod': return await client.send(new PutMethodCommand(params as any));
+      case 'CreateDeployment': return await client.send(new CreateDeploymentCommand(params as any));
+      case 'CreateStage': return await client.send(new CreateStageCommand(params as any));
+      case 'CreateAuthorizer': return await client.send(new CreateAuthorizerCommand(params as any));
+      case 'CreateApiKey': return await client.send(new CreateApiKeyCommand(params as any));
+      case 'CreateUsagePlan': return await client.send(new CreateUsagePlanCommand(params as any));
+      case 'CreateDomainName': return await client.send(new CreateDomainNameCommand(params as any));
+      case 'ImportRestApi': return await client.send(new ImportRestApiCommand(params as any));
+      case 'DeleteRestApi': return await client.send(new DeleteRestApiCommand(params as any));
+      case 'DeleteResource': return await client.send(new DeleteResourceCommand(params as any));
+      case 'DeleteMethod': return await client.send(new DeleteMethodCommand(params as any));
+      case 'DeleteStage': return await client.send(new DeleteStageCommand(params as any));
+      case 'DeleteAuthorizer': return await client.send(new DeleteAuthorizerCommand(params as any));
+      case 'DeleteApiKey': return await client.send(new DeleteApiKeyCommand(params as any));
+      case 'DeleteUsagePlan': return await client.send(new DeleteUsagePlanCommand(params as any));
+      case 'DeleteDomainName': return await client.send(new DeleteDomainNameCommand(params as any));
+      case 'UpdateRestApi': return await client.send(new UpdateRestApiCommand(params as any));
+      case 'UpdateStage': return await client.send(new UpdateStageCommand(params as any));
+      case 'TagResource': return await client.send(new TagResourceCommand(params as any));
+      case 'UntagResource': return await client.send(new UntagResourceCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

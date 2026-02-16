@@ -2,8 +2,8 @@
   "name": "StepFuncTool",
   "toolReferenceName": "StepFuncTool",
   "displayName": "Step Functions Tool",
-  "modelDescription": "Execute AWS Step Functions commands. ALWAYS provide params object. Examples: ListStateMachines {command:'ListStateMachines', params:{maxResults:10}}. StartExecution {command:'StartExecution', params:{stateMachineArn:'arn:aws:states:...', input:'{\\\"key\\\":\\\"value\\\"}'}}. DescribeExecution {command:'DescribeExecution', params:{executionArn:'arn:aws:states:...'}}. GetExecutionHistory {command:'GetExecutionHistory', params:{executionArn:'arn:aws:states:...', maxResults:100}}.",
-  "userDescription": "Manage and run AWS Step Functions state machines",
+  "modelDescription": "Full lifecycle management of Step Functions state machines, activities, and executions. Includes CreateStateMachine, CreateActivity, CreateStateMachineAlias, PublishStateMachineVersion, TagResource, UntagResource, DeleteStateMachine, DeleteActivity, StopExecution, UpdateStateMachineAlias, DeleteStateMachineAlias, DeleteStateMachineVersion, plus DescribeActivity, DescribeExecution, DescribeMapRun, DescribeStateMachine, DescribeStateMachineAlias, DescribeStateMachineForExecution, GetExecutionHistory, ListActivities, ListExecutions, ListMapRuns, ListStateMachineAliases, ListStateMachines, ListStateMachineVersions, StartExecution, UpdateStateMachine, ValidateStateMachineDefinition.",
+  "userDescription": "Create, manage, execute, and monitor AWS Step Functions state machines and workflows",
   "tags": [
     "aws",
     "stepfunctions",
@@ -37,7 +37,19 @@
           "ListStateMachineVersions",
           "StartExecution",
           "UpdateStateMachine",
-          "ValidateStateMachineDefinition"
+          "ValidateStateMachineDefinition",
+          "CreateStateMachine",
+          "CreateActivity",
+          "CreateStateMachineAlias",
+          "PublishStateMachineVersion",
+          "TagResource",
+          "UntagResource",
+          "DeleteStateMachine",
+          "DeleteActivity",
+          "StopExecution",
+          "UpdateStateMachineAlias",
+          "DeleteStateMachineAlias",
+          "DeleteStateMachineVersion"
         ],
         "description": "The Step Functions command to execute"
       },

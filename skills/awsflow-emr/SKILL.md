@@ -1,11 +1,11 @@
 ---
 name: awsflow-emr
-description: Inspect AWS EMR clusters, steps, instances, studios, notebook executions, release labels, security configurations, and managed scaling using awsflow. All read-only commands for Hadoop/Spark cluster management.
+description: Manage and inspect AWS EMR clusters, steps, instances, studios, notebook executions, release labels, security configurations, and managed scaling using awsflow. Supports full lifecycle operations.
 ---
 
 # Awsflow EMR
 
-Inspect EMR clusters, steps, studios, notebook executions, and related configurations. All commands are read-only.
+Manage and inspect EMR clusters, steps, studios, notebook executions, and related configurations.
 
 ## When to Use This Skill
 
@@ -16,10 +16,13 @@ Use this skill when the user:
 - Needs to view EMR studios or notebook executions
 - Asks about release labels, instance types, or security configurations
 - Wants to check auto-termination, managed scaling, or session credentials
+- Wants to launch or terminate clusters
+- Needs to add steps, instance groups, or tags
+- Wants to modify cluster settings or scaling policies
 
 ## Tool: EMRTool
 
-Describe and list EMR clusters, steps, studios, and configurations. ALWAYS provide params object.
+Describe and manage EMR clusters, steps, studios, and configurations. ALWAYS provide params object.
 
 ### Commands
 
@@ -197,6 +200,50 @@ Get a security configuration.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | SecurityConfigurationName | string | Yes | Security configuration name |
+
+### Lifecycle and Management Commands
+
+#### RunJobFlow
+Create a new EMR cluster.
+```json
+{ "command": "RunJobFlow", "params": { "Name": "analytics-cluster", "ReleaseLabel": "emr-7.0.0", "Instances": { "InstanceGroups": [{ "InstanceRole": "MASTER", "InstanceType": "m5.xlarge", "InstanceCount": 1 }] }, "ServiceRole": "EMR_DefaultRole", "JobFlowRole": "EMR_EC2_DefaultRole" } }
+```
+
+#### AddJobFlowSteps
+Add steps to a cluster.
+```json
+{ "command": "AddJobFlowSteps", "params": { "JobFlowId": "j-1234567890ABC", "Steps": [{ "Name": "spark-step", "ActionOnFailure": "CONTINUE", "HadoopJarStep": { "Jar": "command-runner.jar", "Args": ["spark-submit", "--deploy-mode", "cluster", "s3://bucket/job.py"] } }] } }
+```
+
+#### ModifyCluster
+Modify cluster settings.
+```json
+{ "command": "ModifyCluster", "params": { "ClusterId": "j-1234567890ABC", "StepConcurrencyLevel": 2 } }
+```
+
+#### PutAutoScalingPolicy
+Configure auto scaling for an instance group.
+```json
+{ "command": "PutAutoScalingPolicy", "params": { "ClusterId": "j-1234567890ABC", "InstanceGroupId": "ig-ABC123", "AutoScalingPolicy": { "Constraints": { "MinCapacity": 2, "MaxCapacity": 10 }, "Rules": [] } } }
+```
+
+#### AddTags
+Tag a cluster.
+```json
+{ "command": "AddTags", "params": { "ResourceId": "j-1234567890ABC", "Tags": { "env": "prod" } } }
+```
+
+#### RemoveTags
+Remove tags from a cluster.
+```json
+{ "command": "RemoveTags", "params": { "ResourceId": "j-1234567890ABC", "TagKeys": ["env"] } }
+```
+
+#### TerminateJobFlows
+Terminate one or more clusters.
+```json
+{ "command": "TerminateJobFlows", "params": { "JobFlowIds": ["j-1234567890ABC"] } }
+```
 
 #### ListSecurityConfigurations
 List security configurations.

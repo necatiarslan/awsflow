@@ -2,8 +2,8 @@
   "name": "IAMTool",
   "toolReferenceName": "IAMTool",
   "displayName": "IAM Tool",
-  "modelDescription": "Execute AWS IAM commands including permission simulation. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. GetUser {command:'GetUser', params:{UserName:'john'}}. ListUsers {command:'ListUsers', params:{}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}. GetAccountSummary {command:'GetAccountSummary', params:{}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}.",
-  "userDescription": "Inspect IAM roles, policies, users, groups, simulate permissions, and get account summary",
+  "modelDescription": "Execute AWS IAM commands for managing users, roles, groups, policies, and permissions. ALWAYS provide params object. Supports creation, modification, deletion, and querying of IAM resources, plus permission simulation. Examples: CreateRole {command:'CreateRole', params:{RoleName:'MyRole',AssumeRolePolicyDocument:'...'}}. AttachRolePolicy {command:'AttachRolePolicy', params:{RoleName:'MyRole',PolicyArn:'arn:aws:iam::aws:policy/ReadOnly'}}. GetRole {command:'GetRole', params:{RoleName:'my-role'}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}.",
+  "userDescription": "Manage and inspect IAM resources: create/delete roles, users, groups, policies, manage permissions, simulate access, and query IAM configurations",
   "tags": [
     "aws",
     "iam",
@@ -22,6 +22,29 @@
       "command": {
         "type": "string",
         "enum": [
+          "AddRoleToInstanceProfile",
+          "AttachGroupPolicy",
+          "AttachRolePolicy",
+          "AttachUserPolicy",
+          "CreateAccessKey",
+          "CreateGroup",
+          "CreateInstanceProfile",
+          "CreatePolicy",
+          "CreateRole",
+          "CreateServiceLinkedRole",
+          "CreateUser",
+          "DeleteAccessKey",
+          "DeleteGroup",
+          "DeleteGroupPolicy",
+          "DeleteInstanceProfile",
+          "DeletePolicy",
+          "DeleteRole",
+          "DeleteRolePolicy",
+          "DeleteUser",
+          "DeleteUserPolicy",
+          "DetachGroupPolicy",
+          "DetachRolePolicy",
+          "DetachUserPolicy",
           "GenerateCredentialReport",
           "GetAccountPasswordPolicy",
           "GetAccountSummary",
@@ -42,7 +65,18 @@
           "ListRoles",
           "ListRoleTags",
           "ListUsers",
-          "SimulatePrincipalPolicy"
+          "PutGroupPolicy",
+          "PutRolePolicy",
+          "PutUserPolicy",
+          "RemoveRoleFromInstanceProfile",
+          "SimulatePrincipalPolicy",
+          "TagPolicy",
+          "TagRole",
+          "TagUser",
+          "UntagPolicy",
+          "UntagRole",
+          "UntagUser",
+          "UpdateAssumeRolePolicy"
         ],
         "description": "The IAM command to execute"
       },
@@ -151,6 +185,60 @@
           "JobId": {
             "type": "string",
             "description": "Job ID from GenerateServiceLastAccessedDetails (Used by: GetServiceLastAccessedDetails (Required))"
+          },
+          "AssumeRolePolicyDocument": {
+            "type": "string",
+            "description": "JSON trust policy document (Used by: CreateRole (Required), UpdateAssumeRolePolicy (Required))"
+          },
+          "Description": {
+            "type": "string",
+            "description": "Resource description (Used by: CreateRole, CreateUser, CreateGroup, CreatePolicy, CreateInstanceProfile)"
+          },
+          "MaxSessionDuration": {
+            "type": "number",
+            "description": "Maximum session duration in seconds (Used by: CreateRole)"
+          },
+          "PermissionsBoundary": {
+            "type": "string",
+            "description": "ARN of permissions boundary policy (Used by: CreateRole, CreateUser)"
+          },
+          "Tags": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Resource tags (Used by: CreateRole, CreateUser, CreatePolicy, CreateInstanceProfile, TagRole, TagUser, TagPolicy)"
+          },
+          "Path": {
+            "type": "string",
+            "description": "Resource path (Used by: CreateRole, CreateUser, CreateGroup, CreatePolicy, CreateInstanceProfile)"
+          },
+          "PolicyDocument": {
+            "type": "string",
+            "description": "JSON policy document (Used by: CreatePolicy (Required), PutRolePolicy (Required), PutUserPolicy (Required), PutGroupPolicy (Required))"
+          },
+          "InstanceProfileName": {
+            "type": "string",
+            "description": "Instance profile name (Used by: CreateInstanceProfile (Required), AddRoleToInstanceProfile (Required), RemoveRoleFromInstanceProfile (Required), DeleteInstanceProfile (Required))"
+          },
+          "AWSServiceName": {
+            "type": "string",
+            "description": "AWS service name for service-linked role (Used by: CreateServiceLinkedRole (Required))"
+          },
+          "CustomSuffix": {
+            "type": "string",
+            "description": "Custom suffix for service-linked role (Used by: CreateServiceLinkedRole)"
+          },
+          "AccessKeyId": {
+            "type": "string",
+            "description": "Access key ID (Used by: DeleteAccessKey (Required))"
+          },
+          "TagKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag keys to remove (Used by: UntagRole (Required), UntagUser (Required), UntagPolicy (Required))"
           }
         }
       }

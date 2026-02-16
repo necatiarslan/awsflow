@@ -23,6 +23,33 @@ import {
   ListCrawlsCommand,
   GetConnectionsCommand,
   GetJobBookmarkCommand,
+  CreateDatabaseCommand,
+  CreateTableCommand,
+  CreatePartitionCommand,
+  CreateCrawlerCommand,
+  StartCrawlerCommand,
+  CreateTriggerCommand,
+  CreateConnectionCommand,
+  CreateDevEndpointCommand,
+  CreateWorkflowCommand,
+  CreateSecurityConfigurationCommand,
+  UpdateJobCommand,
+  UpdateCrawlerCommand,
+  UpdateTriggerCommand,
+  TagResourceCommand,
+  UntagResourceCommand,
+  DeleteJobCommand,
+  DeleteCrawlerCommand,
+  DeleteDatabaseCommand,
+  DeleteTableCommand,
+  DeletePartitionCommand,
+  DeleteConnectionCommand,
+  DeleteDevEndpointCommand,
+  DeleteWorkflowCommand,
+  DeleteSecurityConfigurationCommand,
+  DeleteTriggerCommand,
+  StopCrawlerCommand,
+  BatchStopJobRunCommand,
 } from '@aws-sdk/client-glue';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -48,7 +75,34 @@ type GlueCommand =
   | 'ListCrawlers'
   | 'ListCrawls'
   | 'GetConnections'
-  | 'GetJobBookmark';
+  | 'GetJobBookmark'
+  | 'CreateDatabase'
+  | 'CreateTable'
+  | 'CreatePartition'
+  | 'CreateCrawler'
+  | 'StartCrawler'
+  | 'CreateTrigger'
+  | 'CreateConnection'
+  | 'CreateDevEndpoint'
+  | 'CreateWorkflow'
+  | 'CreateSecurityConfiguration'
+  | 'UpdateJob'
+  | 'UpdateCrawler'
+  | 'UpdateTrigger'
+  | 'TagResource'
+  | 'UntagResource'
+  | 'DeleteJob'
+  | 'DeleteCrawler'
+  | 'DeleteDatabase'
+  | 'DeleteTable'
+  | 'DeletePartition'
+  | 'DeleteConnection'
+  | 'DeleteDevEndpoint'
+  | 'DeleteWorkflow'
+  | 'DeleteSecurityConfiguration'
+  | 'DeleteTrigger'
+  | 'StopCrawler'
+  | 'BatchStopJobRun';
 
 // Input interface - command + params object
 interface GlueToolInput extends BaseToolInput {
@@ -208,6 +262,87 @@ export class GlueTool extends BaseTool<GlueToolInput> {
 
       case 'StartJobRun':
         return await this.executeStartJobRun(params as StartJobRunParams);
+
+      case 'CreateDatabase':
+        return await client.send(new CreateDatabaseCommand(params as any));
+
+      case 'CreateTable':
+        return await client.send(new CreateTableCommand(params as any));
+
+      case 'CreatePartition':
+        return await client.send(new CreatePartitionCommand(params as any));
+
+      case 'CreateCrawler':
+        return await client.send(new CreateCrawlerCommand(params as any));
+
+      case 'StartCrawler':
+        return await client.send(new StartCrawlerCommand(params as any));
+
+      case 'CreateTrigger':
+        return await client.send(new CreateTriggerCommand(params as any));
+
+      case 'CreateConnection':
+        return await client.send(new CreateConnectionCommand(params as any));
+
+      case 'CreateDevEndpoint':
+        return await client.send(new CreateDevEndpointCommand(params as any));
+
+      case 'CreateWorkflow':
+        return await client.send(new CreateWorkflowCommand(params as any));
+
+      case 'CreateSecurityConfiguration':
+        return await client.send(new CreateSecurityConfigurationCommand(params as any));
+
+      case 'UpdateJob':
+        return await client.send(new UpdateJobCommand(params as any));
+
+      case 'UpdateCrawler':
+        return await client.send(new UpdateCrawlerCommand(params as any));
+
+      case 'UpdateTrigger':
+        return await client.send(new UpdateTriggerCommand(params as any));
+
+      case 'TagResource':
+        return await client.send(new TagResourceCommand(params as any));
+
+      case 'UntagResource':
+        return await client.send(new UntagResourceCommand(params as any));
+
+      case 'DeleteJob':
+        return await client.send(new DeleteJobCommand(params as any));
+
+      case 'DeleteCrawler':
+        return await client.send(new DeleteCrawlerCommand(params as any));
+
+      case 'DeleteDatabase':
+        return await client.send(new DeleteDatabaseCommand(params as any));
+
+      case 'DeleteTable':
+        return await client.send(new DeleteTableCommand(params as any));
+
+      case 'DeletePartition':
+        return await client.send(new DeletePartitionCommand(params as any));
+
+      case 'DeleteConnection':
+        return await client.send(new DeleteConnectionCommand(params as any));
+
+      case 'DeleteDevEndpoint':
+        return await client.send(new DeleteDevEndpointCommand(params as any));
+
+      case 'DeleteWorkflow':
+        return await client.send(new DeleteWorkflowCommand(params as any));
+
+      case 'DeleteSecurityConfiguration':
+        return await client.send(new DeleteSecurityConfigurationCommand(params as any));
+
+      case 'DeleteTrigger':
+        return await client.send(new DeleteTriggerCommand(params as any));
+
+      case 'StopCrawler':
+        return await client.send(new StopCrawlerCommand(params as any));
+
+      case 'BatchStopJobRun':
+        return await client.send(new BatchStopJobRunCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);

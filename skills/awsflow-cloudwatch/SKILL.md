@@ -1,11 +1,11 @@
 ---
 name: awsflow-cloudwatch
-description: Query CloudWatch log groups, streams, events, run Insights queries, inspect metric filters and subscriptions, and open the interactive log viewer using awsflow. Find logs from Lambda, API Gateway, Glue, RDS, ECS, Step Functions, and other AWS services.
+description: Query and manage CloudWatch log groups, streams, events, run Insights queries, inspect metric filters and subscriptions, and open the interactive log viewer using awsflow. Find logs from Lambda, API Gateway, Glue, RDS, ECS, Step Functions, and other AWS services.
 ---
 
 # Awsflow CloudWatch Logs
 
-Query CloudWatch log groups, streams, events, run Insights queries, and open the interactive log viewer.
+Query and manage CloudWatch log groups, streams, events, run Insights queries, and open the interactive log viewer.
 
 ## When to Use This Skill
 
@@ -17,6 +17,8 @@ Use this skill when the user:
 - Wants to find logs from Lambda, API Gateway, Glue, or other services
 - Needs to inspect metric filters, subscriptions, or query definitions
 - Wants to open the interactive CloudWatch Log Viewer
+- Needs to create, delete, or tag log groups and log streams
+- Needs to configure retention policies or resource policies
 
 ## Tool: CloudWatchLogTool
 
@@ -170,6 +172,96 @@ List log destinations.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | destinationNamePrefix | string | No | Destination name prefix |
+
+#### CreateLogGroup
+Create a new log group.
+```json
+{ "command": "CreateLogGroup", "params": { "logGroupName": "/aws/lambda/new-func" } }
+```
+
+#### CreateLogStream
+Create a new log stream in a log group.
+```json
+{ "command": "CreateLogStream", "params": { "logGroupName": "/aws/lambda/new-func", "logStreamName": "manual" } }
+```
+
+#### PutLogEvents
+Put log events to a log stream.
+```json
+{ "command": "PutLogEvents", "params": { "logGroupName": "/aws/lambda/new-func", "logStreamName": "manual", "logEvents": [{ "timestamp": 1704067200000, "message": "hello" }] } }
+```
+
+#### PutRetentionPolicy
+Set retention policy for a log group.
+```json
+{ "command": "PutRetentionPolicy", "params": { "logGroupName": "/aws/lambda/new-func", "retentionInDays": 30 } }
+```
+
+#### PutMetricFilter
+Create or update a metric filter.
+```json
+{ "command": "PutMetricFilter", "params": { "logGroupName": "/aws/lambda/new-func", "filterName": "ErrorCount", "filterPattern": "ERROR", "metricTransformations": [{ "metricName": "ErrorCount", "metricNamespace": "App", "metricValue": "1" }] } }
+```
+
+#### PutSubscriptionFilter
+Create or update a subscription filter.
+```json
+{ "command": "PutSubscriptionFilter", "params": { "logGroupName": "/aws/lambda/new-func", "filterName": "to-kinesis", "filterPattern": "", "destinationArn": "arn:aws:kinesis:..." } }
+```
+
+#### PutResourcePolicy
+Create or update a resource policy.
+```json
+{ "command": "PutResourcePolicy", "params": { "policyName": "cw-policy", "policyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"logs:PutLogEvents\"],\"Resource\":[\"*\"]}]}" } }
+```
+
+#### DeleteLogGroup
+Delete a log group.
+```json
+{ "command": "DeleteLogGroup", "params": { "logGroupName": "/aws/lambda/old-func" } }
+```
+
+#### DeleteLogStream
+Delete a log stream.
+```json
+{ "command": "DeleteLogStream", "params": { "logGroupName": "/aws/lambda/new-func", "logStreamName": "manual" } }
+```
+
+#### DeleteMetricFilter
+Delete a metric filter.
+```json
+{ "command": "DeleteMetricFilter", "params": { "logGroupName": "/aws/lambda/new-func", "filterName": "ErrorCount" } }
+```
+
+#### DeleteSubscriptionFilter
+Delete a subscription filter.
+```json
+{ "command": "DeleteSubscriptionFilter", "params": { "logGroupName": "/aws/lambda/new-func", "filterName": "to-kinesis" } }
+```
+
+#### DeleteRetentionPolicy
+Remove retention policy (reverts to Never Expire).
+```json
+{ "command": "DeleteRetentionPolicy", "params": { "logGroupName": "/aws/lambda/new-func" } }
+```
+
+#### DeleteResourcePolicy
+Delete a resource policy.
+```json
+{ "command": "DeleteResourcePolicy", "params": { "policyName": "cw-policy" } }
+```
+
+#### TagLogGroup
+Tag a log group.
+```json
+{ "command": "TagLogGroup", "params": { "logGroupName": "/aws/lambda/new-func", "tags": { "env": "prod" } } }
+```
+
+#### UntagLogGroup
+Remove tags from a log group.
+```json
+{ "command": "UntagLogGroup", "params": { "logGroupName": "/aws/lambda/new-func", "tagKeys": ["env"] } }
+```
 
 #### OpenCloudWatchLogView
 Open the interactive CloudWatch Log Viewer in VS Code.

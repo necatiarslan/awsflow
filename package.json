@@ -2,7 +2,7 @@
   "name": "awsflow",
   "displayName": "Awsflow: AWS AI Assistant",
   "description": "Let AI access AWS services and work for you",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "NecatiARSLAN",
   "repository": {
     "type": "git",
@@ -52,8 +52,8 @@
         "name": "APIGatewayTool",
         "toolReferenceName": "APIGatewayTool",
         "displayName": "API Gateway Tool",
-        "modelDescription": "Execute AWS API Gateway REST API commands including testing. ALWAYS provide params object. Examples: GetRestApis {command:'GetRestApis', params:{limit:25}}. GetResources {command:'GetResources', params:{restApiId:'abc'}}. GetMethod {command:'GetMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET'}}. TestInvokeMethod {command:'TestInvokeMethod', params:{restApiId:'abc', resourceId:'xyz', httpMethod:'GET', pathWithQueryString:'/test?param=value'}}. TestInvokeAuthorizer {command:'TestInvokeAuthorizer', params:{restApiId:'abc', authorizerId:'xyz', headers:{'Authorization':'Bearer token'}}}.",
-        "userDescription": "Inspect API Gateway REST APIs, resources, stages, usage, test invoke methods and authorizers",
+        "modelDescription": "Full lifecycle management of API Gateway REST APIs, resources, methods, deployments, stages, authorizers, API keys, usage plans, and custom domains. Includes CreateRestApi, CreateResource, PutMethod, CreateDeployment, CreateStage, CreateAuthorizer, CreateApiKey, CreateUsagePlan, CreateDomainName, ImportRestApi, DeleteRestApi, DeleteResource, DeleteMethod, DeleteStage, DeleteAuthorizer, DeleteApiKey, DeleteUsagePlan, DeleteDomainName, UpdateRestApi, UpdateStage, TagResource, UntagResource, plus all read and test operations.",
+        "userDescription": "Create, configure, deploy, and test API Gateway REST APIs and resources",
         "tags": [
           "aws",
           "api-gateway",
@@ -119,7 +119,29 @@
                 "GetVpcLink",
                 "GetVpcLinks",
                 "TestInvokeAuthorizer",
-                "TestInvokeMethod"
+                "TestInvokeMethod",
+                "CreateRestApi",
+                "CreateResource",
+                "PutMethod",
+                "CreateDeployment",
+                "CreateStage",
+                "CreateAuthorizer",
+                "CreateApiKey",
+                "CreateUsagePlan",
+                "CreateDomainName",
+                "ImportRestApi",
+                "DeleteRestApi",
+                "DeleteResource",
+                "DeleteMethod",
+                "DeleteStage",
+                "DeleteAuthorizer",
+                "DeleteApiKey",
+                "DeleteUsagePlan",
+                "DeleteDomainName",
+                "UpdateRestApi",
+                "UpdateStage",
+                "TagResource",
+                "UntagResource"
               ],
               "description": "The API Gateway command to execute"
             },
@@ -282,7 +304,22 @@
                 "ListTypeRegistrations",
                 "ListTypes",
                 "ListTypeVersions",
-                "ValidateTemplate"
+                "ValidateTemplate",
+                "CreateStack",
+                "CreateChangeSet",
+                "ExecuteChangeSet",
+                "CreateStackSet",
+                "CreateStackInstances",
+                "UpdateStack",
+                "UpdateStackSet",
+                "DeleteStack",
+                "DeleteChangeSet",
+                "DeleteStackSet",
+                "DeleteStackInstances",
+                "ContinueUpdateRollback",
+                "CancelUpdateStack",
+                "SetStackPolicy",
+                "UpdateTerminationProtection"
               ],
               "description": "The CloudFormation command to execute"
             },
@@ -358,7 +395,22 @@
                 "GetLogGroupFields",
                 "GetQueryResults",
                 "OpenCloudWatchLogView",
-                "StartQuery"
+                "StartQuery",
+                "CreateLogGroup",
+                "CreateLogStream",
+                "PutLogEvents",
+                "PutMetricFilter",
+                "PutSubscriptionFilter",
+                "PutRetentionPolicy",
+                "PutResourcePolicy",
+                "DeleteLogGroup",
+                "DeleteLogStream",
+                "DeleteMetricFilter",
+                "DeleteSubscriptionFilter",
+                "DeleteRetentionPolicy",
+                "DeleteResourcePolicy",
+                "TagLogGroup",
+                "UntagLogGroup"
               ],
               "description": "The CloudWatch Logs command to execute"
             },
@@ -646,7 +698,15 @@
                 "Scan",
                 "UpdateItem",
                 "UpdateTable",
-                "UpdateTimeToLive"
+                "UpdateTimeToLive",
+                "CreateBackup",
+                "RestoreTableFromBackup",
+                "CreateGlobalTable",
+                "UpdateGlobalTable",
+                "TagResource",
+                "UntagResource",
+                "DescribeBackup",
+                "DeleteBackup"
               ],
               "description": "The DynamoDB command to execute"
             },
@@ -756,8 +816,8 @@
         "name": "EC2Tool",
         "toolReferenceName": "EC2Tool",
         "displayName": "EC2 Tool",
-        "modelDescription": "Execute AWS EC2 read-only and info commands. ALWAYS provide params object. Examples: DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}. DescribeInstanceTypes {command:'DescribeInstanceTypes', params:{InstanceTypes:['t3.micro']}}. DescribeNetworkInterfaces {command:'DescribeNetworkInterfaces', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. DescribeRouteTables {command:'DescribeRouteTables', params:{Filters:[{Name:'vpc-id',Values:['vpc-123']}]}}. GetConsoleOutput {command:'GetConsoleOutput', params:{InstanceId:'i-123'}}.",
-        "userDescription": "Query EC2 instances, instance types, images, networking (VPCs, subnets, route tables, internet/NAT gateways, network interfaces, security groups), and console data",
+        "modelDescription": "Execute AWS EC2 commands for managing compute and network resources. ALWAYS provide params object. Supports read operations, instance lifecycle (launch, start, stop, terminate, reboot), VPC/network creation and configuration (VPCs, subnets, security groups, internet/NAT gateways, route tables), storage (volumes, snapshots, AMIs), and resource tagging. Examples: RunInstances {command:'RunInstances', params:{ImageId:'ami-123',InstanceType:'t3.micro',MinCount:1,MaxCount:1}}, CreateVpc {command:'CreateVpc', params:{CidrBlock:'10.0.0.0/16'}}, CreateSecurityGroup {command:'CreateSecurityGroup', params:{GroupName:'MyGroup',Description:'My security group',VpcId:'vpc-123'}}, DescribeInstances {command:'DescribeInstances', params:{InstanceIds:['i-123']}}.",
+        "userDescription": "Manage EC2 compute and network resources: launch/stop/terminate instances, create/delete VPCs and subnets, manage security groups, volumes, snapshots, AMIs, and query all resource types",
         "tags": [
           "aws",
           "ec2",
@@ -777,6 +837,39 @@
             "command": {
               "type": "string",
               "enum": [
+                "AllocateAddress",
+                "AssociateAddress",
+                "AssociateRouteTable",
+                "AttachInternetGateway",
+                "AttachVolume",
+                "AuthorizeSecurityGroupEgress",
+                "AuthorizeSecurityGroupIngress",
+                "CreateImage",
+                "CreateInternetGateway",
+                "CreateKeyPair",
+                "CreateLaunchTemplate",
+                "CreateNatGateway",
+                "CreateRoute",
+                "CreateRouteTable",
+                "CreateSecurityGroup",
+                "CreateSnapshot",
+                "CreateSubnet",
+                "CreateTags",
+                "CreateVolume",
+                "CreateVpc",
+                "DeleteInternetGateway",
+                "DeleteKeyPair",
+                "DeleteLaunchTemplate",
+                "DeleteNatGateway",
+                "DeleteRoute",
+                "DeleteRouteTable",
+                "DeleteSecurityGroup",
+                "DeleteSnapshot",
+                "DeleteSubnet",
+                "DeleteTags",
+                "DeleteVolume",
+                "DeleteVpc",
+                "DeregisterImage",
                 "DescribeAccountAttributes",
                 "DescribeAddresses",
                 "DescribeAvailabilityZones",
@@ -804,10 +897,22 @@
                 "DescribeVpcEndpoints",
                 "DescribeVpcPeeringConnections",
                 "DescribeVpcs",
+                "DetachInternetGateway",
+                "DetachVolume",
+                "DisassociateAddress",
+                "DisassociateRouteTable",
                 "GetConsoleOutput",
                 "GetHostReservationPurchasePreview",
                 "GetLaunchTemplateData",
-                "GetPasswordData"
+                "GetPasswordData",
+                "RebootInstances",
+                "ReleaseAddress",
+                "RevokeSecurityGroupEgress",
+                "RevokeSecurityGroupIngress",
+                "RunInstances",
+                "StartInstances",
+                "StopInstances",
+                "TerminateInstances"
               ],
               "description": "The EC2 command to execute"
             },
@@ -966,6 +1071,191 @@
                     "type": "string"
                   },
                   "description": "Product descriptions for spot price history (Used by: DescribeSpotPriceHistory)"
+                },
+                "ImageId": {
+                  "type": "string",
+                  "description": "AMI ID for launching instances or creating images (Used by: RunInstances (Required), CreateImage, DeregisterImage)"
+                },
+                "InstanceType": {
+                  "type": "string",
+                  "description": "Instance type like t3.micro, m5.large (Used by: RunInstances (Required))"
+                },
+                "MinCount": {
+                  "type": "number",
+                  "description": "Minimum number of instances to launch (Used by: RunInstances (Required))"
+                },
+                "MaxCount": {
+                  "type": "number",
+                  "description": "Maximum number of instances to launch (Used by: RunInstances (Required))"
+                },
+                "KeyName": {
+                  "type": "string",
+                  "description": "Key pair name for SSH access (Used by: RunInstances, CreateKeyPair, DeleteKeyPair)"
+                },
+                "SecurityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Security group names (Used by: RunInstances)"
+                },
+                "SecurityGroupIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Security group IDs (Used by: RunInstances)"
+                },
+                "UserData": {
+                  "type": "string",
+                  "description": "Base64-encoded user data script (Used by: RunInstances)"
+                },
+                "SubnetId": {
+                  "type": "string",
+                  "description": "Subnet ID for instance/NAT gateway placement (Used by: RunInstances, CreateSubnet, DeleteSubnet, CreateNatGateway)"
+                },
+                "VpcId": {
+                  "type": "string",
+                  "description": "VPC ID for resource creation (Used by: CreateSubnet (Required), CreateSecurityGroup (Required), DeleteVpc, AttachInternetGateway, DetachInternetGateway, CreateRouteTable)"
+                },
+                "CidrBlock": {
+                  "type": "string",
+                  "description": "CIDR block like 10.0.0.0/16 (Used by: CreateVpc (Required), CreateSubnet (Required))"
+                },
+                "GroupName": {
+                  "type": "string",
+                  "description": "Security group name (Used by: CreateSecurityGroup (Required), DeleteSecurityGroup)"
+                },
+                "GroupId": {
+                  "type": "string",
+                  "description": "Security group ID (Used by: AuthorizeSecurityGroupIngress, AuthorizeSecurityGroupEgress, RevokeSecurityGroupIngress, RevokeSecurityGroupEgress, DeleteSecurityGroup)"
+                },
+                "Description": {
+                  "type": "string",
+                  "description": "Resource description (Used by: CreateSecurityGroup (Required), CreateSnapshot, CreateVolume)"
+                },
+                "IpPermissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Security group rule definitions (Used by: AuthorizeSecurityGroupIngress, AuthorizeSecurityGroupEgress, RevokeSecurityGroupIngress, RevokeSecurityGroupEgress)"
+                },
+                "VolumeId": {
+                  "type": "string",
+                  "description": "EBS volume ID (Used by: DeleteVolume, AttachVolume (Required), DetachVolume (Required), CreateSnapshot)"
+                },
+                "AvailabilityZone": {
+                  "type": "string",
+                  "description": "Availability zone for volume creation (Used by: CreateVolume (Required))"
+                },
+                "Size": {
+                  "type": "number",
+                  "description": "Volume size in GiB (Used by: CreateVolume)"
+                },
+                "VolumeType": {
+                  "type": "string",
+                  "description": "Volume type: gp2, gp3, io1, io2, st1, sc1 (Used by: CreateVolume)"
+                },
+                "Device": {
+                  "type": "string",
+                  "description": "Device name like /dev/sdf (Used by: AttachVolume (Required), DetachVolume)"
+                },
+                "SnapshotId": {
+                  "type": "string",
+                  "description": "Snapshot ID (Used by: CreateVolume, DeleteSnapshot)"
+                },
+                "Name": {
+                  "type": "string",
+                  "description": "Resource name (Used by: CreateImage, CreateSnapshot, CreateLaunchTemplate)"
+                },
+                "NoReboot": {
+                  "type": "boolean",
+                  "description": "Don't reboot instance when creating image (Used by: CreateImage)"
+                },
+                "Resources": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Resource IDs to tag (Used by: CreateTags (Required), DeleteTags)"
+                },
+                "Tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Tag key-value pairs (Used by: CreateTags (Required), DeleteTags, RunInstances, CreateVpc, CreateSubnet, CreateVolume)"
+                },
+                "InternetGatewayId": {
+                  "type": "string",
+                  "description": "Internet gateway ID (Used by: DeleteInternetGateway, AttachInternetGateway (Required), DetachInternetGateway (Required))"
+                },
+                "NatGatewayId": {
+                  "type": "string",
+                  "description": "NAT gateway ID (Used by: DeleteNatGateway)"
+                },
+                "AllocationId": {
+                  "type": "string",
+                  "description": "Elastic IP allocation ID (Used by: CreateNatGateway (Required), ReleaseAddress, AssociateAddress)"
+                },
+                "RouteTableId": {
+                  "type": "string",
+                  "description": "Route table ID (Used by: CreateRoute (Required), DeleteRoute (Required), DeleteRouteTable, AssociateRouteTable (Required), DisassociateRouteTable)"
+                },
+                "DestinationCidrBlock": {
+                  "type": "string",
+                  "description": "Destination CIDR for route (Used by: CreateRoute, DeleteRoute)"
+                },
+                "GatewayId": {
+                  "type": "string",
+                  "description": "Gateway ID for route target (Used by: CreateRoute)"
+                },
+                "AssociationId": {
+                  "type": "string",
+                  "description": "Route table association ID (Used by: DisassociateRouteTable (Required))"
+                },
+                "LaunchTemplateName": {
+                  "type": "string",
+                  "description": "Launch template name (Used by: CreateLaunchTemplate, DeleteLaunchTemplate)"
+                },
+                "LaunchTemplateId": {
+                  "type": "string",
+                  "description": "Launch template ID (Used by: DeleteLaunchTemplate)"
+                },
+                "LaunchTemplateData": {
+                  "type": "object",
+                  "description": "Launch template configuration (Used by: CreateLaunchTemplate (Required))"
+                },
+                "Domain": {
+                  "type": "string",
+                  "description": "Domain: vpc or standard (Used by: AllocateAddress)"
+                },
+                "AllocationIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Elastic IP allocation IDs (Used by: DescribeAddresses)"
+                },
+                "NetworkInterfaceId": {
+                  "type": "string",
+                  "description": "Network interface ID (Used by: AssociateAddress)"
+                },
+                "PrivateIpAddress": {
+                  "type": "string",
+                  "description": "Private IP address (Used by: AssociateAddress)"
+                },
+                "AssociationIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Elastic IP association IDs (Used by: DisassociateAddress)"
+                },
+                "Force": {
+                  "type": "boolean",
+                  "description": "Force operation (Used by: StopInstances, DetachVolume)"
                 }
               }
             }
@@ -976,8 +1266,8 @@
         "name": "EMRTool",
         "toolReferenceName": "EMRTool",
         "displayName": "EMR Tool",
-        "modelDescription": "Describe and list EMR clusters, steps, studios, notebook executions, release labels, and security settings. Commands are read-only: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
-        "userDescription": "Inspect EMR clusters, notebooks, steps, studios, and related configurations",
+        "modelDescription": "Full lifecycle management of EMR clusters, steps, studios, and security configurations. Includes RunJobFlow, AddJobFlowSteps, CreateStudio, CreateSecurityConfiguration, AddInstanceFleet, AddInstanceGroups, AddTags, RemoveTags, SetTerminationProtection, ModifyCluster, TerminateJobFlows, SetVisibleToAllUsers, PutAutoScalingPolicy, plus all read operations: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
+        "userDescription": "Create, manage, and terminate EMR clusters, studios, and configurations",
         "tags": [
           "aws",
           "emr",
@@ -1023,7 +1313,20 @@
                 "ListSteps",
                 "ListStudios",
                 "ListStudioSessionMappings",
-                "ListSupportedInstanceTypes"
+                "ListSupportedInstanceTypes",
+                "RunJobFlow",
+                "AddJobFlowSteps",
+                "CreateStudio",
+                "CreateSecurityConfiguration",
+                "AddInstanceFleet",
+                "AddInstanceGroups",
+                "AddTags",
+                "RemoveTags",
+                "SetTerminationProtection",
+                "ModifyCluster",
+                "TerminateJobFlows",
+                "SetVisibleToAllUsers",
+                "PutAutoScalingPolicy"
               ],
               "description": "The EMR command to execute"
             },
@@ -1144,8 +1447,8 @@
         "name": "GlueTool",
         "toolReferenceName": "GlueTool",
         "displayName": "Glue Tool",
-        "modelDescription": "Execute AWS Glue commands including Data Catalog queries. ALWAYS provide params object. Examples: GetDatabases {command:'GetDatabases', params:{}}. GetDatabase {command:'GetDatabase', params:{Name:'my-database'}}. GetTables {command:'GetTables', params:{DatabaseName:'my-database'}}. GetTable {command:'GetTable', params:{DatabaseName:'my-database', Name:'my-table'}}. GetPartitions {command:'GetPartitions', params:{DatabaseName:'my-database', TableName:'my-table'}}. ListCrawlers {command:'ListCrawlers', params:{}}. GetCrawler {command:'GetCrawler', params:{Name:'my-crawler'}}. CreateJob {command:'CreateJob', params:{Name:'my-job', Role:'arn:aws:iam::...:role/...', Command:{Name:'glueetl'}}}. StartJobRun {command:'StartJobRun', params:{JobName:'my-job'}}.",
-        "userDescription": "Manage Glue ETL jobs, triggers, crawlers, and query Data Catalog (databases, tables, partitions, connections)",
+        "modelDescription": "Full lifecycle management of Glue ETL jobs, crawlers, databases, tables, workflows, and connections. Includes CreateDatabase, CreateTable, CreateCrawler, StartCrawler, CreateJob, CreateTrigger, CreateConnection, CreateWorkflow, UpdateJob, UpdateCrawler, DeleteJob, DeleteCrawler, StopCrawler, BatchStopJobRun, plus all read operations.",
+        "userDescription": "Create, manage, and monitor Glue ETL jobs, crawlers, and data catalog",
         "tags": [
           "aws",
           "glue",
@@ -1185,7 +1488,34 @@
                 "ListCrawlers",
                 "ListJobs",
                 "ListTriggers",
-                "StartJobRun"
+                "StartJobRun",
+                "CreateDatabase",
+                "CreateTable",
+                "CreatePartition",
+                "CreateCrawler",
+                "StartCrawler",
+                "CreateTrigger",
+                "CreateConnection",
+                "CreateDevEndpoint",
+                "CreateWorkflow",
+                "CreateSecurityConfiguration",
+                "UpdateJob",
+                "UpdateCrawler",
+                "UpdateTrigger",
+                "TagResource",
+                "UntagResource",
+                "DeleteJob",
+                "DeleteCrawler",
+                "DeleteDatabase",
+                "DeleteTable",
+                "DeletePartition",
+                "DeleteConnection",
+                "DeleteDevEndpoint",
+                "DeleteWorkflow",
+                "DeleteSecurityConfiguration",
+                "DeleteTrigger",
+                "StopCrawler",
+                "BatchStopJobRun"
               ],
               "description": "The Glue command to execute"
             },
@@ -1332,8 +1662,8 @@
         "name": "IAMTool",
         "toolReferenceName": "IAMTool",
         "displayName": "IAM Tool",
-        "modelDescription": "Execute AWS IAM commands including permission simulation. ALWAYS provide params object. Examples: GetRole {command:'GetRole', params:{RoleName:'my-role'}}. GetUser {command:'GetUser', params:{UserName:'john'}}. ListUsers {command:'ListUsers', params:{}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}. GetAccountSummary {command:'GetAccountSummary', params:{}}. ListAttachedRolePolicies {command:'ListAttachedRolePolicies', params:{RoleName:'my-role'}}.",
-        "userDescription": "Inspect IAM roles, policies, users, groups, simulate permissions, and get account summary",
+        "modelDescription": "Execute AWS IAM commands for managing users, roles, groups, policies, and permissions. ALWAYS provide params object. Supports creation, modification, deletion, and querying of IAM resources, plus permission simulation. Examples: CreateRole {command:'CreateRole', params:{RoleName:'MyRole',AssumeRolePolicyDocument:'...'}}. AttachRolePolicy {command:'AttachRolePolicy', params:{RoleName:'MyRole',PolicyArn:'arn:aws:iam::aws:policy/ReadOnly'}}. GetRole {command:'GetRole', params:{RoleName:'my-role'}}. SimulatePrincipalPolicy {command:'SimulatePrincipalPolicy', params:{PolicySourceArn:'arn:aws:iam::123:role/MyRole', ActionNames:['s3:GetObject'], ResourceArns:['arn:aws:s3:::bucket/*']}}.",
+        "userDescription": "Manage and inspect IAM resources: create/delete roles, users, groups, policies, manage permissions, simulate access, and query IAM configurations",
         "tags": [
           "aws",
           "iam",
@@ -1352,6 +1682,29 @@
             "command": {
               "type": "string",
               "enum": [
+                "AddRoleToInstanceProfile",
+                "AttachGroupPolicy",
+                "AttachRolePolicy",
+                "AttachUserPolicy",
+                "CreateAccessKey",
+                "CreateGroup",
+                "CreateInstanceProfile",
+                "CreatePolicy",
+                "CreateRole",
+                "CreateServiceLinkedRole",
+                "CreateUser",
+                "DeleteAccessKey",
+                "DeleteGroup",
+                "DeleteGroupPolicy",
+                "DeleteInstanceProfile",
+                "DeletePolicy",
+                "DeleteRole",
+                "DeleteRolePolicy",
+                "DeleteUser",
+                "DeleteUserPolicy",
+                "DetachGroupPolicy",
+                "DetachRolePolicy",
+                "DetachUserPolicy",
                 "GenerateCredentialReport",
                 "GetAccountPasswordPolicy",
                 "GetAccountSummary",
@@ -1372,7 +1725,18 @@
                 "ListRoles",
                 "ListRoleTags",
                 "ListUsers",
-                "SimulatePrincipalPolicy"
+                "PutGroupPolicy",
+                "PutRolePolicy",
+                "PutUserPolicy",
+                "RemoveRoleFromInstanceProfile",
+                "SimulatePrincipalPolicy",
+                "TagPolicy",
+                "TagRole",
+                "TagUser",
+                "UntagPolicy",
+                "UntagRole",
+                "UntagUser",
+                "UpdateAssumeRolePolicy"
               ],
               "description": "The IAM command to execute"
             },
@@ -1481,6 +1845,60 @@
                 "JobId": {
                   "type": "string",
                   "description": "Job ID from GenerateServiceLastAccessedDetails (Used by: GetServiceLastAccessedDetails (Required))"
+                },
+                "AssumeRolePolicyDocument": {
+                  "type": "string",
+                  "description": "JSON trust policy document (Used by: CreateRole (Required), UpdateAssumeRolePolicy (Required))"
+                },
+                "Description": {
+                  "type": "string",
+                  "description": "Resource description (Used by: CreateRole, CreateUser, CreateGroup, CreatePolicy, CreateInstanceProfile)"
+                },
+                "MaxSessionDuration": {
+                  "type": "number",
+                  "description": "Maximum session duration in seconds (Used by: CreateRole)"
+                },
+                "PermissionsBoundary": {
+                  "type": "string",
+                  "description": "ARN of permissions boundary policy (Used by: CreateRole, CreateUser)"
+                },
+                "Tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "description": "Resource tags (Used by: CreateRole, CreateUser, CreatePolicy, CreateInstanceProfile, TagRole, TagUser, TagPolicy)"
+                },
+                "Path": {
+                  "type": "string",
+                  "description": "Resource path (Used by: CreateRole, CreateUser, CreateGroup, CreatePolicy, CreateInstanceProfile)"
+                },
+                "PolicyDocument": {
+                  "type": "string",
+                  "description": "JSON policy document (Used by: CreatePolicy (Required), PutRolePolicy (Required), PutUserPolicy (Required), PutGroupPolicy (Required))"
+                },
+                "InstanceProfileName": {
+                  "type": "string",
+                  "description": "Instance profile name (Used by: CreateInstanceProfile (Required), AddRoleToInstanceProfile (Required), RemoveRoleFromInstanceProfile (Required), DeleteInstanceProfile (Required))"
+                },
+                "AWSServiceName": {
+                  "type": "string",
+                  "description": "AWS service name for service-linked role (Used by: CreateServiceLinkedRole (Required))"
+                },
+                "CustomSuffix": {
+                  "type": "string",
+                  "description": "Custom suffix for service-linked role (Used by: CreateServiceLinkedRole)"
+                },
+                "AccessKeyId": {
+                  "type": "string",
+                  "description": "Access key ID (Used by: DeleteAccessKey (Required))"
+                },
+                "TagKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Tag keys to remove (Used by: UntagRole (Required), UntagUser (Required), UntagPolicy (Required))"
                 }
               }
             }
@@ -1491,8 +1909,8 @@
         "name": "LambdaTool",
         "toolReferenceName": "LambdaTool",
         "displayName": "Lambda Tool",
-        "modelDescription": "Execute AWS Lambda commands including event source mappings. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. ListEventSourceMappings {command:'ListEventSourceMappings', params:{FunctionName:'my-function'}}. GetEventSourceMapping {command:'GetEventSourceMapping', params:{UUID:'12345678-1234-1234-1234-123456789012'}}. GetFunctionConcurrency {command:'GetFunctionConcurrency', params:{FunctionName:'my-function'}}. ListAliases {command:'ListAliases', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
-        "userDescription": "Manage Lambda functions, event source mappings, aliases, versions, layers, concurrency, function URLs, and invoke functions",
+        "modelDescription": "Execute AWS Lambda commands for managing serverless functions. ALWAYS provide params object. Supports creation, configuration, invocation, and deletion of functions, aliases, event source mappings, layers, and permissions. Examples: CreateFunction {command:'CreateFunction', params:{FunctionName:'my-func',Runtime:'nodejs18.x',Role:'arn:...',Handler:'index.handler',Code:{ZipFile:'...'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}. CreateEventSourceMapping {command:'CreateEventSourceMapping', params:{FunctionName:'my-func',EventSourceArn:'arn:...'}}. ListFunctions {command:'ListFunctions', params:{MaxItems:10}}.",
+        "userDescription": "Manage Lambda functions: create/delete/invoke functions, manage event sources, aliases, versions, layers, concurrency, function URLs, and permissions",
         "tags": [
           "aws",
           "lambda",
@@ -1512,6 +1930,18 @@
             "command": {
               "type": "string",
               "enum": [
+                "AddLayerVersionPermission",
+                "AddPermission",
+                "CreateAlias",
+                "CreateEventSourceMapping",
+                "CreateFunction",
+                "CreateFunctionUrlConfig",
+                "DeleteAlias",
+                "DeleteEventSourceMapping",
+                "DeleteFunction",
+                "DeleteFunctionConcurrency",
+                "DeleteFunctionEventInvokeConfig",
+                "DeleteFunctionUrlConfig",
                 "GetAccountSettings",
                 "GetAlias",
                 "GetEventSourceMapping",
@@ -1529,9 +1959,19 @@
                 "ListLayerVersions",
                 "ListTags",
                 "ListVersionsByFunction",
+                "PublishLayerVersion",
+                "PublishVersion",
+                "PutFunctionConcurrency",
+                "PutFunctionEventInvokeConfig",
+                "RemoveLayerVersionPermission",
+                "RemovePermission",
                 "TagResource",
                 "UntagResource",
-                "UpdateFunctionCode"
+                "UpdateAlias",
+                "UpdateEventSourceMapping",
+                "UpdateFunctionCode",
+                "UpdateFunctionConfiguration",
+                "UpdateFunctionEventInvokeConfig"
               ],
               "description": "The Lambda command to execute"
             },
@@ -1549,7 +1989,7 @@
                 },
                 "FunctionVersion": {
                   "type": "string",
-                  "description": "Set to ALL to include all versions (Used by: ListFunctions)"
+                  "description": "Function version (Used by: CreateAlias (Required), UpdateAlias)"
                 },
                 "Marker": {
                   "type": "string",
@@ -1669,6 +2109,155 @@
                 "CodeSigningConfigArn": {
                   "type": "string",
                   "description": "Code signing configuration ARN (Used by: ListFunctionsByCodeSigningConfig (Required))"
+                },
+                "Runtime": {
+                  "type": "string",
+                  "description": "Runtime environment (nodejs18.x, python3.11, java17, etc.) (Used by: CreateFunction (Required))"
+                },
+                "Role": {
+                  "type": "string",
+                  "description": "IAM role ARN for function execution (Used by: CreateFunction (Required))"
+                },
+                "Handler": {
+                  "type": "string",
+                  "description": "Function handler (e.g., index.handler) (Used by: CreateFunction (Required), UpdateFunctionConfiguration)"
+                },
+                "Code": {
+                  "type": "object",
+                  "description": "Function code configuration (ZipFile, S3Bucket/Key, or ImageUri) (Used by: CreateFunction (Required))"
+                },
+                "Description": {
+                  "type": "string",
+                  "description": "Function or alias description (Used by: CreateFunction, CreateAlias, PublishVersion, UpdateFunctionConfiguration)"
+                },
+                "Timeout": {
+                  "type": "number",
+                  "description": "Timeout in seconds (1-900) (Used by: CreateFunction, UpdateFunctionConfiguration)"
+                },
+                "MemorySize": {
+                  "type": "number",
+                  "description": "Memory in MB (128-10240) (Used by: CreateFunction, UpdateFunctionConfiguration)"
+                },
+                "Environment": {
+                  "type": "object",
+                  "description": "Environment variables (Used by: CreateFunction, UpdateFunctionConfiguration)"
+                },
+                "VpcConfig": {
+                  "type": "object",
+                  "description": "VPC configuration (Used by: CreateFunction, UpdateFunctionConfiguration)"
+                },
+                "Layers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Layer ARNs (Used by: CreateFunction, UpdateFunctionConfiguration)"
+                },
+                "RoutingConfig": {
+                  "type": "object",
+                  "description": "Traffic routing configuration for alias (Used by: CreateAlias, UpdateAlias)"
+                },
+                "CodeSha256": {
+                  "type": "string",
+                  "description": "Version code SHA-256 (Used by: PublishVersion)"
+                },
+                "StartingPosition": {
+                  "type": "string",
+                  "description": "Starting position for stream: TRIM_HORIZON, LATEST, AT_TIMESTAMP (Used by: CreateEventSourceMapping (Required))"
+                },
+                "Enabled": {
+                  "type": "boolean",
+                  "description": "Enable/disable event source mapping (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+                },
+                "BatchSize": {
+                  "type": "number",
+                  "description": "Number of records per batch (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+                },
+                "MaximumBatchingWindowInSeconds": {
+                  "type": "number",
+                  "description": "Maximum batching window (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+                },
+                "ParallelizationFactor": {
+                  "type": "number",
+                  "description": "Number of batches to process simultaneously (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+                },
+                "AuthType": {
+                  "type": "string",
+                  "description": "Auth type for function URL: AWS_IAM or NONE (Used by: CreateFunctionUrlConfig (Required))"
+                },
+                "Cors": {
+                  "type": "object",
+                  "description": "CORS configuration (Used by: CreateFunctionUrlConfig)"
+                },
+                "InvokeMode": {
+                  "type": "string",
+                  "description": "Invoke mode: BUFFERED or RESPONSE_STREAM (Used by: CreateFunctionUrlConfig)"
+                },
+                "ReservedConcurrentExecutions": {
+                  "type": "number",
+                  "description": "Reserved concurrent executions (Used by: PutFunctionConcurrency (Required))"
+                },
+                "StatementId": {
+                  "type": "string",
+                  "description": "Permission statement ID (Used by: AddPermission (Required), RemovePermission (Required))"
+                },
+                "Action": {
+                  "type": "string",
+                  "description": "Action to allow (e.g., lambda:InvokeFunction) (Used by: AddPermission (Required), AddLayerVersionPermission (Required))"
+                },
+                "Principal": {
+                  "type": "string",
+                  "description": "Principal to grant permission (Used by: AddPermission (Required), AddLayerVersionPermission (Required))"
+                },
+                "SourceArn": {
+                  "type": "string",
+                  "description": "Source ARN for permission (Used by: AddPermission)"
+                },
+                "SourceAccount": {
+                  "type": "string",
+                  "description": "Source account ID (Used by: AddPermission)"
+                },
+                "VersionNumber": {
+                  "type": "number",
+                  "description": "Layer version number (Used by: AddLayerVersionPermission (Required), RemoveLayerVersionPermission (Required))"
+                },
+                "OrganizationId": {
+                  "type": "string",
+                  "description": "Organization ID for permission (Used by: AddLayerVersionPermission)"
+                },
+                "Content": {
+                  "type": "object",
+                  "description": "Layer content (S3Bucket/Key or ZipFile) (Used by: PublishLayerVersion (Required))"
+                },
+                "CompatibleRuntimes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Compatible runtimes for layer (Used by: PublishLayerVersion)"
+                },
+                "LicenseInfo": {
+                  "type": "string",
+                  "description": "Layer license info (Used by: PublishLayerVersion)"
+                },
+                "CompatibleArchitectures": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Compatible architectures (x86_64, arm64) (Used by: PublishLayerVersion)"
+                },
+                "MaximumRetryAttempts": {
+                  "type": "number",
+                  "description": "Maximum retry attempts (0-2) (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
+                },
+                "MaximumEventAgeInSeconds": {
+                  "type": "number",
+                  "description": "Maximum event age in seconds (60-21600) (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
+                },
+                "DestinationConfig": {
+                  "type": "object",
+                  "description": "Destination configuration for async invocation (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
                 }
               }
             }
@@ -1679,8 +2268,8 @@
         "name": "RDSTool",
         "toolReferenceName": "RDSTool",
         "displayName": "RDS Tool",
-        "modelDescription": "Execute AWS RDS describe and log commands. ALWAYS provide params object. Examples: DescribeDBInstances {command:'DescribeDBInstances', params:{DBInstanceIdentifier:'my-db'}}. DescribeDBClusters {command:'DescribeDBClusters', params:{}}.",
-        "userDescription": "Inspect Amazon RDS: instances, clusters, snapshots, parameters, logs",
+        "modelDescription": "Full lifecycle management of RDS database instances, clusters, snapshots, parameter groups, subnet groups, proxies, and event subscriptions. Includes CreateDBInstance, CreateDBCluster, CreateDBSnapshot, RestoreDBInstanceFromDBSnapshot, CreateDBParameterGroup, CreateDBSubnetGroup, CreateDBProxy, ModifyDBInstance, StartDBInstance, StopDBInstance, RebootDBInstance, DeleteDBInstance, CopyDBSnapshot, PromoteReadReplica, plus all describe operations.",
+        "userDescription": "Create, manage, and monitor RDS database instances, clusters, and snapshots",
         "tags": [
           "aws",
           "rds",
@@ -1733,7 +2322,38 @@
                 "DescribeTenantDatabases",
                 "DescribeValidDBInstanceModifications",
                 "DownloadDBLogFilePortion",
-                "ListTagsForResource"
+                "ListTagsForResource",
+                "CreateDBInstance",
+                "CreateDBCluster",
+                "CreateDBSnapshot",
+                "CreateDBClusterSnapshot",
+                "RestoreDBInstanceFromDBSnapshot",
+                "RestoreDBClusterFromSnapshot",
+                "CreateDBParameterGroup",
+                "CreateDBSubnetGroup",
+                "CreateDBSecurityGroup",
+                "CreateDBProxy",
+                "CreateEventSubscription",
+                "ModifyDBInstance",
+                "ModifyDBCluster",
+                "StartDBInstance",
+                "StopDBInstance",
+                "RebootDBInstance",
+                "AddTagsToResource",
+                "RemoveTagsFromResource",
+                "DeleteDBInstance",
+                "DeleteDBCluster",
+                "DeleteDBSnapshot",
+                "DeleteDBClusterSnapshot",
+                "DeleteDBParameterGroup",
+                "DeleteDBSubnetGroup",
+                "DeleteDBSecurityGroup",
+                "DeleteDBProxy",
+                "DeleteEventSubscription",
+                "CopyDBSnapshot",
+                "CopyDBClusterSnapshot",
+                "PromoteReadReplica",
+                "CreateDBInstanceReadReplica"
               ],
               "description": "The RDS command to execute"
             },
@@ -2058,7 +2678,32 @@
                 "ListObjectVersions",
                 "OpenS3Explorer",
                 "PutObject",
-                "SelectObjectContent"
+                "SelectObjectContent",
+                "CreateBucket",
+                "DeleteBucket",
+                "PutBucketVersioning",
+                "PutBucketEncryption",
+                "PutBucketLifecycleConfiguration",
+                "PutBucketReplication",
+                "PutBucketLogging",
+                "PutBucketTagging",
+                "PutBucketCors",
+                "PutBucketWebsite",
+                "PutBucketPolicy",
+                "PutBucketNotificationConfiguration",
+                "PutBucketAccelerateConfiguration",
+                "PutPublicAccessBlock",
+                "DeleteBucketPolicy",
+                "DeleteBucketTagging",
+                "DeleteBucketWebsite",
+                "DeleteBucketCors",
+                "DeleteBucketLifecycle",
+                "DeleteBucketReplication",
+                "PutObjectTagging",
+                "DeleteObjectTagging",
+                "PutObjectAcl",
+                "PutObjectLegalHold",
+                "PutObjectRetention"
               ],
               "description": "The S3 command to execute"
             },
@@ -2200,22 +2845,38 @@
               "type": "string",
               "enum": [
                 "CheckIfPhoneNumberIsOptedOut",
-                "GetDataProtectionPolicy",
                 "GetEndpointAttributes",
                 "GetPlatformApplicationAttributes",
                 "GetSMSAttributes",
-                "GetSMSSandboxAccountStatus",
                 "GetSubscriptionAttributes",
                 "GetTopicAttributes",
-                "ListEndpointsByPlatformApplication",
-                "ListOriginationNumbers",
                 "ListPhoneNumbersOptedOut",
-                "ListPlatformApplications",
                 "ListSubscriptionsByTopic",
                 "ListSubscriptions",
                 "ListTagsForResource",
                 "ListTopics",
-                "Publish"
+                "Publish",
+                "GetDataProtectionPolicy",
+                "GetSMSSandboxAccountStatus",
+                "ListPlatformApplications",
+                "ListEndpointsByPlatformApplication",
+                "ListOriginationNumbers",
+                "CreateTopic",
+                "Subscribe",
+                "Unsubscribe",
+                "CreatePlatformApplication",
+                "CreatePlatformEndpoint",
+                "SetTopicAttributes",
+                "SetSubscriptionAttributes",
+                "AddPermission",
+                "RemovePermission",
+                "TagResource",
+                "UntagResource",
+                "OptInPhoneNumber",
+                "DeleteTopic",
+                "DeletePlatformApplication",
+                "DeleteEndpoint",
+                "ConfirmSubscription"
               ],
               "description": "The SNS command to execute"
             },
@@ -2287,8 +2948,8 @@
         "name": "SQSTool",
         "toolReferenceName": "SQSTool",
         "displayName": "SQS Tool",
-        "modelDescription": "Execute AWS SQS (Simple Queue Service) commands. ALWAYS provide params object. Examples: ListQueues {command:'ListQueues', params:{}}. GetQueueUrl {command:'GetQueueUrl', params:{QueueName:'my-queue'}}. SendMessage {command:'SendMessage', params:{QueueUrl:'https://...', MessageBody:'text'}}. ReceiveMessage {command:'ReceiveMessage', params:{QueueUrl:'https://...', MaxNumberOfMessages:10}}. DeleteMessage {command:'DeleteMessage', params:{QueueUrl:'https://...', ReceiptHandle:'handle'}}.",
-        "userDescription": "Manage SQS queues and send/receive messages",
+        "modelDescription": "Full lifecycle management of SQS queues. Includes CreateQueue, SetQueueAttributes, AddPermission, RemovePermission, TagQueue, UntagQueue, DeleteQueue, plus ListQueues, GetQueueAttributes, SendMessage, ReceiveMessage, DeleteMessage, PurgeQueue, ChangeMessageVisibility, and batch operations.",
+        "userDescription": "Create, configure, and manage SQS queues and send/receive messages",
         "tags": [
           "aws",
           "sqs",
@@ -2308,19 +2969,26 @@
             "command": {
               "type": "string",
               "enum": [
-                "ChangeMessageVisibility",
-                "ChangeMessageVisibilityBatch",
-                "DeleteMessage",
-                "DeleteMessageBatch",
+                "ListQueues",
+                "ListDeadLetterSourceQueues",
+                "ListQueueTags",
                 "GetQueueAttributes",
                 "GetQueueUrl",
-                "ListDeadLetterSourceQueues",
-                "ListQueues",
-                "ListQueueTags",
-                "PurgeQueue",
-                "ReceiveMessage",
                 "SendMessage",
-                "SendMessageBatch"
+                "ReceiveMessage",
+                "DeleteMessage",
+                "PurgeQueue",
+                "ChangeMessageVisibility",
+                "SendMessageBatch",
+                "DeleteMessageBatch",
+                "ChangeMessageVisibilityBatch",
+                "CreateQueue",
+                "SetQueueAttributes",
+                "AddPermission",
+                "RemovePermission",
+                "TagQueue",
+                "UntagQueue",
+                "DeleteQueue"
               ],
               "description": "The SQS command to execute"
             },
@@ -2411,8 +3079,8 @@
         "name": "StepFuncTool",
         "toolReferenceName": "StepFuncTool",
         "displayName": "Step Functions Tool",
-        "modelDescription": "Execute AWS Step Functions commands. ALWAYS provide params object. Examples: ListStateMachines {command:'ListStateMachines', params:{maxResults:10}}. StartExecution {command:'StartExecution', params:{stateMachineArn:'arn:aws:states:...', input:'{\\\"key\\\":\\\"value\\\"}'}}. DescribeExecution {command:'DescribeExecution', params:{executionArn:'arn:aws:states:...'}}. GetExecutionHistory {command:'GetExecutionHistory', params:{executionArn:'arn:aws:states:...', maxResults:100}}.",
-        "userDescription": "Manage and run AWS Step Functions state machines",
+        "modelDescription": "Full lifecycle management of Step Functions state machines, activities, and executions. Includes CreateStateMachine, CreateActivity, CreateStateMachineAlias, PublishStateMachineVersion, TagResource, UntagResource, DeleteStateMachine, DeleteActivity, StopExecution, UpdateStateMachineAlias, DeleteStateMachineAlias, DeleteStateMachineVersion, plus DescribeActivity, DescribeExecution, DescribeMapRun, DescribeStateMachine, DescribeStateMachineAlias, DescribeStateMachineForExecution, GetExecutionHistory, ListActivities, ListExecutions, ListMapRuns, ListStateMachineAliases, ListStateMachines, ListStateMachineVersions, StartExecution, UpdateStateMachine, ValidateStateMachineDefinition.",
+        "userDescription": "Create, manage, execute, and monitor AWS Step Functions state machines and workflows",
         "tags": [
           "aws",
           "stepfunctions",
@@ -2446,7 +3114,19 @@
                 "ListStateMachineVersions",
                 "StartExecution",
                 "UpdateStateMachine",
-                "ValidateStateMachineDefinition"
+                "ValidateStateMachineDefinition",
+                "CreateStateMachine",
+                "CreateActivity",
+                "CreateStateMachineAlias",
+                "PublishStateMachineVersion",
+                "TagResource",
+                "UntagResource",
+                "DeleteStateMachine",
+                "DeleteActivity",
+                "StopExecution",
+                "UpdateStateMachineAlias",
+                "DeleteStateMachineAlias",
+                "DeleteStateMachineVersion"
               ],
               "description": "The Step Functions command to execute"
             },
@@ -2831,10 +3511,12 @@
     ]
   },
   "scripts": {
-    "generate-tools": "ts-node scripts/discoverTools.ts",
+    "discover-tools": "ts-node scripts/discoverTools.ts",
+    "extract-schemas": "ts-node scripts/extractSchemas.ts",
+    "sync-schemas": "ts-node scripts/syncSchemas.ts",
     "generate-package": "ts-node scripts/generatePackageJson.ts",
     "validate-schemas": "ts-node scripts/validateSchemas.ts",
-    "prebuild": "npm run generate-tools && npm run generate-package",
+    "prebuild": "npm run sync-schemas && npm run discover-tools && npm run generate-package",
     "build": "node esbuild.js",
     "build:prod": "node esbuild.js --production",
     "typecheck": "tsc --noEmit --incremental",

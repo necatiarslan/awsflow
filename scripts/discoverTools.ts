@@ -6,7 +6,8 @@
  * - src/generated/toolManifest.json: List of discovered tools
  * - src/generated/toolRegistry.ts: Static tool registration code
  * 
- * Enforces strict naming: S3Tool.ts must have src/schemas/s3Tool.json
+ * Enforces strict naming: S3Tool.ts must have src/schemas/S3Tool.json
+ * Schemas are synced from tool_registry before discovery
  * Validates schemas with Ajv, skips tools with validation errors
  */
 

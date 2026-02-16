@@ -1,16 +1,23 @@
 ---
 name: awsflow-ec2
-description: Query AWS EC2 instances, instance types, images, VPCs, subnets, security groups, route tables, internet/NAT gateways, network interfaces, volumes, snapshots, key pairs, flow logs, tags, launch templates, transit gateways, VPC endpoints, and spot pricing using awsflow. All read-only commands.
+description: Manage and query AWS EC2 resources including launching/stopping/terminating instances, creating VPCs and subnets, managing security groups, volumes, snapshots, AMIs, and querying all EC2 resource types using awsflow. Full lifecycle management.
 ---
 
 # Awsflow EC2
 
-Query EC2 compute and networking resources. All commands are read-only.
+Manage EC2 compute and networking resources with full lifecycle operations including creation, modification, and deletion.
 
 ## When to Use This Skill
 
 Use this skill when the user:
 
+- Wants to launch, start, stop, terminate, or reboot EC2 instances
+- Needs to create or delete VPCs, subnets, security groups, or route tables
+- Wants to manage security group rules (ingress/egress)
+- Needs to create, attach, or delete EBS volumes and snapshots
+- Wants to create AMIs or manage launch templates
+- Needs to allocate Elastic IPs or manage internet/NAT gateways
+- Wants to tag resources
 - Asks about EC2 instances, their status, or console output
 - Wants to explore VPCs, subnets, security groups, or route tables
 - Needs to list volumes, snapshots, or key pairs
@@ -20,9 +27,325 @@ Use this skill when the user:
 
 ## Tool: EC2Tool
 
-Execute AWS EC2 read-only and info commands. ALWAYS provide params object.
+Execute AWS EC2 commands for managing compute and network resources. ALWAYS provide params object. Supports read operations, instance lifecycle (launch, start, stop, terminate, reboot), VPC/network creation and configuration (VPCs, subnets, security groups, internet/NAT gateways, route tables), storage (volumes, snapshots, AMIs), and resource tagging.
 
-### Commands
+### Lifecycle Management Commands
+
+#### RunInstances
+Launch new EC2 instances.
+```json
+{ "command": "RunInstances", "params": { "ImageId": "ami-0abcdef1234567890", "InstanceType": "t3.micro", "MinCount": 1, "MaxCount": 1, "KeyName": "my-key", "SecurityGroupIds": ["sg-12345"], "SubnetId": "subnet-12345" } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| ImageId | string | Yes | AMI ID to launch |
+| InstanceType | string | Yes | Instance type (e.g., t3.micro, m5.large) |
+| MinCount | number | Yes | Minimum number of instances |
+| MaxCount | number | Yes | Maximum number of instances |
+| KeyName | string | No | SSH key pair name |
+| SecurityGroupIds | array of strings | No | Security group IDs |
+| SubnetId | string | No | Subnet ID for placement |
+| UserData | string | No | Base64-encoded startup script |
+| Tags | array of objects | No | Resource tags |
+
+#### TerminateInstances
+Terminate EC2 instances.
+```json
+{ "command": "TerminateInstances", "params": { "InstanceIds": ["i-1234567890abcdef0"] } }
+```
+
+#### StopInstances
+Stop running instances.
+```json
+{ "command": "StopInstances", "params": { "InstanceIds": ["i-1234567890abcdef0"], "Force": false } }
+```
+
+#### StartInstances
+Start stopped instances.
+```json
+{ "command": "StartInstances", "params": { "InstanceIds": ["i-1234567890abcdef0"] } }
+```
+
+#### RebootInstances
+Reboot instances.
+```json
+{ "command": "RebootInstances", "params": { "InstanceIds": ["i-1234567890abcdef0"] } }
+```
+
+### VPC and Network Management
+
+#### CreateVpc
+Create a new VPC.
+```json
+{ "command": "CreateVpc", "params": { "CidrBlock": "10.0.0.0/16", "Tags": [{ "Key": "Name", "Value": "MyVPC" }] } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| CidrBlock | string | Yes | CIDR block (e.g., 10.0.0.0/16) |
+| Tags | array of objects | No | Resource tags |
+
+#### DeleteVpc
+```json
+{ "command": "DeleteVpc", "params": { "VpcId": "vpc-12345" } }
+```
+
+#### CreateSubnet
+Create a subnet in a VPC.
+```json
+{ "command": "CreateSubnet", "params": { "VpcId": "vpc-12345", "CidrBlock": "10.0.1.0/24", "AvailabilityZone": "us-east-1a" } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| VpcId | string | Yes | VPC ID |
+| CidrBlock | string | Yes | Subnet CIDR block |
+| AvailabilityZone | string | No | AZ for subnet |
+
+#### DeleteSubnet
+```json
+{ "command": "DeleteSubnet", "params": { "SubnetId": "subnet-12345" } }
+```
+
+#### CreateSecurityGroup
+Create a security group.
+```json
+{ "command": "CreateSecurityGroup", "params": { "GroupName": "MySecurityGroup", "Description": "My security group description", "VpcId": "vpc-12345" } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| GroupName | string | Yes | Security group name |
+| Description | string | Yes | Security group description |
+| VpcId | string | Yes | VPC ID |
+
+#### DeleteSecurityGroup
+```json
+{ "command": "DeleteSecurityGroup", "params": { "GroupId": "sg-12345" } }
+```
+
+#### AuthorizeSecurityGroupIngress
+Add inbound rules to security group.
+```json
+{ "command": "AuthorizeSecurityGroupIngress", "params": { "GroupId": "sg-12345", "IpPermissions": [{ "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }] } }
+```
+
+#### AuthorizeSecurityGroupEgress
+Add outbound rules to security group.
+```json
+{ "command": "AuthorizeSecurityGroupEgress", "params": { "GroupId": "sg-12345", "IpPermissions": [{ "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }] } }
+```
+
+#### RevokeSecurityGroupIngress
+Remove inbound rules.
+```json
+{ "command": "RevokeSecurityGroupIngress", "params": { "GroupId": "sg-12345", "IpPermissions": [{ "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22 }] } }
+```
+
+#### RevokeSecurityGroupEgress
+Remove outbound rules.
+```json
+{ "command": "RevokeSecurityGroupEgress", "params": { "GroupId": "sg-12345", "IpPermissions": [{ "IpProtocol": "-1" }] } }
+```
+
+### Storage Management
+
+#### CreateVolume
+Create an EBS volume.
+```json
+{ "command": "CreateVolume", "params": { "AvailabilityZone": "us-east-1a", "Size": 100, "VolumeType": "gp3", "Tags": [{ "Key": "Name", "Value": "MyVolume" }] } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| AvailabilityZone | string | Yes | AZ for volume |
+| Size | number | No | Size in GiB |
+| VolumeType | string | No | gp2, gp3, io1, io2, st1, sc1 |
+| SnapshotId | string | No | Create from snapshot |
+
+#### DeleteVolume
+```json
+{ "command": "DeleteVolume", "params": { "VolumeId": "vol-12345" } }
+```
+
+#### AttachVolume
+Attach volume to instance.
+```json
+{ "command": "AttachVolume", "params": { "VolumeId": "vol-12345", "InstanceId": "i-12345", "Device": "/dev/sdf" } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| VolumeId | string | Yes | Volume ID |
+| InstanceId | string | Yes | Instance ID |
+| Device | string | Yes | Device name (/dev/sdf) |
+
+#### DetachVolume
+```json
+{ "command": "DetachVolume", "params": { "VolumeId": "vol-12345", "Force": false } }
+```
+
+#### CreateSnapshot
+Create snapshot from volume.
+```json
+{ "command": "CreateSnapshot", "params": { "VolumeId": "vol-12345", "Description": "My snapshot" } }
+```
+
+#### DeleteSnapshot
+```json
+{ "command": "DeleteSnapshot", "params": { "SnapshotId": "snap-12345" } }
+```
+
+#### CreateImage
+Create AMI from instance.
+```json
+{ "command": "CreateImage", "params": { "InstanceId": "i-12345", "Name": "MyAMI", "Description": "My custom AMI", "NoReboot": true } }
+```
+
+#### DeregisterImage
+Delete an AMI.
+```json
+{ "command": "DeregisterImage", "params": { "ImageId": "ami-12345" } }
+```
+
+### Resource Tagging
+
+#### CreateTags
+Add tags to resources.
+```json
+{ "command": "CreateTags", "params": { "Resources": ["i-12345", "vol-12345"], "Tags": [{ "Key": "Environment", "Value": "Production" }] } }
+```
+**Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| Resources | array of strings | Yes | Resource IDs to tag |
+| Tags | array of objects | Yes | Tag key-value pairs |
+
+#### DeleteTags
+Remove tags from resources.
+```json
+{ "command": "DeleteTags", "params": { "Resources": ["i-12345"], "Tags": [{ "Key": "Environment" }] } }
+```
+
+### Networking - Gateways and Routes
+
+#### CreateInternetGateway
+Create internet gateway.
+```json
+{ "command": "CreateInternetGateway", "params": {} }
+```
+
+#### AttachInternetGateway
+Attach internet gateway to VPC.
+```json
+{ "command": "AttachInternetGateway", "params": { "InternetGatewayId": "igw-12345", "VpcId": "vpc-12345" } }
+```
+
+#### DetachInternetGateway
+```json
+{ "command": "DetachInternetGateway", "params": { "InternetGatewayId": "igw-12345", "VpcId": "vpc-12345" } }
+```
+
+#### DeleteInternetGateway
+```json
+{ "command": "DeleteInternetGateway", "params": { "InternetGatewayId": "igw-12345" } }
+```
+
+#### CreateNatGateway
+Create NAT gateway.
+```json
+{ "command": "CreateNatGateway", "params": { "SubnetId": "subnet-12345", "AllocationId": "eipalloc-12345" } }
+```
+
+#### DeleteNatGateway
+```json
+{ "command": "DeleteNatGateway", "params": { "NatGatewayId": "nat-12345" } }
+```
+
+#### CreateRouteTable
+Create route table.
+```json
+{ "command": "CreateRouteTable", "params": { "VpcId": "vpc-12345" } }
+```
+
+#### DeleteRouteTable
+```json
+{ "command": "DeleteRouteTable", "params": { "RouteTableId": "rtb-12345" } }
+```
+
+#### CreateRoute
+Add route to route table.
+```json
+{ "command": "CreateRoute", "params": { "RouteTableId": "rtb-12345", "DestinationCidrBlock": "0.0.0.0/0", "GatewayId": "igw-12345" } }
+```
+
+#### DeleteRoute
+```json
+{ "command": "DeleteRoute", "params": { "RouteTableId": "rtb-12345", "DestinationCidrBlock": "0.0.0.0/0" } }
+```
+
+#### AssociateRouteTable
+Associate route table with subnet.
+```json
+{ "command": "AssociateRouteTable", "params": { "RouteTableId": "rtb-12345", "SubnetId": "subnet-12345" } }
+```
+
+#### DisassociateRouteTable
+```json
+{ "command": "DisassociateRouteTable", "params": { "AssociationId": "rtbassoc-12345" } }
+```
+
+### Elastic IPs
+
+#### AllocateAddress
+Allocate Elastic IP.
+```json
+{ "command": "AllocateAddress", "params": { "Domain": "vpc" } }
+```
+
+#### ReleaseAddress
+Release Elastic IP.
+```json
+{ "command": "ReleaseAddress", "params": { "AllocationId": "eipalloc-12345" } }
+```
+
+#### AssociateAddress
+Associate Elastic IP with instance.
+```json
+{ "command": "AssociateAddress", "params": { "AllocationId": "eipalloc-12345", "InstanceId": "i-12345" } }
+```
+
+#### DisassociateAddress
+```json
+{ "command": "DisassociateAddress", "params": { "AssociationId": "eipassoc-12345" } }
+```
+
+### Key Pairs and Launch Templates
+
+#### CreateKeyPair
+Create SSH key pair.
+```json
+{ "command": "CreateKeyPair", "params": { "KeyName": "my-key-pair" } }
+```
+
+#### DeleteKeyPair
+```json
+{ "command": "DeleteKeyPair", "params": { "KeyName": "my-key-pair" } }
+```
+
+#### CreateLaunchTemplate
+Create launch template.
+```json
+{ "command": "CreateLaunchTemplate", "params": { "LaunchTemplateName": "MyTemplate", "LaunchTemplateData": { "ImageId": "ami-12345", "InstanceType": "t3.micro" } } }
+```
+
+#### DeleteLaunchTemplate
+```json
+{ "command": "DeleteLaunchTemplate", "params": { "LaunchTemplateId": "lt-12345" } }
+```
+
+### Query Commands
 
 #### DescribeInstances
 Describe one or more EC2 instances.

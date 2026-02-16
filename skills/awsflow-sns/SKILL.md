@@ -1,6 +1,6 @@
 ---
 name: awsflow-sns
-description: Manage Amazon SNS topics, subscriptions, publishing, platform applications, SMS, and endpoints using awsflow. List topics, publish messages, inspect subscriptions, and check SMS/sandbox status.
+description: Manage Amazon SNS topics, subscriptions, publishing, platform applications, SMS, and endpoints using awsflow. Create, configure, and delete resources, publish messages, and check SMS/sandbox status.
 ---
 
 # Awsflow SNS
@@ -16,6 +16,8 @@ Use this skill when the user:
 - Needs to inspect subscriptions or endpoints
 - Asks about SMS, platform applications, or push notifications
 - Wants to check data protection policies or sandbox status
+- Wants to create or delete topics, subscriptions, or endpoints
+- Needs to configure topic or subscription attributes
 
 ## Tool: SNSTool
 
@@ -187,6 +189,86 @@ List phone numbers that have opted out.
 List origination phone numbers.
 ```json
 { "command": "ListOriginationNumbers", "params": {} }
+```
+
+### Lifecycle Commands
+
+#### CreateTopic
+Create a new topic.
+```json
+{ "command": "CreateTopic", "params": { "Name": "alerts" } }
+```
+
+#### Subscribe
+Subscribe an endpoint to a topic.
+```json
+{ "command": "Subscribe", "params": { "TopicArn": "arn:aws:sns:...:alerts", "Protocol": "email", "Endpoint": "team@example.com" } }
+```
+
+#### ConfirmSubscription
+Confirm a subscription (for token-based subscriptions).
+```json
+{ "command": "ConfirmSubscription", "params": { "TopicArn": "arn:aws:sns:...:alerts", "Token": "token" } }
+```
+
+#### Unsubscribe
+Unsubscribe an endpoint.
+```json
+{ "command": "Unsubscribe", "params": { "SubscriptionArn": "arn:aws:sns:..." } }
+```
+
+#### SetTopicAttributes
+Update topic attributes.
+```json
+{ "command": "SetTopicAttributes", "params": { "TopicArn": "arn:aws:sns:...:alerts", "AttributeName": "DisplayName", "AttributeValue": "Alerts" } }
+```
+
+#### SetSubscriptionAttributes
+Update subscription attributes.
+```json
+{ "command": "SetSubscriptionAttributes", "params": { "SubscriptionArn": "arn:aws:sns:...", "AttributeName": "RawMessageDelivery", "AttributeValue": "true" } }
+```
+
+#### CreatePlatformApplication
+Create a platform application.
+```json
+{ "command": "CreatePlatformApplication", "params": { "Name": "mobile-app", "Platform": "APNS", "Attributes": { "PlatformCredential": "..." } } }
+```
+
+#### CreatePlatformEndpoint
+Create a platform endpoint.
+```json
+{ "command": "CreatePlatformEndpoint", "params": { "PlatformApplicationArn": "arn:aws:sns:...", "Token": "device-token" } }
+```
+
+#### DeleteTopic
+Delete a topic.
+```json
+{ "command": "DeleteTopic", "params": { "TopicArn": "arn:aws:sns:...:alerts" } }
+```
+
+#### DeletePlatformApplication
+Delete a platform application.
+```json
+{ "command": "DeletePlatformApplication", "params": { "PlatformApplicationArn": "arn:aws:sns:..." } }
+```
+
+#### DeleteEndpoint
+Delete a platform endpoint.
+```json
+{ "command": "DeleteEndpoint", "params": { "EndpointArn": "arn:aws:sns:..." } }
+```
+
+#### TagResource
+Tag an SNS resource.
+```json
+{ "command": "TagResource", "params": { "ResourceArn": "arn:aws:sns:...", "Tags": [{ "Key": "env", "Value": "prod" }] } }
+```
+
+#### UntagResource
+Remove tags from an SNS resource.
+```json
+{ "command": "UntagResource", "params": { "ResourceArn": "arn:aws:sns:...", "TagKeys": ["env"] } }
 ```
 
 ---

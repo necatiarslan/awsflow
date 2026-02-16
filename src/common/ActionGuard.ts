@@ -24,7 +24,29 @@ export function needsConfirmation(command: string): boolean {
     c.startsWith('receive') ||
     c.startsWith('remove') ||
     c.startsWith('write') ||
-    c.startsWith('append')
+    c.startsWith('append') ||
+    c.startsWith('tag') ||
+    c.startsWith('untag') ||
+    c.startsWith('add') ||
+    c.startsWith('attach') ||
+    c.startsWith('detach') ||
+    c.startsWith('enable') ||
+    c.startsWith('disable') ||
+    c.startsWith('grant') ||
+    c.startsWith('revoke') ||
+    c.startsWith('set') ||
+    c.startsWith('associate') ||
+    c.startsWith('disassociate') ||
+    c.startsWith('import') ||
+    c.startsWith('export') ||
+    c.startsWith('register') ||
+    c.startsWith('deregister') ||
+    c.startsWith('allocate') ||
+    c.startsWith('deallocate') ||
+    c.startsWith('approve') ||
+    c.startsWith('reject') ||
+    c.startsWith('confirm') ||
+    c.startsWith('cancel')
   );
 }
 

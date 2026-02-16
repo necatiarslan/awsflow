@@ -1,11 +1,11 @@
 ---
 name: awsflow-rds
-description: Inspect Amazon RDS instances, clusters, snapshots, parameter groups, logs, proxies, events, engine versions, subnet groups, security groups, certificates, recommendations, and more using awsflow. All read-only commands.
+description: Manage and inspect Amazon RDS instances, clusters, snapshots, parameter groups, logs, proxies, events, engine versions, subnet groups, security groups, certificates, recommendations, and more using awsflow.
 ---
 
 # Awsflow RDS
 
-Inspect Amazon RDS instances, clusters, snapshots, parameter groups, logs, and configurations. All commands are read-only.
+Manage and inspect Amazon RDS instances, clusters, snapshots, parameter groups, logs, and configurations.
 
 ## When to Use This Skill
 
@@ -17,10 +17,12 @@ Use this skill when the user:
 - Asks about parameter groups, subnet groups, or security groups
 - Wants to check engine versions, instance options, or recommendations
 - Needs to inspect RDS proxies or Blue/Green deployments
+- Wants to create, modify, start, stop, or delete DB instances or clusters
+- Needs to create snapshots or restore from snapshots
 
 ## Tool: RDSTool
 
-Execute AWS RDS describe and log commands. ALWAYS provide params object.
+Execute AWS RDS commands including lifecycle operations. ALWAYS provide params object.
 
 ### Commands
 
@@ -196,6 +198,62 @@ List automated backups for Aurora clusters.
 List RDS recommendations.
 ```json
 { "command": "DescribeDBRecommendations", "params": {} }
+```
+
+### Lifecycle Commands
+
+#### CreateDBInstance
+Create a DB instance.
+```json
+{ "command": "CreateDBInstance", "params": { "DBInstanceIdentifier": "my-db", "DBInstanceClass": "db.t3.micro", "Engine": "mysql", "MasterUsername": "admin", "MasterUserPassword": "Secret1234!" } }
+```
+
+#### ModifyDBInstance
+Modify a DB instance.
+```json
+{ "command": "ModifyDBInstance", "params": { "DBInstanceIdentifier": "my-db", "AllocatedStorage": 50 } }
+```
+
+#### StartDBInstance
+Start a stopped DB instance.
+```json
+{ "command": "StartDBInstance", "params": { "DBInstanceIdentifier": "my-db" } }
+```
+
+#### StopDBInstance
+Stop a DB instance.
+```json
+{ "command": "StopDBInstance", "params": { "DBInstanceIdentifier": "my-db" } }
+```
+
+#### DeleteDBInstance
+Delete a DB instance.
+```json
+{ "command": "DeleteDBInstance", "params": { "DBInstanceIdentifier": "my-db", "SkipFinalSnapshot": true } }
+```
+
+#### CreateDBSnapshot
+Create a DB snapshot.
+```json
+{ "command": "CreateDBSnapshot", "params": { "DBInstanceIdentifier": "my-db", "DBSnapshotIdentifier": "my-db-snap" } }
+```
+
+#### RestoreDBInstanceFromDBSnapshot
+Restore a DB instance from snapshot.
+```json
+{ "command": "RestoreDBInstanceFromDBSnapshot", "params": { "DBInstanceIdentifier": "my-db-restore", "DBSnapshotIdentifier": "my-db-snap" } }
+```
+
+#### AddTagsToResource
+Tag an RDS resource.
+```json
+{ "command": "AddTagsToResource", "params": { "ResourceName": "arn:aws:rds:...", "Tags": [{ "Key": "env", "Value": "prod" }] } }
+```
+
+#### RemoveTagsFromResource
+Remove tags from a resource.
+```json
+{ "command": "RemoveTagsFromResource", "params": { "ResourceName": "arn:aws:rds:...", "TagKeys": ["env"] } }
 ```
 
 #### DescribeBlueGreenDeployments

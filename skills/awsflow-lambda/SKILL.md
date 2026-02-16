@@ -1,6 +1,6 @@
 ---
 name: awsflow-lambda
-description: Manage AWS Lambda functions using awsflow. List functions, get configuration, invoke functions, update code, manage aliases/versions, inspect event source mappings, layers, tags, function URLs, concurrency, and code signing.
+description: Manage AWS Lambda functions using awsflow. Create, update, invoke, and delete functions, manage aliases/versions, event source mappings, layers, tags, function URLs, concurrency, and code signing.
 ---
 
 # Awsflow Lambda
@@ -18,10 +18,12 @@ Use this skill when the user:
 - Asks about event source mappings (SQS, SNS, DynamoDB, Kinesis triggers)
 - Needs to manage aliases, versions, or layers
 - Wants to tag or untag Lambda resources
+- Wants to create, update, or delete Lambda functions
+- Needs to manage permissions or function URLs
 
 ## Tool: LambdaTool
 
-Execute AWS Lambda commands including event source mappings. ALWAYS provide params object.
+Execute AWS Lambda commands including lifecycle management and event source mappings. ALWAYS provide params object.
 
 ### Commands
 
@@ -140,6 +142,80 @@ Update a function's deployment package.
 | DryRun | boolean | No | Validate without updating |
 | RevisionId | string | No | Update only if revision ID matches |
 | Architectures | array of strings | No | Instruction set: `x86_64` or `arm64` |
+
+### Lifecycle Commands
+
+#### CreateFunction
+Create a new Lambda function.
+```json
+{ "command": "CreateFunction", "params": { "FunctionName": "my-func", "Runtime": "nodejs18.x", "Role": "arn:aws:iam::123456789012:role/LambdaRole", "Handler": "index.handler", "Code": { "S3Bucket": "code-bucket", "S3Key": "code.zip" } } }
+```
+
+#### UpdateFunctionConfiguration
+Update function configuration.
+```json
+{ "command": "UpdateFunctionConfiguration", "params": { "FunctionName": "my-func", "MemorySize": 512, "Timeout": 30 } }
+```
+
+#### DeleteFunction
+Delete a function.
+```json
+{ "command": "DeleteFunction", "params": { "FunctionName": "my-func" } }
+```
+
+#### CreateEventSourceMapping
+Create an event source mapping.
+```json
+{ "command": "CreateEventSourceMapping", "params": { "FunctionName": "my-func", "EventSourceArn": "arn:aws:sqs:us-east-1:123456789012:queue", "StartingPosition": "LATEST" } }
+```
+
+#### AddPermission
+Add a resource-based permission.
+```json
+{ "command": "AddPermission", "params": { "FunctionName": "my-func", "StatementId": "sns-invoke", "Action": "lambda:InvokeFunction", "Principal": "sns.amazonaws.com", "SourceArn": "arn:aws:sns:us-east-1:123456789012:topic" } }
+```
+
+#### CreateFunctionUrlConfig
+Create a function URL.
+```json
+{ "command": "CreateFunctionUrlConfig", "params": { "FunctionName": "my-func", "AuthType": "NONE" } }
+```
+
+#### PutFunctionConcurrency
+Set reserved concurrency.
+```json
+{ "command": "PutFunctionConcurrency", "params": { "FunctionName": "my-func", "ReservedConcurrentExecutions": 10 } }
+```
+
+#### PublishVersion
+Publish a new version.
+```json
+{ "command": "PublishVersion", "params": { "FunctionName": "my-func" } }
+```
+
+#### CreateAlias
+Create an alias for a version.
+```json
+{ "command": "CreateAlias", "params": { "FunctionName": "my-func", "Name": "prod", "FunctionVersion": "1" } }
+```
+
+#### UpdateAlias
+Update an alias.
+```json
+{ "command": "UpdateAlias", "params": { "FunctionName": "my-func", "Name": "prod", "FunctionVersion": "2" } }
+```
+
+#### DeleteAlias
+Delete an alias.
+```json
+{ "command": "DeleteAlias", "params": { "FunctionName": "my-func", "Name": "prod" } }
+```
+
+#### PublishLayerVersion
+Publish a new layer version.
+```json
+{ "command": "PublishLayerVersion", "params": { "LayerName": "my-layer", "Content": { "S3Bucket": "code-bucket", "S3Key": "layer.zip" } } }
+```
 
 #### ListAliases
 List aliases for a function.

@@ -2,8 +2,8 @@
   "name": "EMRTool",
   "toolReferenceName": "EMRTool",
   "displayName": "EMR Tool",
-  "modelDescription": "Describe and list EMR clusters, steps, studios, notebook executions, release labels, and security settings. Commands are read-only: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
-  "userDescription": "Inspect EMR clusters, notebooks, steps, studios, and related configurations",
+  "modelDescription": "Full lifecycle management of EMR clusters, steps, studios, and security configurations. Includes RunJobFlow, AddJobFlowSteps, CreateStudio, CreateSecurityConfiguration, AddInstanceFleet, AddInstanceGroups, AddTags, RemoveTags, SetTerminationProtection, ModifyCluster, TerminateJobFlows, SetVisibleToAllUsers, PutAutoScalingPolicy, plus all read operations: DescribeCluster, DescribeJobFlows, DescribeNotebookExecution, DescribePersistentAppUI, DescribeReleaseLabel, DescribeSecurityConfiguration, DescribeStep, DescribeStudio, GetAutoTerminationPolicy, GetBlockPublicAccessConfiguration, GetClusterSessionCredentials, GetManagedScalingPolicy, GetOnClusterAppUIPresignedURL, GetPersistentAppUIPresignedURL, GetStudioSessionMapping, ListBootstrapActions, ListClusters, ListInstanceFleets, ListInstanceGroups, ListInstances, ListNotebookExecutions, ListReleaseLabels, ListSecurityConfigurations, ListSteps, ListStudios, ListStudioSessionMappings, ListSupportedInstanceTypes.",
+  "userDescription": "Create, manage, and terminate EMR clusters, studios, and configurations",
   "tags": [
     "aws",
     "emr",
@@ -49,7 +49,20 @@
           "ListSteps",
           "ListStudios",
           "ListStudioSessionMappings",
-          "ListSupportedInstanceTypes"
+          "ListSupportedInstanceTypes",
+          "RunJobFlow",
+          "AddJobFlowSteps",
+          "CreateStudio",
+          "CreateSecurityConfiguration",
+          "AddInstanceFleet",
+          "AddInstanceGroups",
+          "AddTags",
+          "RemoveTags",
+          "SetTerminationProtection",
+          "ModifyCluster",
+          "TerminateJobFlows",
+          "SetVisibleToAllUsers",
+          "PutAutoScalingPolicy"
         ],
         "description": "The EMR command to execute"
       },

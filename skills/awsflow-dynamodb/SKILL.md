@@ -293,6 +293,54 @@ List tags for a DynamoDB resource.
 |-----------|------|----------|-------------|
 | ResourceArn | string | Yes | Table resource ARN |
 
+#### CreateBackup
+Create an on-demand backup.
+```json
+{ "command": "CreateBackup", "params": { "TableName": "my-table", "BackupName": "daily-2026-02-15" } }
+```
+
+#### DescribeBackup
+Get details of a backup.
+```json
+{ "command": "DescribeBackup", "params": { "BackupArn": "arn:aws:dynamodb:...:backup/backup-id" } }
+```
+
+#### DeleteBackup
+Delete a backup.
+```json
+{ "command": "DeleteBackup", "params": { "BackupArn": "arn:aws:dynamodb:...:backup/backup-id" } }
+```
+
+#### RestoreTableFromBackup
+Restore a table from a backup.
+```json
+{ "command": "RestoreTableFromBackup", "params": { "TargetTableName": "restored-table", "BackupArn": "arn:aws:dynamodb:...:backup/backup-id" } }
+```
+
+#### CreateGlobalTable
+Create a global table.
+```json
+{ "command": "CreateGlobalTable", "params": { "GlobalTableName": "global-table", "ReplicationGroup": [{ "RegionName": "us-east-1" }, { "RegionName": "us-west-2" }] } }
+```
+
+#### UpdateGlobalTable
+Update a global table replication group.
+```json
+{ "command": "UpdateGlobalTable", "params": { "GlobalTableName": "global-table", "ReplicaUpdates": [{ "Create": { "RegionName": "eu-west-1" } }] } }
+```
+
+#### TagResource
+Tag a DynamoDB resource.
+```json
+{ "command": "TagResource", "params": { "ResourceArn": "arn:aws:dynamodb:...", "Tags": [{ "Key": "env", "Value": "prod" }] } }
+```
+
+#### UntagResource
+Remove tags from a DynamoDB resource.
+```json
+{ "command": "UntagResource", "params": { "ResourceArn": "arn:aws:dynamodb:...", "TagKeys": ["env"] } }
+```
+
 ---
 
 ## Related Services

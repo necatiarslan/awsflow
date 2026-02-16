@@ -33,7 +33,22 @@
           "GetLogGroupFields",
           "GetQueryResults",
           "OpenCloudWatchLogView",
-          "StartQuery"
+          "StartQuery",
+          "CreateLogGroup",
+          "CreateLogStream",
+          "PutLogEvents",
+          "PutMetricFilter",
+          "PutSubscriptionFilter",
+          "PutRetentionPolicy",
+          "PutResourcePolicy",
+          "DeleteLogGroup",
+          "DeleteLogStream",
+          "DeleteMetricFilter",
+          "DeleteSubscriptionFilter",
+          "DeleteRetentionPolicy",
+          "DeleteResourcePolicy",
+          "TagLogGroup",
+          "UntagLogGroup"
         ],
         "description": "The CloudWatch Logs command to execute"
       },

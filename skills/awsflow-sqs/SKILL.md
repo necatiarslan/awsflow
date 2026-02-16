@@ -1,6 +1,6 @@
 ---
 name: awsflow-sqs
-description: Manage Amazon SQS queues and messages using awsflow. List queues, send/receive/delete messages, manage visibility, purge queues, inspect dead letter queues, and get queue attributes and tags.
+description: Manage Amazon SQS queues and messages using awsflow. Create, configure, tag, and delete queues, send/receive/delete messages, manage visibility, purge queues, inspect dead letter queues, and get queue attributes.
 ---
 
 # Awsflow SQS
@@ -17,6 +17,8 @@ Use this skill when the user:
 - Wants to purge a queue
 - Asks about FIFO queues, message groups, or deduplication
 - Needs to manage message visibility
+- Wants to create or delete queues
+- Needs to configure queue attributes or permissions
 
 ## Tool: SQSTool
 
@@ -170,6 +172,50 @@ List tags for a queue.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | QueueUrl | string | Yes | Queue URL |
+
+### Queue Lifecycle Commands
+
+#### CreateQueue
+Create a new queue.
+```json
+{ "command": "CreateQueue", "params": { "QueueName": "my-queue", "Attributes": { "VisibilityTimeout": "30" } } }
+```
+
+#### SetQueueAttributes
+Update queue attributes.
+```json
+{ "command": "SetQueueAttributes", "params": { "QueueUrl": "https://sqs...", "Attributes": { "MessageRetentionPeriod": "1209600" } } }
+```
+
+#### AddPermission
+Add a permission to a queue.
+```json
+{ "command": "AddPermission", "params": { "QueueUrl": "https://sqs...", "Label": "allow-sns", "AWSAccountIds": ["123456789012"], "Actions": ["SendMessage"] } }
+```
+
+#### RemovePermission
+Remove a permission from a queue.
+```json
+{ "command": "RemovePermission", "params": { "QueueUrl": "https://sqs...", "Label": "allow-sns" } }
+```
+
+#### TagQueue
+Tag a queue.
+```json
+{ "command": "TagQueue", "params": { "QueueUrl": "https://sqs...", "Tags": { "env": "prod" } } }
+```
+
+#### UntagQueue
+Remove tags from a queue.
+```json
+{ "command": "UntagQueue", "params": { "QueueUrl": "https://sqs...", "TagKeys": ["env"] } }
+```
+
+#### DeleteQueue
+Delete a queue.
+```json
+{ "command": "DeleteQueue", "params": { "QueueUrl": "https://sqs..." } }
+```
 
 ---
 

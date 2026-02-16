@@ -29,7 +29,20 @@ import {
   ListStepsCommand,
   ListStudiosCommand,
   ListStudioSessionMappingsCommand,
-  ListSupportedInstanceTypesCommand
+  ListSupportedInstanceTypesCommand,
+  RunJobFlowCommand,
+  AddJobFlowStepsCommand,
+  CreateStudioCommand,
+  CreateSecurityConfigurationCommand,
+  AddInstanceFleetCommand,
+  AddInstanceGroupsCommand,
+  AddTagsCommand,
+  RemoveTagsCommand,
+  SetTerminationProtectionCommand,
+  ModifyClusterCommand,
+  TerminateJobFlowsCommand,
+  SetVisibleToAllUsersCommand,
+  PutAutoScalingPolicyCommand
 } from '@aws-sdk/client-emr';
 
 // Supported EMR commands
@@ -60,7 +73,20 @@ export type EMRCommand =
   | 'ListSteps'
   | 'ListStudios'
   | 'ListStudioSessionMappings'
-  | 'ListSupportedInstanceTypes';
+  | 'ListSupportedInstanceTypes'
+  | 'RunJobFlow'
+  | 'AddJobFlowSteps'
+  | 'CreateStudio'
+  | 'CreateSecurityConfiguration'
+  | 'AddInstanceFleet'
+  | 'AddInstanceGroups'
+  | 'AddTags'
+  | 'RemoveTags'
+  | 'SetTerminationProtection'
+  | 'ModifyCluster'
+  | 'TerminateJobFlows'
+  | 'SetVisibleToAllUsers'
+  | 'PutAutoScalingPolicy';
 
 // Input interface
 interface EMRToolInput extends BaseToolInput {
@@ -150,6 +176,32 @@ export class EMRTool extends BaseTool<EMRToolInput> {
         return await client.send(new ListStudioSessionMappingsCommand(params as any));
       case 'ListSupportedInstanceTypes':
         return await client.send(new ListSupportedInstanceTypesCommand(params as any));
+      case 'RunJobFlow':
+        return await client.send(new RunJobFlowCommand(params as any));
+      case 'AddJobFlowSteps':
+        return await client.send(new AddJobFlowStepsCommand(params as any));
+      case 'CreateStudio':
+        return await client.send(new CreateStudioCommand(params as any));
+      case 'CreateSecurityConfiguration':
+        return await client.send(new CreateSecurityConfigurationCommand(params as any));
+      case 'AddInstanceFleet':
+        return await client.send(new AddInstanceFleetCommand(params as any));
+      case 'AddInstanceGroups':
+        return await client.send(new AddInstanceGroupsCommand(params as any));
+      case 'AddTags':
+        return await client.send(new AddTagsCommand(params as any));
+      case 'RemoveTags':
+        return await client.send(new RemoveTagsCommand(params as any));
+      case 'SetTerminationProtection':
+        return await client.send(new SetTerminationProtectionCommand(params as any));
+      case 'ModifyCluster':
+        return await client.send(new ModifyClusterCommand(params as any));
+      case 'TerminateJobFlows':
+        return await client.send(new TerminateJobFlowsCommand(params as any));
+      case 'SetVisibleToAllUsers':
+        return await client.send(new SetVisibleToAllUsersCommand(params as any));
+      case 'PutAutoScalingPolicy':
+        return await client.send(new PutAutoScalingPolicyCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

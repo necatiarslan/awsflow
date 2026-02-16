@@ -5,7 +5,7 @@ description: Manage and run AWS Step Functions state machines, executions, and a
 
 # awsflow-stepfunc
 
-Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions state machines, start and inspect executions, and update definitions.
+Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions state machines, executions, activities, and lifecycle operations.
 
 ## When to Use
 - User wants to list or describe state machines
@@ -14,6 +14,8 @@ Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions s
 - User wants to update a state machine definition
 - User wants to validate a state machine definition
 - User wants to list or describe activities and map runs
+- User wants to create or delete state machines and activities
+- User wants to stop executions or manage tags and aliases
 
 ## Tool Reference
 
@@ -28,7 +30,7 @@ Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions s
 }
 ```
 
-### Commands (16 total)
+### Commands (28 total)
 
 | Command | Description |
 |---------|-------------|
@@ -48,6 +50,18 @@ Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions s
 | StartExecution | Start a new execution of a state machine |
 | UpdateStateMachine | Update a state machine definition, role, or configuration |
 | ValidateStateMachineDefinition | Validate an Amazon States Language definition |
+| CreateStateMachine | Create a new state machine |
+| CreateActivity | Create an activity |
+| CreateStateMachineAlias | Create a state machine alias |
+| PublishStateMachineVersion | Publish a state machine version |
+| TagResource | Tag a state machine or activity |
+| UntagResource | Remove tags from a resource |
+| DeleteStateMachine | Delete a state machine |
+| DeleteActivity | Delete an activity |
+| StopExecution | Stop a running execution |
+| UpdateStateMachineAlias | Update a state machine alias |
+| DeleteStateMachineAlias | Delete a state machine alias |
+| DeleteStateMachineVersion | Delete a state machine version |
 
 ### Parameters
 
@@ -109,6 +123,16 @@ Use the **StepFuncTool** language tool in VS Code to manage AWS Step Functions s
 ### Validate a definition
 ```json
 { "command": "ValidateStateMachineDefinition", "params": {} }
+```
+
+### Create a state machine
+```json
+{ "command": "CreateStateMachine", "params": { "name": "MyWorkflow", "definition": "{\"StartAt\":\"Step1\",\"States\":{\"Step1\":{\"Type\":\"Pass\",\"End\":true}}}", "roleArn": "arn:aws:iam::123456789012:role/StepFuncRole" } }
+```
+
+### Stop an execution
+```json
+{ "command": "StopExecution", "params": { "executionArn": "arn:aws:states:...:execution:MyWorkflow:exec-id", "cause": "manual stop" } }
 ```
 
 ## Related Services

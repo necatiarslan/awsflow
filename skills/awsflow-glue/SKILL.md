@@ -1,11 +1,11 @@
 ---
 name: awsflow-glue
-description: Manage AWS Glue ETL jobs, triggers, crawlers, and query the Data Catalog (databases, tables, partitions, connections) using awsflow. Create and start jobs, inspect crawl history, and manage tags.
+description: Manage AWS Glue ETL jobs, triggers, crawlers, databases, tables, workflows, and connections using awsflow. Create, update, and delete resources, inspect crawl history, and manage tags.
 ---
 
 # Awsflow Glue
 
-Manage Glue ETL jobs, triggers, crawlers, and query the Data Catalog.
+Manage Glue ETL jobs, triggers, crawlers, databases, tables, workflows, and connections.
 
 ## When to Use This Skill
 
@@ -17,10 +17,12 @@ Use this skill when the user:
 - Wants to create a Glue job
 - Asks about Glue connections or job bookmarks
 - Needs to inspect crawl history
+- Wants to create or delete databases, tables, crawlers, or workflows
+- Needs to update jobs, crawlers, or triggers
 
 ## Tool: GlueTool
 
-Execute AWS Glue commands including Data Catalog queries. ALWAYS provide params object.
+Execute AWS Glue commands including Data Catalog queries and lifecycle operations. ALWAYS provide params object.
 
 ### Commands
 
@@ -197,6 +199,86 @@ List crawlers with details.
 List crawl runs for a crawler.
 ```json
 { "command": "ListCrawls", "params": { "CrawlerName": "my-crawler" } }
+```
+
+### Lifecycle Commands
+
+#### CreateDatabase
+Create a new database.
+```json
+{ "command": "CreateDatabase", "params": { "DatabaseInput": { "Name": "analytics" } } }
+```
+
+#### CreateTable
+Create a new table.
+```json
+{ "command": "CreateTable", "params": { "DatabaseName": "analytics", "TableInput": { "Name": "events", "StorageDescriptor": { "Columns": [] } } } }
+```
+
+#### CreateCrawler
+Create a crawler.
+```json
+{ "command": "CreateCrawler", "params": { "Name": "events-crawler", "Role": "arn:aws:iam::123456789012:role/GlueRole", "Targets": { "S3Targets": [{ "Path": "s3://bucket/data/" }] } } }
+```
+
+#### StartCrawler
+Start a crawler.
+```json
+{ "command": "StartCrawler", "params": { "Name": "events-crawler" } }
+```
+
+#### UpdateJob
+Update an existing job.
+```json
+{ "command": "UpdateJob", "params": { "JobName": "my-etl-job", "JobUpdate": { "Description": "Updated job" } } }
+```
+
+#### UpdateCrawler
+Update an existing crawler.
+```json
+{ "command": "UpdateCrawler", "params": { "Name": "events-crawler", "Targets": { "S3Targets": [{ "Path": "s3://bucket/new/" }] } } }
+```
+
+#### UpdateTrigger
+Update a trigger.
+```json
+{ "command": "UpdateTrigger", "params": { "Name": "daily-trigger", "TriggerUpdate": { "Description": "Updated" } } }
+```
+
+#### DeleteJob
+Delete a job.
+```json
+{ "command": "DeleteJob", "params": { "JobName": "old-job" } }
+```
+
+#### DeleteCrawler
+Delete a crawler.
+```json
+{ "command": "DeleteCrawler", "params": { "Name": "events-crawler" } }
+```
+
+#### DeleteDatabase
+Delete a database.
+```json
+{ "command": "DeleteDatabase", "params": { "Name": "analytics" } }
+```
+
+#### DeleteTable
+Delete a table.
+```json
+{ "command": "DeleteTable", "params": { "DatabaseName": "analytics", "Name": "events" } }
+```
+
+#### TagResource
+Tag a Glue resource.
+```json
+{ "command": "TagResource", "params": { "ResourceArn": "arn:aws:glue:...", "Tags": { "env": "prod" } } }
+```
+
+#### UntagResource
+Remove tags from a Glue resource.
+```json
+{ "command": "UntagResource", "params": { "ResourceArn": "arn:aws:glue:...", "TagKeys": ["env"] } }
 ```
 **Parameters:**
 | Parameter | Type | Required | Description |

@@ -18,7 +18,7 @@ console.log('\n📦 Generating package.json languageModelTools...\n');
 
 // Check if manifest exists
 if (!fs.existsSync(manifestPath)) {
-  console.error('❌ Tool manifest not found. Run "npm run generate-tools" first.');
+  console.error('❌ Tool manifest not found. Run "npm run discover-tools" first.');
   process.exit(1);
 }
 

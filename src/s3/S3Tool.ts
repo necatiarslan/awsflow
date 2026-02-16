@@ -35,7 +35,32 @@ import {
   GetObjectAttributesCommand,
   GetObjectLegalHoldCommand,
   GetObjectRetentionCommand,
-  MetadataDirective
+  MetadataDirective,
+  CreateBucketCommand,
+  DeleteBucketCommand,
+  PutBucketVersioningCommand,
+  PutBucketEncryptionCommand,
+  PutBucketLifecycleConfigurationCommand,
+  PutBucketReplicationCommand,
+  PutBucketLoggingCommand,
+  PutBucketTaggingCommand,
+  PutBucketCorsCommand,
+  PutBucketWebsiteCommand,
+  PutBucketPolicyCommand,
+  PutBucketNotificationConfigurationCommand,
+  PutBucketAccelerateConfigurationCommand,
+  PutPublicAccessBlockCommand,
+  DeleteBucketPolicyCommand,
+  DeleteBucketTaggingCommand,
+  DeleteBucketWebsiteCommand,
+  DeleteBucketCorsCommand,
+  DeleteBucketLifecycleCommand,
+  DeleteBucketReplicationCommand,
+  PutObjectTaggingCommand,
+  DeleteObjectTaggingCommand,
+  PutObjectAclCommand,
+  PutObjectLegalHoldCommand,
+  PutObjectRetentionCommand,
 } from '@aws-sdk/client-s3';
 
 // Command type definition
@@ -66,7 +91,32 @@ type S3Command =
   | 'GetObjectAttributes'
   | 'GetObjectLegalHold'
   | 'GetObjectRetention'
-  | 'OpenS3Explorer';
+  | 'OpenS3Explorer'
+  | 'CreateBucket'
+  | 'DeleteBucket'
+  | 'PutBucketVersioning'
+  | 'PutBucketEncryption'
+  | 'PutBucketLifecycleConfiguration'
+  | 'PutBucketReplication'
+  | 'PutBucketLogging'
+  | 'PutBucketTagging'
+  | 'PutBucketCors'
+  | 'PutBucketWebsite'
+  | 'PutBucketPolicy'
+  | 'PutBucketNotificationConfiguration'
+  | 'PutBucketAccelerateConfiguration'
+  | 'PutPublicAccessBlock'
+  | 'DeleteBucketPolicy'
+  | 'DeleteBucketTagging'
+  | 'DeleteBucketWebsite'
+  | 'DeleteBucketCors'
+  | 'DeleteBucketLifecycle'
+  | 'DeleteBucketReplication'
+  | 'PutObjectTagging'
+  | 'DeleteObjectTagging'
+  | 'PutObjectAcl'
+  | 'PutObjectLegalHold'
+  | 'PutObjectRetention';
 
 // Input interface
 interface S3ToolInput extends BaseToolInput {
@@ -193,6 +243,81 @@ export class S3Tool extends BaseTool<S3ToolInput> {
 
       case 'OpenS3Explorer':
         return await this.handleOpenS3Explorer(params as OpenS3ExplorerParams);
+
+      case 'CreateBucket':
+        return await client.send(new CreateBucketCommand(params as any));
+
+      case 'DeleteBucket':
+        return await client.send(new DeleteBucketCommand(params as any));
+
+      case 'PutBucketVersioning':
+        return await client.send(new PutBucketVersioningCommand(params as any));
+
+      case 'PutBucketEncryption':
+        return await client.send(new PutBucketEncryptionCommand(params as any));
+
+      case 'PutBucketLifecycleConfiguration':
+        return await client.send(new PutBucketLifecycleConfigurationCommand(params as any));
+
+      case 'PutBucketReplication':
+        return await client.send(new PutBucketReplicationCommand(params as any));
+
+      case 'PutBucketLogging':
+        return await client.send(new PutBucketLoggingCommand(params as any));
+
+      case 'PutBucketTagging':
+        return await client.send(new PutBucketTaggingCommand(params as any));
+
+      case 'PutBucketCors':
+        return await client.send(new PutBucketCorsCommand(params as any));
+
+      case 'PutBucketWebsite':
+        return await client.send(new PutBucketWebsiteCommand(params as any));
+
+      case 'PutBucketPolicy':
+        return await client.send(new PutBucketPolicyCommand(params as any));
+
+      case 'PutBucketNotificationConfiguration':
+        return await client.send(new PutBucketNotificationConfigurationCommand(params as any));
+
+      case 'PutBucketAccelerateConfiguration':
+        return await client.send(new PutBucketAccelerateConfigurationCommand(params as any));
+
+      case 'PutPublicAccessBlock':
+        return await client.send(new PutPublicAccessBlockCommand(params as any));
+
+      case 'DeleteBucketPolicy':
+        return await client.send(new DeleteBucketPolicyCommand(params as any));
+
+      case 'DeleteBucketTagging':
+        return await client.send(new DeleteBucketTaggingCommand(params as any));
+
+      case 'DeleteBucketWebsite':
+        return await client.send(new DeleteBucketWebsiteCommand(params as any));
+
+      case 'DeleteBucketCors':
+        return await client.send(new DeleteBucketCorsCommand(params as any));
+
+      case 'DeleteBucketLifecycle':
+        return await client.send(new DeleteBucketLifecycleCommand(params as any));
+
+      case 'DeleteBucketReplication':
+        return await client.send(new DeleteBucketReplicationCommand(params as any));
+
+      case 'PutObjectTagging':
+        return await client.send(new PutObjectTaggingCommand(params as any));
+
+      case 'DeleteObjectTagging':
+        return await client.send(new DeleteObjectTaggingCommand(params as any));
+
+      case 'PutObjectAcl':
+        return await client.send(new PutObjectAclCommand(params as any));
+
+      case 'PutObjectLegalHold':
+        return await client.send(new PutObjectLegalHoldCommand(params as any));
+
+      case 'PutObjectRetention':
+        return await client.send(new PutObjectRetentionCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);

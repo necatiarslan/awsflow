@@ -19,6 +19,22 @@ import {
   ListPlatformApplicationsCommand,
   ListEndpointsByPlatformApplicationCommand,
   ListOriginationNumbersCommand,
+  CreateTopicCommand,
+  SubscribeCommand,
+  UnsubscribeCommand,
+  CreatePlatformApplicationCommand,
+  CreatePlatformEndpointCommand,
+  SetTopicAttributesCommand,
+  SetSubscriptionAttributesCommand,
+  AddPermissionCommand,
+  RemovePermissionCommand,
+  TagResourceCommand,
+  UntagResourceCommand,
+  OptInPhoneNumberCommand,
+  DeleteTopicCommand,
+  DeletePlatformApplicationCommand,
+  DeleteEndpointCommand,
+  ConfirmSubscriptionCommand,
 } from '@aws-sdk/client-sns';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -39,7 +55,23 @@ type SNSCommand =
   | 'GetSMSSandboxAccountStatus'
   | 'ListPlatformApplications'
   | 'ListEndpointsByPlatformApplication'
-  | 'ListOriginationNumbers';
+  | 'ListOriginationNumbers'
+  | 'CreateTopic'
+  | 'Subscribe'
+  | 'Unsubscribe'
+  | 'CreatePlatformApplication'
+  | 'CreatePlatformEndpoint'
+  | 'SetTopicAttributes'
+  | 'SetSubscriptionAttributes'
+  | 'AddPermission'
+  | 'RemovePermission'
+  | 'TagResource'
+  | 'UntagResource'
+  | 'OptInPhoneNumber'
+  | 'DeleteTopic'
+  | 'DeletePlatformApplication'
+  | 'DeleteEndpoint'
+  | 'ConfirmSubscription';
 
 interface SNSToolInput extends BaseToolInput {
   command: SNSCommand;
@@ -107,6 +139,38 @@ export class SNSTool extends BaseTool<SNSToolInput> {
         return await client.send(new ListEndpointsByPlatformApplicationCommand(params as any));
       case 'ListOriginationNumbers':
         return await client.send(new ListOriginationNumbersCommand(params as any));
+      case 'CreateTopic':
+        return await client.send(new CreateTopicCommand(params as any));
+      case 'Subscribe':
+        return await client.send(new SubscribeCommand(params as any));
+      case 'Unsubscribe':
+        return await client.send(new UnsubscribeCommand(params as any));
+      case 'CreatePlatformApplication':
+        return await client.send(new CreatePlatformApplicationCommand(params as any));
+      case 'CreatePlatformEndpoint':
+        return await client.send(new CreatePlatformEndpointCommand(params as any));
+      case 'SetTopicAttributes':
+        return await client.send(new SetTopicAttributesCommand(params as any));
+      case 'SetSubscriptionAttributes':
+        return await client.send(new SetSubscriptionAttributesCommand(params as any));
+      case 'AddPermission':
+        return await client.send(new AddPermissionCommand(params as any));
+      case 'RemovePermission':
+        return await client.send(new RemovePermissionCommand(params as any));
+      case 'TagResource':
+        return await client.send(new TagResourceCommand(params as any));
+      case 'UntagResource':
+        return await client.send(new UntagResourceCommand(params as any));
+      case 'OptInPhoneNumber':
+        return await client.send(new OptInPhoneNumberCommand(params as any));
+      case 'DeleteTopic':
+        return await client.send(new DeleteTopicCommand(params as any));
+      case 'DeletePlatformApplication':
+        return await client.send(new DeletePlatformApplicationCommand(params as any));
+      case 'DeleteEndpoint':
+        return await client.send(new DeleteEndpointCommand(params as any));
+      case 'ConfirmSubscription':
+        return await client.send(new ConfirmSubscriptionCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

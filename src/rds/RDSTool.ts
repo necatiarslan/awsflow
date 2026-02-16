@@ -37,6 +37,37 @@ import {
   DescribeValidDBInstanceModificationsCommand,
   DownloadDBLogFilePortionCommand,
   ListTagsForResourceCommand,
+  CreateDBInstanceCommand,
+  CreateDBClusterCommand,
+  CreateDBSnapshotCommand,
+  CreateDBClusterSnapshotCommand,
+  RestoreDBInstanceFromDBSnapshotCommand,
+  RestoreDBClusterFromSnapshotCommand,
+  CreateDBParameterGroupCommand,
+  CreateDBSubnetGroupCommand,
+  CreateDBSecurityGroupCommand,
+  CreateDBProxyCommand,
+  CreateEventSubscriptionCommand,
+  ModifyDBInstanceCommand,
+  ModifyDBClusterCommand,
+  StartDBInstanceCommand,
+  StopDBInstanceCommand,
+  RebootDBInstanceCommand,
+  AddTagsToResourceCommand,
+  RemoveTagsFromResourceCommand,
+  DeleteDBInstanceCommand,
+  DeleteDBClusterCommand,
+  DeleteDBSnapshotCommand,
+  DeleteDBClusterSnapshotCommand,
+  DeleteDBParameterGroupCommand,
+  DeleteDBSubnetGroupCommand,
+  DeleteDBSecurityGroupCommand,
+  DeleteDBProxyCommand,
+  DeleteEventSubscriptionCommand,
+  CopyDBSnapshotCommand,
+  CopyDBClusterSnapshotCommand,
+  PromoteReadReplicaCommand,
+  CreateDBInstanceReadReplicaCommand,
 } from '@aws-sdk/client-rds';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -75,7 +106,38 @@ type RDSCommand =
   | 'DescribeTenantDatabases'
   | 'DescribeValidDBInstanceModifications'
   | 'DownloadDBLogFilePortion'
-  | 'ListTagsForResource';
+  | 'ListTagsForResource'
+  | 'CreateDBInstance'
+  | 'CreateDBCluster'
+  | 'CreateDBSnapshot'
+  | 'CreateDBClusterSnapshot'
+  | 'RestoreDBInstanceFromDBSnapshot'
+  | 'RestoreDBClusterFromSnapshot'
+  | 'CreateDBParameterGroup'
+  | 'CreateDBSubnetGroup'
+  | 'CreateDBSecurityGroup'
+  | 'CreateDBProxy'
+  | 'CreateEventSubscription'
+  | 'ModifyDBInstance'
+  | 'ModifyDBCluster'
+  | 'StartDBInstance'
+  | 'StopDBInstance'
+  | 'RebootDBInstance'
+  | 'AddTagsToResource'
+  | 'RemoveTagsFromResource'
+  | 'DeleteDBInstance'
+  | 'DeleteDBCluster'
+  | 'DeleteDBSnapshot'
+  | 'DeleteDBClusterSnapshot'
+  | 'DeleteDBParameterGroup'
+  | 'DeleteDBSubnetGroup'
+  | 'DeleteDBSecurityGroup'
+  | 'DeleteDBProxy'
+  | 'DeleteEventSubscription'
+  | 'CopyDBSnapshot'
+  | 'CopyDBClusterSnapshot'
+  | 'PromoteReadReplica'
+  | 'CreateDBInstanceReadReplica';
 
 interface RDSToolInput extends BaseToolInput {
   command: RDSCommand;
@@ -96,8 +158,14 @@ export class RDSTool extends BaseTool<RDSToolInput> {
   }
 
   protected updateResourceContext(command: string, params: Record<string, any>): void {
-     if (params?.DBInstanceIdentifier) {
+    if (params?.DBInstanceIdentifier) {
       AIHandler.Current.updateLatestResource({ type: 'RDS DB Instance', name: params.DBInstanceIdentifier });
+    }
+    if (params?.DBClusterIdentifier) {
+      AIHandler.Current.updateLatestResource({ type: 'RDS DB Cluster', name: params.DBClusterIdentifier });
+    }
+    if (params?.DBSnapshotIdentifier) {
+      AIHandler.Current.updateLatestResource({ type: 'RDS Snapshot', name: params.DBSnapshotIdentifier });
     }
   }
 
@@ -142,6 +210,37 @@ export class RDSTool extends BaseTool<RDSToolInput> {
       case 'DescribeValidDBInstanceModifications': return await client.send(new DescribeValidDBInstanceModificationsCommand(params as any));
       case 'DownloadDBLogFilePortion': return await client.send(new DownloadDBLogFilePortionCommand(params as any));
       case 'ListTagsForResource': return await client.send(new ListTagsForResourceCommand(params as any));
+      case 'CreateDBInstance': return await client.send(new CreateDBInstanceCommand(params as any));
+      case 'CreateDBCluster': return await client.send(new CreateDBClusterCommand(params as any));
+      case 'CreateDBSnapshot': return await client.send(new CreateDBSnapshotCommand(params as any));
+      case 'CreateDBClusterSnapshot': return await client.send(new CreateDBClusterSnapshotCommand(params as any));
+      case 'RestoreDBInstanceFromDBSnapshot': return await client.send(new RestoreDBInstanceFromDBSnapshotCommand(params as any));
+      case 'RestoreDBClusterFromSnapshot': return await client.send(new RestoreDBClusterFromSnapshotCommand(params as any));
+      case 'CreateDBParameterGroup': return await client.send(new CreateDBParameterGroupCommand(params as any));
+      case 'CreateDBSubnetGroup': return await client.send(new CreateDBSubnetGroupCommand(params as any));
+      case 'CreateDBSecurityGroup': return await client.send(new CreateDBSecurityGroupCommand(params as any));
+      case 'CreateDBProxy': return await client.send(new CreateDBProxyCommand(params as any));
+      case 'CreateEventSubscription': return await client.send(new CreateEventSubscriptionCommand(params as any));
+      case 'ModifyDBInstance': return await client.send(new ModifyDBInstanceCommand(params as any));
+      case 'ModifyDBCluster': return await client.send(new ModifyDBClusterCommand(params as any));
+      case 'StartDBInstance': return await client.send(new StartDBInstanceCommand(params as any));
+      case 'StopDBInstance': return await client.send(new StopDBInstanceCommand(params as any));
+      case 'RebootDBInstance': return await client.send(new RebootDBInstanceCommand(params as any));
+      case 'AddTagsToResource': return await client.send(new AddTagsToResourceCommand(params as any));
+      case 'RemoveTagsFromResource': return await client.send(new RemoveTagsFromResourceCommand(params as any));
+      case 'DeleteDBInstance': return await client.send(new DeleteDBInstanceCommand(params as any));
+      case 'DeleteDBCluster': return await client.send(new DeleteDBClusterCommand(params as any));
+      case 'DeleteDBSnapshot': return await client.send(new DeleteDBSnapshotCommand(params as any));
+      case 'DeleteDBClusterSnapshot': return await client.send(new DeleteDBClusterSnapshotCommand(params as any));
+      case 'DeleteDBParameterGroup': return await client.send(new DeleteDBParameterGroupCommand(params as any));
+      case 'DeleteDBSubnetGroup': return await client.send(new DeleteDBSubnetGroupCommand(params as any));
+      case 'DeleteDBSecurityGroup': return await client.send(new DeleteDBSecurityGroupCommand(params as any));
+      case 'DeleteDBProxy': return await client.send(new DeleteDBProxyCommand(params as any));
+      case 'DeleteEventSubscription': return await client.send(new DeleteEventSubscriptionCommand(params as any));
+      case 'CopyDBSnapshot': return await client.send(new CopyDBSnapshotCommand(params as any));
+      case 'CopyDBClusterSnapshot': return await client.send(new CopyDBClusterSnapshotCommand(params as any));
+      case 'PromoteReadReplica': return await client.send(new PromoteReadReplicaCommand(params as any));
+      case 'CreateDBInstanceReadReplica': return await client.send(new CreateDBInstanceReadReplicaCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

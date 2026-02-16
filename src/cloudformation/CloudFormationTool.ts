@@ -39,7 +39,22 @@ import {
   ListStackSetsCommand,
   ListTypeRegistrationsCommand,
   ListTypesCommand,
-  ListTypeVersionsCommand
+  ListTypeVersionsCommand,
+  CreateStackCommand,
+  CreateChangeSetCommand,
+  ExecuteChangeSetCommand,
+  CreateStackSetCommand,
+  CreateStackInstancesCommand,
+  UpdateStackCommand,
+  UpdateStackSetCommand,
+  DeleteStackCommand,
+  DeleteChangeSetCommand,
+  DeleteStackSetCommand,
+  DeleteStackInstancesCommand,
+  ContinueUpdateRollbackCommand,
+  CancelUpdateStackCommand,
+  SetStackPolicyCommand,
+  UpdateTerminationProtectionCommand,
 } from '@aws-sdk/client-cloudformation';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -94,7 +109,22 @@ type CFNCommand =
   | 'ListStackSets'
   | 'ListTypeRegistrations'
   | 'ListTypes'
-  | 'ListTypeVersions';
+  | 'ListTypeVersions'
+  | 'CreateStack'
+  | 'CreateChangeSet'
+  | 'ExecuteChangeSet'
+  | 'CreateStackSet'
+  | 'CreateStackInstances'
+  | 'UpdateStack'
+  | 'UpdateStackSet'
+  | 'DeleteStack'
+  | 'DeleteChangeSet'
+  | 'DeleteStackSet'
+  | 'DeleteStackInstances'
+  | 'ContinueUpdateRollback'
+  | 'CancelUpdateStack'
+  | 'SetStackPolicy'
+  | 'UpdateTerminationProtection';
 
 interface CloudFormationToolInput extends BaseToolInput {
   command: CFNCommand;
@@ -183,6 +213,21 @@ export class CloudFormationTool extends BaseTool<CloudFormationToolInput> {
       case 'ListTypeRegistrations': return await this.send(ListTypeRegistrationsCommand, params);
       case 'ListTypes': return await this.send(ListTypesCommand, params);
       case 'ListTypeVersions': return await this.send(ListTypeVersionsCommand, params);
+      case 'CreateStack': return await this.send(CreateStackCommand, params);
+      case 'CreateChangeSet': return await this.send(CreateChangeSetCommand, params);
+      case 'ExecuteChangeSet': return await this.send(ExecuteChangeSetCommand, params);
+      case 'CreateStackSet': return await this.send(CreateStackSetCommand, params);
+      case 'CreateStackInstances': return await this.send(CreateStackInstancesCommand, params);
+      case 'UpdateStack': return await this.send(UpdateStackCommand, params);
+      case 'UpdateStackSet': return await this.send(UpdateStackSetCommand, params);
+      case 'DeleteStack': return await this.send(DeleteStackCommand, params);
+      case 'DeleteChangeSet': return await this.send(DeleteChangeSetCommand, params);
+      case 'DeleteStackSet': return await this.send(DeleteStackSetCommand, params);
+      case 'DeleteStackInstances': return await this.send(DeleteStackInstancesCommand, params);
+      case 'ContinueUpdateRollback': return await this.send(ContinueUpdateRollbackCommand, params);
+      case 'CancelUpdateStack': return await this.send(CancelUpdateStackCommand, params);
+      case 'SetStackPolicy': return await this.send(SetStackPolicyCommand, params);
+      case 'UpdateTerminationProtection': return await this.send(UpdateTerminationProtectionCommand, params);
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

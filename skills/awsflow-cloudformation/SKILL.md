@@ -1,11 +1,11 @@
 ---
 name: awsflow-cloudformation
-description: Inspect AWS CloudFormation stacks, resources, changesets, types, drift detection, and stack sets using the awsflow VS Code extension CloudFormationTool.
+description: Manage and inspect AWS CloudFormation stacks, resources, changesets, types, drift detection, and stack sets using the awsflow VS Code extension CloudFormationTool.
 ---
 
 # awsflow-cloudformation
 
-Use the **CloudFormationTool** language tool in VS Code to inspect AWS CloudFormation stacks, resources, change sets, types, and drift status.
+Use the **CloudFormationTool** language tool in VS Code to manage and inspect AWS CloudFormation stacks, resources, change sets, types, and drift status.
 
 ## When to Use
 - User wants to list or describe CloudFormation stacks
@@ -16,6 +16,8 @@ Use the **CloudFormationTool** language tool in VS Code to inspect AWS CloudForm
 - User wants to view stack set details or operations
 - User wants to list or describe CloudFormation resource types
 - User wants to estimate template cost
+- User wants to create, update, or delete stacks or stack sets
+- User wants to execute or delete change sets
 
 ## Tool Reference
 
@@ -30,7 +32,7 @@ Use the **CloudFormationTool** language tool in VS Code to inspect AWS CloudForm
 }
 ```
 
-### Commands (51 total)
+### Commands (66 total)
 
 | Command | Description |
 |---------|-------------|
@@ -85,6 +87,21 @@ Use the **CloudFormationTool** language tool in VS Code to inspect AWS CloudForm
 | ListTypes | List registered resource types |
 | ListTypeVersions | List versions of a type |
 | ValidateTemplate | Validate a CloudFormation template |
+| CreateStack | Create a new stack |
+| CreateChangeSet | Create a change set |
+| ExecuteChangeSet | Execute a change set |
+| CreateStackSet | Create a stack set |
+| CreateStackInstances | Create stack instances for a stack set |
+| UpdateStack | Update a stack |
+| UpdateStackSet | Update a stack set |
+| DeleteStack | Delete a stack |
+| DeleteChangeSet | Delete a change set |
+| DeleteStackSet | Delete a stack set |
+| DeleteStackInstances | Delete stack set instances |
+| ContinueUpdateRollback | Continue a rollback after update failure |
+| CancelUpdateStack | Cancel a stack update |
+| SetStackPolicy | Set or update a stack policy |
+| UpdateTerminationProtection | Enable or disable termination protection |
 
 ### Parameters
 

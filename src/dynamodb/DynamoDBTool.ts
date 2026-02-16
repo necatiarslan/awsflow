@@ -20,6 +20,14 @@ import {
   ListBackupsCommand,
   ListGlobalTablesCommand,
   DescribeTableReplicaAutoScalingCommand,
+  CreateBackupCommand,
+  RestoreTableFromBackupCommand,
+  CreateGlobalTableCommand,
+  UpdateGlobalTableCommand,
+  TagResourceCommand,
+  UntagResourceCommand,
+  DescribeBackupCommand,
+  DeleteBackupCommand,
 } from '@aws-sdk/client-dynamodb';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -42,7 +50,15 @@ type DynamoDBCommand =
   | 'DescribeTimeToLive'
   | 'ListBackups'
   | 'ListGlobalTables'
-  | 'DescribeTableReplicaAutoScaling';
+  | 'DescribeTableReplicaAutoScaling'
+  | 'CreateBackup'
+  | 'RestoreTableFromBackup'
+  | 'CreateGlobalTable'
+  | 'UpdateGlobalTable'
+  | 'TagResource'
+  | 'UntagResource'
+  | 'DescribeBackup'
+  | 'DeleteBackup';
 
 // Input interface - command + params object
 interface DynamoDBToolInput extends BaseToolInput {
@@ -126,6 +142,30 @@ export class DynamoDBTool extends BaseTool<DynamoDBToolInput> {
 
       case 'DescribeTableReplicaAutoScaling':
         return await client.send(new DescribeTableReplicaAutoScalingCommand(params as any));
+
+      case 'CreateBackup':
+        return await client.send(new CreateBackupCommand(params as any));
+
+      case 'RestoreTableFromBackup':
+        return await client.send(new RestoreTableFromBackupCommand(params as any));
+
+      case 'CreateGlobalTable':
+        return await client.send(new CreateGlobalTableCommand(params as any));
+
+      case 'UpdateGlobalTable':
+        return await client.send(new UpdateGlobalTableCommand(params as any));
+
+      case 'TagResource':
+        return await client.send(new TagResourceCommand(params as any));
+
+      case 'UntagResource':
+        return await client.send(new UntagResourceCommand(params as any));
+
+      case 'DescribeBackup':
+        return await client.send(new DescribeBackupCommand(params as any));
+
+      case 'DeleteBackup':
+        return await client.send(new DeleteBackupCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);

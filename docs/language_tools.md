@@ -8,7 +8,7 @@ The Awsflow extension provides **20 AWS service tools** for VS Code's Language M
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     src/schemas/*.json                      │
+│                     tool_registry/*.json                   │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │ S3Tool.json, EC2Tool.json, LambdaTool.json, etc.     │  │
 │  │ - Single source of truth for tool metadata           │  │
@@ -17,7 +17,14 @@ The Awsflow extension provides **20 AWS service tools** for VS Code's Language M
 │  │ - Validated with Ajv at build time                   │  │
 │  └───────────────────────────────────────────────────────┘  │
 └────────────────────────┬────────────────────────────────────┘
-                         │ Build Time Discovery
+                         │ Sync to src/schemas
+                         ▼
+         ┌───────────────────────────────┐
+         │  scripts/syncSchemas.ts       │
+         │  - Copies tool_registry ->    │
+         │    src/schemas                │
+         └───────────┬───────────────────┘
+                     │ Build Time Discovery
                          ▼
          ┌───────────────────────────────┐
          │  scripts/discoverTools.ts     │
@@ -55,9 +62,10 @@ The Awsflow extension provides **20 AWS service tools** for VS Code's Language M
 
 ## Key Components
 
-### 1. Tool Schemas (`src/schemas/*.json`)
+### 1. Tool Schemas (`tool_registry/*.json`)
 
-Each tool has a dedicated JSON schema file containing all metadata:
+Each tool has a dedicated JSON schema file containing all metadata. These are
+synced into `src/schemas/` during prebuild for discovery and validation:
 
 ```json
 {
@@ -102,7 +110,7 @@ Runs at **build time** to discover and validate tools:
 // 1. Scans src/ for *Tool.ts files
 const toolFiles = findToolFiles('src/');
 
-// 2. Validates corresponding schema exists
+// 2. Validates corresponding schema exists (synced from tool_registry)
 const schemaPath = `src/schemas/${getSchemaFileName(toolName)}`;
 
 // 3. Validates schema with Ajv
@@ -199,10 +207,11 @@ export class S3Tool extends BaseTool<S3ToolInput> {
 ```json
 {
   "scripts": {
-    "generate-tools": "ts-node scripts/discoverTools.ts",
+    "discover-tools": "ts-node scripts/discoverTools.ts",
+    "sync-schemas": "ts-node scripts/syncSchemas.ts",
     "generate-package": "ts-node scripts/generatePackageJson.ts",
     "validate-schemas": "ts-node scripts/validateSchemas.ts",
-    "prebuild": "npm run generate-tools && npm run generate-package",
+    "prebuild": "npm run sync-schemas && npm run discover-tools && npm run generate-package",
     "build": "node esbuild.js",
     "watch": "npm-run-all -p watch:*"
   }
@@ -211,17 +220,20 @@ export class S3Tool extends BaseTool<S3ToolInput> {
 
 ### Build Flow
 
-1. **`npm run generate-tools`**
-   - Discovers `*Tool.ts` files
-   - Validates schemas with Ajv
-   - Generates `toolManifest.json` and `toolRegistry.ts`
+1. **`npm run sync-schemas`**
+  - Copies schemas from `tool_registry/` to `src/schemas/`
 
-2. **`npm run generate-package`**
+2. **`npm run discover-tools`**
+  - Discovers `*Tool.ts` files
+  - Validates schemas with Ajv
+  - Generates `toolManifest.json` and `toolRegistry.ts`
+
+3. **`npm run generate-package`**
    - Reads `toolManifest.json`
    - Loads schemas from `src/schemas/`
    - Updates `package.json` `contributes.languageModelTools`
 
-3. **`npm run build`** (runs `prebuild` automatically)
+4. **`npm run build`** (runs `prebuild` automatically)
    - Compiles TypeScript
    - Bundles with esbuild
 
@@ -315,7 +327,7 @@ Create `src/schemas/ServiceTool.json`:
 ### Step 3: Run Build
 
 ```bash
-npm run generate-tools
+npm run discover-tools
 npm run build
 ```
 
@@ -405,7 +417,7 @@ Invalid schemas **prevent the tool from being registered** but don't fail the bu
 **Symptom**: Changes to schema not reflected in extension
 
 **Solutions**:
-1. ✅ Run `npm run generate-tools`
+1. ✅ Run `npm run discover-tools`
 2. ✅ Run `npm run generate-package`
 3. ✅ Run `npm run build`
 4. ✅ Check `.gitignore` doesn't exclude `src/schemas/`

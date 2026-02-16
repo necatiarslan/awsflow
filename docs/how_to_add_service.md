@@ -6,7 +6,7 @@ This guide provides step-by-step instructions for adding a new AWS service to th
 
 Adding a new service requires creating **2 files**:
 1. **Tool Class** (`src/{service}/{Service}Tool.ts`) - Implementation
-2. **Tool Schema** (`src/schemas/{Service}Tool.json`) - Metadata
+2. **Tool Schema** (`tool_registry/{Service}Tool.json`) - Metadata (synced to `src/schemas/` during prebuild)
 
 Then run `npm run build` and the tool is automatically discovered, validated, and registered!
 
@@ -140,7 +140,7 @@ export class ECSTool extends BaseTool<ECSToolInput> {
 
 ### Step 4: Create Tool Schema
 
-Create `src/schemas/{Service}Tool.json` following this template:
+Create `tool_registry/{Service}Tool.json` following this template:
 
 ```json
 {

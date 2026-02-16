@@ -1,6 +1,6 @@
 ---
 name: awsflow-s3
-description: Manage Amazon S3 buckets and objects using awsflow. List buckets, upload/download objects, inspect bucket configuration (encryption, versioning, lifecycle, replication, logging, CORS, website), query object content with S3 Select, and open the S3 Explorer view.
+description: Manage Amazon S3 buckets and objects using awsflow. Create, configure, and delete buckets, upload/download objects, inspect bucket configuration (encryption, versioning, lifecycle, replication, logging, CORS, website), query object content with S3 Select, and open the S3 Explorer view.
 ---
 
 # Awsflow S3
@@ -17,6 +17,7 @@ Use this skill when the user:
 - Wants to query CSV/JSON/Parquet files with S3 Select SQL
 - Wants to open the interactive S3 Explorer view
 - Needs to check bucket policies, notifications, or replication settings
+- Wants to create or delete buckets or update bucket settings
 
 ## Tool: S3Tool
 
@@ -198,6 +199,68 @@ Get the retention settings of an object.
 | Bucket | string | Yes | Bucket name |
 | Key | string | Yes | Object key path |
 | ExpectedBucketOwner | string | No | Expected bucket owner account ID |
+
+### Bucket Configuration and Lifecycle Commands
+
+#### CreateBucket
+Create a new bucket.
+```json
+{ "command": "CreateBucket", "params": { "Bucket": "my-new-bucket" } }
+```
+
+#### DeleteBucket
+Delete an empty bucket.
+```json
+{ "command": "DeleteBucket", "params": { "Bucket": "my-old-bucket" } }
+```
+
+#### PutBucketVersioning
+Enable or suspend versioning.
+```json
+{ "command": "PutBucketVersioning", "params": { "Bucket": "my-bucket", "VersioningConfiguration": { "Status": "Enabled" } } }
+```
+
+#### PutBucketEncryption
+Set default bucket encryption.
+```json
+{ "command": "PutBucketEncryption", "params": { "Bucket": "my-bucket", "ServerSideEncryptionConfiguration": { "Rules": [{ "ApplyServerSideEncryptionByDefault": { "SSEAlgorithm": "AES256" } }] } } }
+```
+
+#### PutBucketLifecycleConfiguration
+Set lifecycle rules.
+```json
+{ "command": "PutBucketLifecycleConfiguration", "params": { "Bucket": "my-bucket", "LifecycleConfiguration": { "Rules": [] } } }
+```
+
+#### PutBucketTagging
+Set bucket tags.
+```json
+{ "command": "PutBucketTagging", "params": { "Bucket": "my-bucket", "Tagging": { "TagSet": [{ "Key": "env", "Value": "prod" }] } } }
+```
+
+#### PutBucketPolicy
+Set a bucket policy.
+```json
+{ "command": "PutBucketPolicy", "params": { "Bucket": "my-bucket", "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::my-bucket/*\"]}]}" } }
+```
+
+#### DeleteBucketPolicy
+Delete a bucket policy.
+```json
+{ "command": "DeleteBucketPolicy", "params": { "Bucket": "my-bucket" } }
+```
+
+#### PutObjectTagging
+Set object tags.
+```json
+{ "command": "PutObjectTagging", "params": { "Bucket": "my-bucket", "Key": "file.txt", "Tagging": { "TagSet": [{ "Key": "type", "Value": "report" }] } } }
+```
+
+#### DeleteObjectTagging
+Remove object tags.
+```json
+{ "command": "DeleteObjectTagging", "params": { "Bucket": "my-bucket", "Key": "file.txt" } }
+```
 
 #### GetBucketLocation
 Get the region where a bucket is located.

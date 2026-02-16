@@ -72,7 +72,22 @@
           "ListTypeRegistrations",
           "ListTypes",
           "ListTypeVersions",
-          "ValidateTemplate"
+          "ValidateTemplate",
+          "CreateStack",
+          "CreateChangeSet",
+          "ExecuteChangeSet",
+          "CreateStackSet",
+          "CreateStackInstances",
+          "UpdateStack",
+          "UpdateStackSet",
+          "DeleteStack",
+          "DeleteChangeSet",
+          "DeleteStackSet",
+          "DeleteStackInstances",
+          "ContinueUpdateRollback",
+          "CancelUpdateStack",
+          "SetStackPolicy",
+          "UpdateTerminationProtection"
         ],
         "description": "The CloudFormation command to execute"
       },

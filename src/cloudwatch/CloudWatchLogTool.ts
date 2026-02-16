@@ -14,6 +14,21 @@ import {
   DescribeSubscriptionFiltersCommand,
   GetLogGroupFieldsCommand,
   DescribeDestinationsCommand,
+  CreateLogGroupCommand,
+  CreateLogStreamCommand,
+  PutLogEventsCommand,
+  PutMetricFilterCommand,
+  PutSubscriptionFilterCommand,
+  PutRetentionPolicyCommand,
+  PutResourcePolicyCommand,
+  DeleteLogGroupCommand,
+  DeleteLogStreamCommand,
+  DeleteMetricFilterCommand,
+  DeleteSubscriptionFilterCommand,
+  DeleteRetentionPolicyCommand,
+  DeleteResourcePolicyCommand,
+  TagLogGroupCommand,
+  UntagLogGroupCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { AIHandler } from '../chat/AIHandler';
 import { CloudWatchLogView } from './CloudWatchLogView';
@@ -31,7 +46,22 @@ type CloudWatchCommand =
   | 'DescribeSubscriptionFilters'
   | 'GetLogGroupFields'
   | 'DescribeDestinations'
-  | 'OpenCloudWatchLogView';
+  | 'OpenCloudWatchLogView'
+  | 'CreateLogGroup'
+  | 'CreateLogStream'
+  | 'PutLogEvents'
+  | 'PutMetricFilter'
+  | 'PutSubscriptionFilter'
+  | 'PutRetentionPolicy'
+  | 'PutResourcePolicy'
+  | 'DeleteLogGroup'
+  | 'DeleteLogStream'
+  | 'DeleteMetricFilter'
+  | 'DeleteSubscriptionFilter'
+  | 'DeleteRetentionPolicy'
+  | 'DeleteResourcePolicy'
+  | 'TagLogGroup'
+  | 'UntagLogGroup';
 
 // Input interface - command + params object
 interface CloudWatchToolInput extends BaseToolInput {
@@ -105,6 +135,36 @@ export class CloudWatchLogTool extends BaseTool<CloudWatchToolInput> {
         return await client.send(new DescribeDestinationsCommand(params as any));
       case 'OpenCloudWatchLogView':
         return await this.executeOpenCloudWatchLogView(params);
+      case 'CreateLogGroup':
+        return await client.send(new CreateLogGroupCommand(params as any));
+      case 'CreateLogStream':
+        return await client.send(new CreateLogStreamCommand(params as any));
+      case 'PutLogEvents':
+        return await client.send(new PutLogEventsCommand(params as any));
+      case 'PutMetricFilter':
+        return await client.send(new PutMetricFilterCommand(params as any));
+      case 'PutSubscriptionFilter':
+        return await client.send(new PutSubscriptionFilterCommand(params as any));
+      case 'PutRetentionPolicy':
+        return await client.send(new PutRetentionPolicyCommand(params as any));
+      case 'PutResourcePolicy':
+        return await client.send(new PutResourcePolicyCommand(params as any));
+      case 'DeleteLogGroup':
+        return await client.send(new DeleteLogGroupCommand(params as any));
+      case 'DeleteLogStream':
+        return await client.send(new DeleteLogStreamCommand(params as any));
+      case 'DeleteMetricFilter':
+        return await client.send(new DeleteMetricFilterCommand(params as any));
+      case 'DeleteSubscriptionFilter':
+        return await client.send(new DeleteSubscriptionFilterCommand(params as any));
+      case 'DeleteRetentionPolicy':
+        return await client.send(new DeleteRetentionPolicyCommand(params as any));
+      case 'DeleteResourcePolicy':
+        return await client.send(new DeleteResourcePolicyCommand(params as any));
+      case 'TagLogGroup':
+        return await client.send(new TagLogGroupCommand(params as any));
+      case 'UntagLogGroup':
+        return await client.send(new UntagLogGroupCommand(params as any));
       default:
         throw new Error(`Unsupported command: ${command}`);
     }

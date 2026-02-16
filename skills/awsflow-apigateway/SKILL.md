@@ -1,11 +1,11 @@
 ---
 name: awsflow-apigateway
-description: Inspect and test AWS API Gateway REST APIs, resources, methods, stages, authorizers, usage plans, and domain names using the awsflow VS Code extension APIGatewayTool.
+description: Manage and inspect AWS API Gateway REST APIs, resources, methods, stages, authorizers, usage plans, and domain names using the awsflow VS Code extension APIGatewayTool.
 ---
 
 # awsflow-apigateway
 
-Use the **APIGatewayTool** language tool in VS Code to inspect and test AWS API Gateway REST APIs — resources, methods, integrations, stages, authorizers, usage plans, and more.
+Use the **APIGatewayTool** language tool in VS Code to manage, inspect, and test AWS API Gateway REST APIs — resources, methods, integrations, stages, authorizers, usage plans, and more.
 
 ## When to Use
 - User wants to list or inspect REST APIs
@@ -17,6 +17,8 @@ Use the **APIGatewayTool** language tool in VS Code to inspect and test AWS API 
 - User wants to view custom domain names, base path mappings, or VPC links
 - User wants to view models, request validators, or documentation
 - User wants to export an API or get SDK artifacts
+- User wants to create or delete APIs, resources, stages, authorizers, or usage plans
+- User wants to update API definitions or stage settings
 
 ## Tool Reference
 
@@ -31,7 +33,7 @@ Use the **APIGatewayTool** language tool in VS Code to inspect and test AWS API 
 }
 ```
 
-### Commands (46 total)
+### Commands (68 total)
 
 | Command | Description |
 |---------|-------------|
@@ -82,6 +84,28 @@ Use the **APIGatewayTool** language tool in VS Code to inspect and test AWS API 
 | GetVpcLinks | List VPC links |
 | TestInvokeAuthorizer | Test invoke an authorizer |
 | TestInvokeMethod | Test invoke a method |
+| CreateRestApi | Create a REST API |
+| CreateResource | Create a resource under a REST API |
+| PutMethod | Create or update a method on a resource |
+| CreateDeployment | Create a deployment |
+| CreateStage | Create a stage |
+| CreateAuthorizer | Create an authorizer |
+| CreateApiKey | Create an API key |
+| CreateUsagePlan | Create a usage plan |
+| CreateDomainName | Create a custom domain name |
+| ImportRestApi | Import a REST API from Swagger/OAS |
+| DeleteRestApi | Delete a REST API |
+| DeleteResource | Delete a resource |
+| DeleteMethod | Delete a method |
+| DeleteStage | Delete a stage |
+| DeleteAuthorizer | Delete an authorizer |
+| DeleteApiKey | Delete an API key |
+| DeleteUsagePlan | Delete a usage plan |
+| DeleteDomainName | Delete a custom domain name |
+| UpdateRestApi | Update a REST API |
+| UpdateStage | Update a stage |
+| TagResource | Tag an API Gateway resource |
+| UntagResource | Remove tags from a resource |
 
 ### Parameters
 

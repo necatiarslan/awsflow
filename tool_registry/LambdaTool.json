@@ -2,8 +2,8 @@
   "name": "LambdaTool",
   "toolReferenceName": "LambdaTool",
   "displayName": "Lambda Tool",
-  "modelDescription": "Execute AWS Lambda commands including event source mappings. ALWAYS provide params object. Examples: ListFunctions {command:'ListFunctions', params:{MaxItems:10}}. GetFunction {command:'GetFunction', params:{FunctionName:'my-function'}}. ListEventSourceMappings {command:'ListEventSourceMappings', params:{FunctionName:'my-function'}}. GetEventSourceMapping {command:'GetEventSourceMapping', params:{UUID:'12345678-1234-1234-1234-123456789012'}}. GetFunctionConcurrency {command:'GetFunctionConcurrency', params:{FunctionName:'my-function'}}. ListAliases {command:'ListAliases', params:{FunctionName:'my-function'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}",
-  "userDescription": "Manage Lambda functions, event source mappings, aliases, versions, layers, concurrency, function URLs, and invoke functions",
+  "modelDescription": "Execute AWS Lambda commands for managing serverless functions. ALWAYS provide params object. Supports creation, configuration, invocation, and deletion of functions, aliases, event source mappings, layers, and permissions. Examples: CreateFunction {command:'CreateFunction', params:{FunctionName:'my-func',Runtime:'nodejs18.x',Role:'arn:...',Handler:'index.handler',Code:{ZipFile:'...'}}. Invoke {command:'Invoke', params:{FunctionName:'my-function', Payload:'{\"key\":\"value\"}'}}. CreateEventSourceMapping {command:'CreateEventSourceMapping', params:{FunctionName:'my-func',EventSourceArn:'arn:...'}}. ListFunctions {command:'ListFunctions', params:{MaxItems:10}}.",
+  "userDescription": "Manage Lambda functions: create/delete/invoke functions, manage event sources, aliases, versions, layers, concurrency, function URLs, and permissions",
   "tags": [
     "aws",
     "lambda",
@@ -23,6 +23,18 @@
       "command": {
         "type": "string",
         "enum": [
+          "AddLayerVersionPermission",
+          "AddPermission",
+          "CreateAlias",
+          "CreateEventSourceMapping",
+          "CreateFunction",
+          "CreateFunctionUrlConfig",
+          "DeleteAlias",
+          "DeleteEventSourceMapping",
+          "DeleteFunction",
+          "DeleteFunctionConcurrency",
+          "DeleteFunctionEventInvokeConfig",
+          "DeleteFunctionUrlConfig",
           "GetAccountSettings",
           "GetAlias",
           "GetEventSourceMapping",
@@ -40,9 +52,19 @@
           "ListLayerVersions",
           "ListTags",
           "ListVersionsByFunction",
+          "PublishLayerVersion",
+          "PublishVersion",
+          "PutFunctionConcurrency",
+          "PutFunctionEventInvokeConfig",
+          "RemoveLayerVersionPermission",
+          "RemovePermission",
           "TagResource",
           "UntagResource",
-          "UpdateFunctionCode"
+          "UpdateAlias",
+          "UpdateEventSourceMapping",
+          "UpdateFunctionCode",
+          "UpdateFunctionConfiguration",
+          "UpdateFunctionEventInvokeConfig"
         ],
         "description": "The Lambda command to execute"
       },
@@ -180,6 +202,159 @@
           "CodeSigningConfigArn": {
             "type": "string",
             "description": "Code signing configuration ARN (Used by: ListFunctionsByCodeSigningConfig (Required))"
+          },
+          "Runtime": {
+            "type": "string",
+            "description": "Runtime environment (nodejs18.x, python3.11, java17, etc.) (Used by: CreateFunction (Required))"
+          },
+          "Role": {
+            "type": "string",
+            "description": "IAM role ARN for function execution (Used by: CreateFunction (Required))"
+          },
+          "Handler": {
+            "type": "string",
+            "description": "Function handler (e.g., index.handler) (Used by: CreateFunction (Required), UpdateFunctionConfiguration)"
+          },
+          "Code": {
+            "type": "object",
+            "description": "Function code configuration (ZipFile, S3Bucket/Key, or ImageUri) (Used by: CreateFunction (Required))"
+          },
+          "Description": {
+            "type": "string",
+            "description": "Function or alias description (Used by: CreateFunction, CreateAlias, PublishVersion, UpdateFunctionConfiguration)"
+          },
+          "Timeout": {
+            "type": "number",
+            "description": "Timeout in seconds (1-900) (Used by: CreateFunction, UpdateFunctionConfiguration)"
+          },
+          "MemorySize": {
+            "type": "number",
+            "description": "Memory in MB (128-10240) (Used by: CreateFunction, UpdateFunctionConfiguration)"
+          },
+          "Environment": {
+            "type": "object",
+            "description": "Environment variables (Used by: CreateFunction, UpdateFunctionConfiguration)"
+          },
+          "VpcConfig": {
+            "type": "object",
+            "description": "VPC configuration (Used by: CreateFunction, UpdateFunctionConfiguration)"
+          },
+          "Layers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Layer ARNs (Used by: CreateFunction, UpdateFunctionConfiguration)"
+          },
+          "FunctionVersion": {
+            "type": "string",
+            "description": "Function version (Used by: CreateAlias (Required), UpdateAlias)"
+          },
+          "RoutingConfig": {
+            "type": "object",
+            "description": "Traffic routing configuration for alias (Used by: CreateAlias, UpdateAlias)"
+          },
+          "CodeSha256": {
+            "type": "string",
+            "description": "Version code SHA-256 (Used by: PublishVersion)"
+          },
+          "StartingPosition": {
+            "type": "string",
+            "description": "Starting position for stream: TRIM_HORIZON, LATEST, AT_TIMESTAMP (Used by: CreateEventSourceMapping (Required))"
+          },
+          "Enabled": {
+            "type": "boolean",
+            "description": "Enable/disable event source mapping (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+          },
+          "BatchSize": {
+            "type": "number",
+            "description": "Number of records per batch (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+          },
+          "MaximumBatchingWindowInSeconds": {
+            "type": "number",
+            "description": "Maximum batching window (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+          },
+          "ParallelizationFactor": {
+            "type": "number",
+            "description": "Number of batches to process simultaneously (Used by: CreateEventSourceMapping, UpdateEventSourceMapping)"
+          },
+          "AuthType": {
+            "type": "string",
+            "description": "Auth type for function URL: AWS_IAM or NONE (Used by: CreateFunctionUrlConfig (Required))"
+          },
+          "Cors": {
+            "type": "object",
+            "description": "CORS configuration (Used by: CreateFunctionUrlConfig)"
+          },
+          "InvokeMode": {
+            "type": "string",
+            "description": "Invoke mode: BUFFERED or RESPONSE_STREAM (Used by: CreateFunctionUrlConfig)"
+          },
+          "ReservedConcurrentExecutions": {
+            "type": "number",
+            "description": "Reserved concurrent executions (Used by: PutFunctionConcurrency (Required))"
+          },
+          "StatementId": {
+            "type": "string",
+            "description": "Permission statement ID (Used by: AddPermission (Required), RemovePermission (Required))"
+          },
+          "Action": {
+            "type": "string",
+            "description": "Action to allow (e.g., lambda:InvokeFunction) (Used by: AddPermission (Required), AddLayerVersionPermission (Required))"
+          },
+          "Principal": {
+            "type": "string",
+            "description": "Principal to grant permission (Used by: AddPermission (Required), AddLayerVersionPermission (Required))"
+          },
+          "SourceArn": {
+            "type": "string",
+            "description": "Source ARN for permission (Used by: AddPermission)"
+          },
+          "SourceAccount": {
+            "type": "string",
+            "description": "Source account ID (Used by: AddPermission)"
+          },
+          "VersionNumber": {
+            "type": "number",
+            "description": "Layer version number (Used by: AddLayerVersionPermission (Required), RemoveLayerVersionPermission (Required))"
+          },
+          "OrganizationId": {
+            "type": "string",
+            "description": "Organization ID for permission (Used by: AddLayerVersionPermission)"
+          },
+          "Content": {
+            "type": "object",
+            "description": "Layer content (S3Bucket/Key or ZipFile) (Used by: PublishLayerVersion (Required))"
+          },
+          "CompatibleRuntimes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Compatible runtimes for layer (Used by: PublishLayerVersion)"
+          },
+          "LicenseInfo": {
+            "type": "string",
+            "description": "Layer license info (Used by: PublishLayerVersion)"
+          },
+          "CompatibleArchitectures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Compatible architectures (x86_64, arm64) (Used by: PublishLayerVersion)"
+          },
+          "MaximumRetryAttempts": {
+            "type": "number",
+            "description": "Maximum retry attempts (0-2) (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
+          },
+          "MaximumEventAgeInSeconds": {
+            "type": "number",
+            "description": "Maximum event age in seconds (60-21600) (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
+          },
+          "DestinationConfig": {
+            "type": "object",
+            "description": "Destination configuration for async invocation (Used by: PutFunctionEventInvokeConfig, UpdateFunctionEventInvokeConfig)"
           }
         }
       }

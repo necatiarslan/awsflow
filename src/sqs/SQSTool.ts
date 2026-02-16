@@ -16,6 +16,13 @@ import {
   DeleteMessageBatchCommand,
   ChangeMessageVisibilityBatchCommand,
   QueueAttributeName,
+  CreateQueueCommand,
+  SetQueueAttributesCommand,
+  AddPermissionCommand,
+  RemovePermissionCommand,
+  TagQueueCommand,
+  UntagQueueCommand,
+  DeleteQueueCommand,
 } from '@aws-sdk/client-sqs';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -33,7 +40,14 @@ type SQSCommand =
   | 'ChangeMessageVisibility'
   | 'SendMessageBatch'
   | 'DeleteMessageBatch'
-  | 'ChangeMessageVisibilityBatch';
+  | 'ChangeMessageVisibilityBatch'
+  | 'CreateQueue'
+  | 'SetQueueAttributes'
+  | 'AddPermission'
+  | 'RemovePermission'
+  | 'TagQueue'
+  | 'UntagQueue'
+  | 'DeleteQueue';
 
 // Input interface - command + params object
 interface SQSToolInput extends BaseToolInput {
@@ -104,6 +118,27 @@ export class SQSTool extends BaseTool<SQSToolInput> {
       
       case 'ChangeMessageVisibilityBatch':
         return await client.send(new ChangeMessageVisibilityBatchCommand(params as any));
+      
+      case 'CreateQueue':
+        return await client.send(new CreateQueueCommand(params as any));
+      
+      case 'SetQueueAttributes':
+        return await client.send(new SetQueueAttributesCommand(params as any));
+      
+      case 'AddPermission':
+        return await client.send(new AddPermissionCommand(params as any));
+      
+      case 'RemovePermission':
+        return await client.send(new RemovePermissionCommand(params as any));
+      
+      case 'TagQueue':
+        return await client.send(new TagQueueCommand(params as any));
+      
+      case 'UntagQueue':
+        return await client.send(new UntagQueueCommand(params as any));
+      
+      case 'DeleteQueue':
+        return await client.send(new DeleteQueueCommand(params as any));
       
       default:
         throw new Error(`Unsupported command: ${command}`);

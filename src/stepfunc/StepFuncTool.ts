@@ -18,6 +18,18 @@ import {
   DescribeStateMachineAliasCommand,
   ListStateMachineAliasesCommand,
   ListStateMachineVersionsCommand,
+  CreateStateMachineCommand,
+  CreateActivityCommand,
+  CreateStateMachineAliasCommand,
+  PublishStateMachineVersionCommand,
+  TagResourceCommand,
+  UntagResourceCommand,
+  DeleteStateMachineCommand,
+  DeleteActivityCommand,
+  StopExecutionCommand,
+  UpdateStateMachineAliasCommand,
+  DeleteStateMachineAliasCommand,
+  DeleteStateMachineVersionCommand,
 } from '@aws-sdk/client-sfn';
 import { AIHandler } from '../chat/AIHandler';
 
@@ -38,7 +50,19 @@ type StepFuncCommand =
   | 'DescribeStateMachineForExecution'
   | 'DescribeStateMachineAlias'
   | 'ListStateMachineAliases'
-  | 'ListStateMachineVersions';
+  | 'ListStateMachineVersions'
+  | 'CreateStateMachine'
+  | 'CreateActivity'
+  | 'CreateStateMachineAlias'
+  | 'PublishStateMachineVersion'
+  | 'TagResource'
+  | 'UntagResource'
+  | 'DeleteStateMachine'
+  | 'DeleteActivity'
+  | 'StopExecution'
+  | 'UpdateStateMachineAlias'
+  | 'DeleteStateMachineAlias'
+  | 'DeleteStateMachineVersion';
 
 // Input interface - command + params object
 interface StepFuncToolInput extends BaseToolInput {
@@ -164,6 +188,42 @@ export class StepFuncTool extends BaseTool<StepFuncToolInput> {
 
       case 'ListStateMachineVersions':
         return await client.send(new ListStateMachineVersionsCommand(params as any));
+
+      case 'CreateStateMachine':
+        return await client.send(new CreateStateMachineCommand(params as any));
+
+      case 'CreateActivity':
+        return await client.send(new CreateActivityCommand(params as any));
+
+      case 'CreateStateMachineAlias':
+        return await client.send(new CreateStateMachineAliasCommand(params as any));
+
+      case 'PublishStateMachineVersion':
+        return await client.send(new PublishStateMachineVersionCommand(params as any));
+
+      case 'TagResource':
+        return await client.send(new TagResourceCommand(params as any));
+
+      case 'UntagResource':
+        return await client.send(new UntagResourceCommand(params as any));
+
+      case 'DeleteStateMachine':
+        return await client.send(new DeleteStateMachineCommand(params as any));
+
+      case 'DeleteActivity':
+        return await client.send(new DeleteActivityCommand(params as any));
+
+      case 'StopExecution':
+        return await client.send(new StopExecutionCommand(params as any));
+
+      case 'UpdateStateMachineAlias':
+        return await client.send(new UpdateStateMachineAliasCommand(params as any));
+
+      case 'DeleteStateMachineAlias':
+        return await client.send(new DeleteStateMachineAliasCommand(params as any));
+
+      case 'DeleteStateMachineVersion':
+        return await client.send(new DeleteStateMachineVersionCommand(params as any));
 
       default:
         throw new Error(`Unsupported command: ${command}`);
