@@ -112,6 +112,7 @@ Click [here](README_AWS_SERVICES.md) for the full list of supported AWS services
    - Tier3 : X-Ray, Athena, Redshift
 
 - Improve natural language understanding for AWS-specific queries.
+- Setting Panel like copilot for better user experience.
 
 ## 💖 Links
 

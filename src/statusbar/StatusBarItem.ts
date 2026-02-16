@@ -99,7 +99,7 @@ export class StatusBarItem implements vscode.Disposable {
                     Session.Current!.AwsProfile = value;
                     //this.ShowLoading();
                     Session.Current!.SaveState();
-                    Session.Current!.ClearCredentials();
+                    Session.Current!.GetCredentials(true);
                 }
             });
         }

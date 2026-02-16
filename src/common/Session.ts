@@ -161,13 +161,13 @@ export class Session implements vscode.Disposable {
         }
     }
 
-    public async GetCredentials(): Promise<AwsCredentialIdentity | undefined> {
-        if (this.CurrentCredentials !== undefined) {
+    public async GetCredentials(renew: boolean = false): Promise<AwsCredentialIdentity | undefined> {
+        if (this.CurrentCredentials !== undefined && !renew) {
             if(this.CurrentCredentials.expiration && (new Date() >= this.CurrentCredentials.expiration)) {
                 ui.logToOutput('Cached credentials expired, refreshing...');
             } else {
-            ui.logToOutput(`Using cached credentials (AccessKeyId=${this.CurrentCredentials.accessKeyId})`);
-            return this.CurrentCredentials;
+                ui.logToOutput(`Using cached credentials (AccessKeyId=${this.CurrentCredentials.accessKeyId})`);
+                return this.CurrentCredentials;
             }
         }
 
@@ -192,8 +192,7 @@ export class Session implements vscode.Disposable {
     }
 
     public RefreshCredentials() {
-        this.CurrentCredentials = undefined;
-        this.GetCredentials();
+        this.GetCredentials(true);
         this._onDidChangeSession.fire();
         // MessageHub.CredentialsChanged();
         ui.logToOutput('Credentials cache refreshed');
