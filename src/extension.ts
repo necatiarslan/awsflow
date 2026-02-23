@@ -152,7 +152,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 			if(Session.Current.IsHostSupportLanguageTools()) {
-				ui.showInfoMessage('MCP server is not required in this environment.');
+				ui.showInfoMessage('MCP server is not required in VsCode');
 				return;
 			}
 			await mcpManager.startSession();
@@ -161,7 +161,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('awsflow.StopMcpServers', () => {
 			if(!Session.Current) { return; }
 			if(Session.Current.IsHostSupportLanguageTools()) {
-				ui.showInfoMessage('MCP server is not required in this environment.');
+				ui.showInfoMessage('MCP server is not required in VsCode');
 				return;
 			}
 			mcpManager.stopAll();
@@ -171,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('awsflow.OpenMcpManageView', () => {
 			if(!Session.Current) { return; }
 			if(Session.Current.IsHostSupportLanguageTools()) {
-				ui.showInfoMessage('MCP server is not required in this environment.');
+				ui.showInfoMessage('MCP server is not required in VsCode');
 				return;
 			}
 			McpManageView.Render(context.extensionUri, mcpManager);

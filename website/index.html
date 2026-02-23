@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awsflow – AWS AI Assistant for VS Code</title>
+  <meta name="description" content="Awsflow is a VS Code extension that brings AWS interaction into your chat experience. Use natural language to inspect and operate AWS resources." />
+  <meta property="og:title" content="Awsflow – AWS AI Assistant for VS Code" />
+  <meta property="og:description" content="Use natural language to inspect and operate AWS resources directly from VS Code." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/1.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ── Nav ───────────────────────────────────────────── -->
+<nav>
+  <div class="nav-brand">
+    <span class="emoji">☁️</span>
+    Awsflow
+  </div>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#quickstart">Quick Start</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://github.com/necatiarslan/awsflow" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+  <a class="btn btn-primary nav-cta" href="https://marketplace.visualstudio.com/search?term=awsflow&target=VSCode" target="_blank" rel="noopener">
+    Install Extension
+  </a>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-badge">🤖 AWS AI Assistant</div>
+  <h1>Your AWS Cloud,<br>in Plain English</h1>
+  <p>
+    Awsflow is a free VS Code extension that brings AWS interaction into your
+    chat experience. Use natural language to inspect and operate your AWS
+    resources — no SDK knowledge required.
+  </p>
+  <div class="hero-btns">
+    <a class="btn btn-primary"
+       href="https://marketplace.visualstudio.com/search?term=awsflow&target=VSCode"
+       target="_blank" rel="noopener">
+      🚀 Install for Free
+    </a>
+    <a class="btn btn-secondary"
+       href="https://github.com/necatiarslan/awsflow"
+       target="_blank" rel="noopener">
+      ⭐ Star on GitHub
+    </a>
+  </div>
+  <div class="hero-demo">
+    <img
+      src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/movie.gif"
+      alt="Awsflow demo – natural language AWS interaction in VS Code"
+      loading="lazy"
+    />
+  </div>
+</header>
+
+<!-- ── Features ──────────────────────────────────────── -->
+<section id="features">
+  <div class="container">
+    <div class="features-header">
+      <p class="section-label">Why Awsflow?</p>
+      <h2 class="section-title">Everything you need to work with AWS</h2>
+      <p class="section-subtitle">
+        Stop memorising CLI flags and SDK signatures. Just describe what you
+        want and Awsflow handles the rest.
+      </p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Natural Language First</h3>
+        <p>Ask questions in plain English. "List my S3 buckets", "tail the latest Lambda logs", "describe EC2 instances in us-west-2" — it just works.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔑</div>
+        <h3>Uses Your Existing Credentials</h3>
+        <p>Authenticates via the standard AWS SDK provider chain — CLI profiles, SSO, environment variables. Zero extra setup.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy by Design</h3>
+        <p>Your AWS credentials are handled locally and never sent to any external AI service. Read-only actions run immediately; mutating actions always ask for your confirmation first.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Agent &amp; Ask Modes</h3>
+        <p>Use Agent/Plan Mode for autonomous multi-step tasks, or Ask/Edit Mode with the <code>@aws</code> prefix for quick queries. Pick the workflow that fits your needs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔌</div>
+        <h3>MCP Support</h3>
+        <p>Run Awsflow as a local MCP server and connect any editor — Google Antigravity, Windsurf, Cursor, and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Full Audit Trail</h3>
+        <p>Every AWS API call is logged in the Command History panel and the Awsflow-Log output channel so you always know what happened.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chat Modes ─────────────────────────────────────── -->
+<section id="modes">
+  <div class="container">
+    <p class="section-label">Chat Modes</p>
+    <h2 class="section-title">Two ways to talk to AWS</h2>
+    <div class="modes-grid">
+      <div class="mode-card">
+        <span class="badge">Agent / Plan Mode</span>
+        <h3>Let the AI drive</h3>
+        <p>
+          Awsflow registers AWS-aware tools that the AI assistant can invoke
+          autonomously based on your request. Best for complex, multi-step
+          operations and most everyday tasks.
+        </p>
+      </div>
+      <div class="mode-card">
+        <span class="badge">Ask / Edit Mode</span>
+        <h3>Direct <code>@aws</code> commands</h3>
+        <p>
+          Prefix your message with <strong>@aws</strong> and the assistant
+          responds immediately with data or performs the action. Ideal for
+          quick queries or when you don't have access to Agent/Plan mode.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ──────────────────────────────────────── -->
+<section id="services">
+  <div class="container">
+    <p class="section-label">Supported AWS Services</p>
+    <h2 class="section-title">16 AWS services and growing</h2>
+    <p class="section-subtitle">
+      From storage to compute, databases to observability — all accessible
+      through natural language.
+    </p>
+    <div class="services-grid">
+      <div class="service-pill">S3</div>
+      <div class="service-pill">SQS</div>
+      <div class="service-pill">SNS</div>
+      <div class="service-pill">EC2</div>
+      <div class="service-pill">Lambda</div>
+      <div class="service-pill">Step Functions</div>
+      <div class="service-pill">EMR</div>
+      <div class="service-pill">CloudWatch</div>
+      <div class="service-pill">CloudFormation</div>
+      <div class="service-pill">RDS</div>
+      <div class="service-pill">DynamoDB</div>
+      <div class="service-pill">IAM</div>
+      <div class="service-pill">STS</div>
+      <div class="service-pill">Glue</div>
+      <div class="service-pill">API Gateway</div>
+      <div class="service-pill">+ more soon</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Screenshots ────────────────────────────────────── -->
+<section id="screenshots">
+  <div class="container">
+    <div class="screenshots-header">
+      <p class="section-label">In Action</p>
+      <h2 class="section-title">See Awsflow in action</h2>
+    </div>
+    <div class="screenshots-grid">
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/1.png"  alt="Awsflow screenshot 1"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/2.png"  alt="Awsflow screenshot 2"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/3.png"  alt="Awsflow screenshot 3"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/4.png"  alt="Awsflow screenshot 4"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/5.png"  alt="Awsflow screenshot 5"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/6.png"  alt="Awsflow screenshot 6"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/7.png"  alt="Awsflow screenshot 7"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/8.png"  alt="Awsflow screenshot 8"  loading="lazy" />
+      </div>
+      <div class="screenshot-item">
+        <img src="https://raw.githubusercontent.com/necatiarslan/awsflow/main/docs/readme/9.png"  alt="Awsflow screenshot 9"  loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Quick Start ────────────────────────────────────── -->
+<section id="quickstart">
+  <div class="container">
+    <p class="section-label">Quick Start</p>
+    <h2 class="section-title">Up and running in minutes</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Configure AWS Credentials</h3>
+          <p>Make sure you have AWS credentials configured locally via the AWS CLI, SSO, or environment variables. Awsflow uses the standard SDK provider chain.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Install the Extension</h3>
+          <p>Search for <strong>Awsflow</strong> in the VS Code Extensions panel, or install it from the Marketplace. No extra runtime dependencies required.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Test AWS Connectivity</h3>
+          <p>Click the <strong>🔌 Aws</strong> button in the VS Code status bar and run <em>Awsflow: Test AWS Connection</em> from the Command Palette to verify access. Set your default profile, region, or a custom endpoint (e.g. LocalStack) if needed.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Open Chat and Ask Away</h3>
+          <p>Open the VS Code Chat panel (use <code>@aws</code> in Ask or Edit Mode) and start asking: <em>"List my S3 buckets"</em>, <em>"Tail the latest CloudWatch log for /aws/lambda/my-fn"</em>, <em>"Describe EC2 instances in us-west-2"</em>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Review Results</h3>
+          <p>The assistant streams results and suggests follow-up actions. Mutating operations (create, delete, update…) always ask for your confirmation before executing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MCP ────────────────────────────────────────────── -->
+<section id="mcp">
+  <div class="container">
+    <p class="section-label">MCP Support</p>
+    <h2 class="section-title">Works beyond VS Code</h2>
+    <p class="section-subtitle">
+      Awsflow exposes a local MCP server so you can connect any editor or
+      AI assistant that supports the Model Context Protocol.
+    </p>
+    <div class="mcp-card">
+      <div class="mcp-icon">🔌</div>
+      <div>
+        <h3>Google Antigravity · Windsurf · Cursor · Others</h3>
+        <p>
+          Point your editor's MCP configuration to the Awsflow local server and
+          get the same natural language AWS experience everywhere. Full setup
+          instructions are in the
+          <a href="https://github.com/necatiarslan/awsflow/blob/main/README_MCP.md"
+             target="_blank" rel="noopener">MCP README</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────────────────── -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <p class="section-label">FAQ</p>
+      <h2 class="section-title">Common questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>&nbsp;How does Awsflow authenticate?</h3>
+        <p>It uses your existing local AWS credentials via the AWS SDK provider chain — CLI config, SSO, environment variables, and more.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Are my credentials stored?</h3>
+        <p>No. Credentials are not persisted outside VS Code global state. You can refresh or clear cached credentials at any time from the Command Palette.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Are my credentials sent to AI services?</h3>
+        <p>Never. Your AWS credentials are handled locally by the extension and are not shared with any external AI service.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Can it perform unintended actions?</h3>
+        <p>Mutating actions (create, delete, update, invoke, publish, etc.) always require your confirmation. Read-only actions are safe and run immediately.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;What permissions are needed?</h3>
+        <p>Awsflow uses whatever permissions your active IAM profile has. We recommend least-privilege policies and verifying the active profile before any mutating operations.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Does it support multiple AWS accounts?</h3>
+        <p>Yes. Switch profiles anytime using the AWS selector in the VS Code status bar or via the Command Palette.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Is there any cost?</h3>
+        <p>The extension itself is completely free. AWS API calls may incur charges based on your usage and AWS pricing — the same as any other SDK call.</p>
+      </div>
+      <div class="faq-item">
+        <h3>&nbsp;Can I see what API calls are made?</h3>
+        <p>Yes. Open the <em>Command History</em> panel or the <em>Awsflow-Log</em> output channel (View → Output) to see every API call and its response.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to chat with your AWS cloud? 🚀</h2>
+    <p>Free, open-source, and ready in minutes. No extra setup beyond your existing AWS credentials.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary"
+         href="https://marketplace.visualstudio.com/search?term=awsflow&target=VSCode"
+         target="_blank" rel="noopener">
+        Install Awsflow for Free
+      </a>
+      <a class="btn btn-secondary"
+         href="https://github.com/necatiarslan/awsflow/issues"
+         target="_blank" rel="noopener">
+        Report an Issue
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">☁️ Awsflow</div>
+    <div class="footer-links">
+      <a href="https://github.com/necatiarslan/awsflow" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/necatiarslan/awsflow/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="https://github.com/necatiarslan/awsflow/blob/main/README_MCP.md" target="_blank" rel="noopener">MCP Docs</a>
+      <a href="https://github.com/necatiarslan/awsflow/blob/main/README_AWS_SERVICES.md" target="_blank" rel="noopener">All Services</a>
+      <a href="https://github.com/sponsors/necatiarslan" target="_blank" rel="noopener">Sponsor ❤️</a>
+      <a href="https://github.com/necatiarslan/awsflow/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+    </div>
+    <p class="footer-copy">© 2025 Necati Arslan. Open source under MIT.</p>
+  </div>
+</footer>
+
+</body>
+</html>

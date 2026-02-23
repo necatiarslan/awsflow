@@ -14,3 +14,4 @@ vsix/**
 justfile
 scripts/**
 unpacked_vsix/**
+website/**

@@ -37,7 +37,7 @@ export class Session implements vscode.Disposable {
     }
 
     public IsDebugMode(): boolean {
-        return this.Context.extensionMode === vscode.ExtensionMode.Development;
+        return this.Context.extensionMode !== vscode.ExtensionMode.Production;
     }
 
     public SaveState() {

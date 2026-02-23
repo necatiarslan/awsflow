@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as ui from './UI';
+import { Session } from './Session';
 
 // License status interface that represents the current state
 export interface LicenseStatus {
@@ -187,9 +188,9 @@ export async function validateLicenseOnline(context: vscode.ExtensionContext): P
  * Does NOT make network calls
  */
 export function isLicenseValid(): boolean {
-    // if (process.env.VSCODE_DEBUG_MODE === 'true') {
-    //     return true;
-    // }
+    if (Session.Current?.IsDebugMode) {
+        return true;
+    }
     
     if (!cachedStatus) {
         return false;
