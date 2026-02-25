@@ -21,8 +21,10 @@
   </div>
   <ul>
     <li><a href="#features">Features</a></li>
+    <li><a href="#comparison">Why Awsflow</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#articles">Articles</a></li>
     <li><a href="#quickstart">Quick Start</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="https://github.com/necatiarslan/awsflow" target="_blank" rel="noopener">GitHub</a></li>
@@ -35,7 +37,16 @@
 <!-- ── Hero ──────────────────────────────────────────── -->
 <header class="hero">
   <div class="hero-badge">🤖 AWS AI Assistant</div>
-  <h1>Your AWS Cloud,<br>in Plain English</h1>
+  <h1>Allow VS Code Copilot,<br>Access AWS</h1>
+  <div class="supported-ides" aria-label="Supported IDEs">
+    <span class="supported-label">Supported IDEs</span>
+    <div class="ide-list">
+      <div class="ide-item"><span class="ide-icon">VS</span><span>VS Code</span></div>
+      <div class="ide-item"><span class="ide-icon">AG</span><span>Antigravity</span></div>
+      <div class="ide-item"><span class="ide-icon">WS</span><span>Windsurf</span></div>
+      <div class="ide-item"><span class="ide-icon">CU</span><span>Cursor</span></div>
+    </div>
+  </div>
   <p>
     Awsflow is a free VS Code extension that brings AWS interaction into your
     chat experience. Use natural language to inspect and operate your AWS
@@ -70,7 +81,7 @@
 <section id="features">
   <div class="container">
     <div class="features-header">
-      <p class="section-label">Why Awsflow?</p>
+      <p class="section-label">Features</p>
       <h2 class="section-title">Everything you need to work with AWS</h2>
       <p class="section-subtitle">
         Stop memorising CLI flags and SDK signatures. Just describe what you
@@ -107,6 +118,56 @@
         <div class="feature-icon">📋</div>
         <h3>Full Audit Trail</h3>
         <p>Every AWS API call is logged in the Command History panel and the Awsflow-Log output channel so you always know what happened.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Comparison ────────────────────────────────────── -->
+<section id="comparison">
+  <div class="container">
+    <p class="section-label">Why Awsflow?</p>
+    <h2 class="section-title">Awsflow vs AWS Toolkit for VS Code</h2>
+    <p class="section-subtitle">
+      Both are useful for AWS development in VS Code. Awsflow is built for
+      natural-language, AI-first cloud operations.
+    </p>
+
+    <div class="comparison-table" role="table" aria-label="Awsflow vs AWS Toolkit comparison">
+      <div class="comparison-row comparison-head" role="row">
+        <div role="columnheader">Capability</div>
+        <div role="columnheader">Awsflow</div>
+        <div role="columnheader">AWS Toolkit for VS Code</div>
+      </div>
+
+      <div class="comparison-row" role="row">
+        <div role="cell">Primary workflow</div>
+        <div role="cell">Natural language in chat (<code>@aws</code>, Agent/Plan mode)</div>
+        <div role="cell">Explorer panels, commands, and service-specific tooling</div>
+      </div>
+
+      <div class="comparison-row" role="row">
+        <div role="cell">Multi-step operations</div>
+        <div role="cell">AI can orchestrate multi-step AWS tasks from one prompt</div>
+        <div role="cell">Usually performed manually across multiple commands/views</div>
+      </div>
+
+      <div class="comparison-row" role="row">
+        <div role="cell">Action safety</div>
+        <div role="cell">Mutating actions require explicit confirmation</div>
+        <div role="cell">Behavior depends on the selected command/workflow</div>
+      </div>
+
+      <div class="comparison-row" role="row">
+        <div role="cell">Editor portability</div>
+        <div role="cell">Includes a local MCP server for other AI editors</div>
+        <div role="cell">Primarily designed for native VS Code usage</div>
+      </div>
+
+      <div class="comparison-row" role="row">
+        <div role="cell">Best fit</div>
+        <div role="cell">Teams that want fast, chat-driven AWS operations</div>
+        <div role="cell">Teams that prefer traditional AWS IDE integrations</div>
       </div>
     </div>
   </div>
@@ -275,6 +336,36 @@
              target="_blank" rel="noopener">MCP README</a>.
         </p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Articles ───────────────────────────────────────── -->
+<section id="articles">
+  <div class="container">
+    <p class="section-label">LinkedIn Articles</p>
+    <h2 class="section-title">Learn more about Awsflow</h2>
+    <p class="section-subtitle">
+      Deep dives, practical workflows, and comparisons published by the
+      creator of Awsflow.
+    </p>
+    <div class="articles-grid">
+      <a class="article-card" href="https://www.linkedin.com/pulse/introducing-awsflow-bring-aws-your-vs-code-chat-necati-arslan-2ulce" target="_blank" rel="noopener">
+        <h3>Introducing Awsflow: Bring AWS to Your VS Code Chat</h3>
+        <p>Overview of Awsflow, core capabilities, and how it changes AWS workflows in editor chat.</p>
+      </a>
+      <a class="article-card" href="https://www.linkedin.com/pulse/turning-csv-serverless-workflow-ai-awsflow-necati-arslan-dx8te" target="_blank" rel="noopener">
+        <h3>Turning a CSV Into a Serverless Workflow with AI and Awsflow</h3>
+        <p>Real workflow example showing automation from raw CSV input to serverless AWS execution.</p>
+      </a>
+      <a class="article-card" href="https://www.linkedin.com/pulse/how-awsflow-boosts-developer-productivity-aws-necati-arslan-ugp4e" target="_blank" rel="noopener">
+        <h3>How Awsflow Boosts Developer Productivity on AWS</h3>
+        <p>Practical productivity gains and day-to-day usage patterns for AWS-focused development teams.</p>
+      </a>
+      <a class="article-card" href="https://www.linkedin.com/pulse/awsflow-vs-aws-toolkit-when-use-what-necati-arslan-r92we" target="_blank" rel="noopener">
+        <h3>Awsflow vs AWS Toolkit: When to Use What</h3>
+        <p>Side-by-side guidance on choosing the right approach for different AWS tasks in VS Code.</p>
+      </a>
     </div>
   </div>
 </section>
