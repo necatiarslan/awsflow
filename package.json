@@ -2,7 +2,7 @@
   "name": "awsflow",
   "displayName": "Awsflow: AWS AI Assistant",
   "description": "Let AI access AWS services and work for you",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "NecatiARSLAN",
   "repository": {
     "type": "git",
