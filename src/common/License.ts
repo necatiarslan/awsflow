@@ -188,7 +188,7 @@ export async function validateLicenseOnline(context: vscode.ExtensionContext): P
  * Does NOT make network calls
  */
 export function isLicenseValid(): boolean {
-    if (Session.Current?.IsDebugMode) {
+    if (Session.Current?.IsDebugMode()) {
         return true;
     }
     
